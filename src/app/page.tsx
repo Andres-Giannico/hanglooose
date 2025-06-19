@@ -1,10 +1,12 @@
 import { client } from "@/sanity/client";
+import { urlForImage } from "@/sanity/image";
+import type { ProductCard } from "@/sanity/types";
 import { groq } from "next-sanity";
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function Home() {
-  const products = await client.fetch(
+  const products: ProductCard[] = await client.fetch(
     groq`*[_type == "product"]{
       _id,
       name,
@@ -16,25 +18,25 @@ export default async function Home() {
   );
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <h1 className="text-4xl font-bold text-center">Hang Loose Ibiza</h1>
+    <main className="flex min-h-screen flex-col items-center p-8 md:p-12 lg:p-24">
+      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex mb-12">
+        <h1 className="text-4xl font-bold text-center w-full">Hang Loose Ibiza</h1>
       </div>
 
-      <div className="mt-12 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((product: any) => (
-          <Link key={product._id} href={`/products/${product.slug}`}>
-            <div className="group block overflow-hidden rounded-lg border border-gray-200 shadow-md transition-shadow duration-300 hover:shadow-xl">
+      <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        {products.map((product) => (
+          <Link key={product._id} href={`/products/${product.slug}`} className="group">
+            <div className="block overflow-hidden rounded-lg border border-gray-200 shadow-md transition-shadow duration-300 hover:shadow-xl">
               <div className="relative h-64 w-full overflow-hidden">
-                {product.mainImage && (
+                {product.mainImage ? (
                   <Image
-                    src={product.mainImage.asset.url}
+                    src={urlForImage(product.mainImage).width(500).height(400).url()}
                     alt={product.name}
                     layout="fill"
                     objectFit="cover"
                     className="transition-transform duration-500 group-hover:scale-110"
                   />
-                )}
+                ) : <div className="w-full h-full bg-gray-200"></div> }
               </div>
               <div className="p-4">
                 <h2 className="text-lg font-semibold text-gray-800 group-hover:text-orange-600">
