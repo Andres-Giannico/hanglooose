@@ -10,6 +10,8 @@ interface ProductGalleryProps {
 }
 
 export default function ProductGallery({ gallery }: ProductGalleryProps) {
+  const [currentIndex, setCurrentIndex] = useState(0)
+
   if (!gallery || gallery.length === 0) {
     return (
       <div className="lg:col-span-2">
@@ -19,8 +21,6 @@ export default function ProductGallery({ gallery }: ProductGalleryProps) {
       </div>
     )
   }
-
-  const [currentIndex, setCurrentIndex] = useState(0)
 
   const goToPrevious = () => {
     const isFirstSlide = currentIndex === 0

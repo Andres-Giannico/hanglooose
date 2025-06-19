@@ -4,6 +4,13 @@ export default defineType({
   name: 'product',
   title: 'Product',
   type: 'document',
+  fieldsets: [
+    {
+      name: 'booking',
+      title: 'Booking Widget',
+      options: { collapsible: true, collapsed: true },
+    },
+  ],
   fields: [
     // --- Basic Info ---
     defineField({
@@ -93,7 +100,7 @@ export default defineType({
         of: [{type: 'string'}]
     }),
     
-    // --- Key Features (like GetYourGuide "About this activity") ---
+    // --- Key Features ---
     defineField({
         name: 'features',
         title: 'Technical Features',
@@ -144,12 +151,77 @@ export default defineType({
         type: 'array',
         of: [{type: 'block'}]
     }),
+
+    // --- Booking Widget ---
+    defineField({
+      name: 'bookingWidget',
+      title: 'Booking Widget Settings',
+      type: 'object',
+      fieldset: 'booking',
+      fields: [
+        defineField({
+          name: 'enableWidget',
+          title: 'Enable Booking Widget',
+          type: 'boolean',
+          initialValue: false,
+        }),
+        defineField({
+          name: 'bookingProductId',
+          title: 'Turbookings Product ID',
+          type: 'number',
+          description: 'The numeric ID of the product from the Turbobooking system.',
+          hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+        defineField({
+          name: 'groupByBillingTerm',
+          title: 'Group by Billing Term',
+          type: 'boolean',
+          initialValue: false,
+          hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+        defineField({
+          name: 'displayBillingTerm',
+          title: 'Display Billing Term',
+          type: 'boolean',
+          initialValue: false,
+          hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+        defineField({
+          name: 'useLargeSlots',
+          title: 'Use Large Slots',
+          type: 'boolean',
+          initialValue: false,
+          hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+        defineField({
+          name: 'showQuantity',
+          title: 'Show Quantity Selector',
+          type: 'boolean',
+          initialValue: true,
+          hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+        defineField({
+            name: 'quantityLabel',
+            title: '"Quantity" Label',
+            type: 'string',
+            placeholder: 'Quantity',
+            hidden: ({ parent }) => !parent?.enableWidget || !parent?.showQuantity,
+        }),
+        defineField({
+            name: 'bookNowLabel',
+            title: '"Book Now" Button Label',
+            type: 'string',
+            placeholder: 'Book Now',
+            hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+      ]
+    }),
   ],
 
   preview: {
     select: {
       title: 'name',
-      media: 'gallery.0.asset', // Use first image of gallery for preview
+      media: 'gallery.0.asset',
       category: 'category.title',
     },
     prepare(selection) {

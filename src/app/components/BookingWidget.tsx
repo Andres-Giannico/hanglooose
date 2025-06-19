@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import Script from 'next/script';
 import type { Product } from '@/sanity/types';
 
@@ -11,7 +11,9 @@ interface BookingWidgetProps {
 // Define the shape of the TurboBooking class if available on window
 declare global {
     interface Window {
-        TurboBooking: any;
+        TurboBooking: new () => {
+            run: (container: HTMLElement, options: unknown) => void;
+        };
     }
 }
 
@@ -37,7 +39,7 @@ export default function BookingWidget({ config }: BookingWidgetProps) {
             const turbo = new window.TurboBooking();
 
             // Build custom properties, providing fallbacks
-            const customProperties: Record<string, any> = {
+            const customProperties: Record<string, string | boolean> = {
                 "groupByBillingTerm": config.groupByBillingTerm ?? false,
                 "displayBillingTerm": config.displayBillingTerm ?? false,
                 "useLargeSlots": config.useLargeSlots ?? false,

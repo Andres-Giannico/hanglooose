@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 import { client } from "@/sanity/client";
-import { urlForImage } from "@/sanity/image";
-import type { Product, SanityImage } from "@/sanity/types";
+import type { Product } from "@/sanity/types";
 import { PortableText } from "@portabletext/react";
 import { groq } from "next-sanity";
 import { notFound } from "next/navigation";
