@@ -86,25 +86,44 @@ export default async function ProductPage({ params }: { params: { slug: string }
                 </div>
             )}
 
-            {/* Includes / Not Includes */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                {product.includes && (
-                    <div>
-                        <h3 className="text-xl font-semibold mb-2">Includes</h3>
-                        <ul className="space-y-1">
-                            {product.includes.map((item: string, index: number) => <li key={index} className="text-green-600">✓ {item}</li>)}
-                        </ul>
-                    </div>
-                )}
-                {product.notIncludes && (
-                     <div>
-                        <h3 className="text-xl font-semibold mb-2">Not Includes</h3>
-                        <ul className="space-y-1">
-                            {product.notIncludes.map((item: string, index: number) => <li key={index} className="text-red-600">✗ {item}</li>)}
-                        </ul>
-                    </div>
-                )}
-            </div>
+            {/* Price Details (Includes / Not Includes) */}
+            {(product.includes && product.includes.length > 0) || (product.notIncludes && product.notIncludes.length > 0) ? (
+                <div className="mb-8">
+                    <h2 className="text-2xl font-bold mb-4">Detalles de precio</h2>
+                    
+                    {product.includes && product.includes.length > 0 && (
+                        <div className="mb-6">
+                            <h3 className="text-lg font-semibold mb-3 text-green-700">Incluido en el precio</h3>
+                            <ul className="space-y-2">
+                                {product.includes.map((item: string, index: number) => (
+                                    <li key={index} className="flex items-center text-gray-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6 mr-3 text-green-500 flex-shrink-0">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                        </svg>
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    
+                    {product.notIncludes && product.notIncludes.length > 0 && (
+                         <div>
+                            <h3 className="text-lg font-semibold mb-3 text-red-700">No incluido en el precio</h3>
+                            <ul className="space-y-2">
+                                {product.notIncludes.map((item: string, index: number) => (
+                                    <li key={index} className="flex items-center text-gray-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6 mr-3 text-red-500 flex-shrink-0">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+            ) : null}
 
             {/* Important Information */}
             {product.importantInformation && (
