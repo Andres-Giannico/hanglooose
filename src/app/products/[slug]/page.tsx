@@ -5,8 +5,8 @@ import { urlForImage } from "@/sanity/image";
 import type { Product, SanityImage } from "@/sanity/types";
 import { PortableText } from "@portabletext/react";
 import { groq } from "next-sanity";
-import Image from "next/image";
 import { notFound } from "next/navigation";
+import ProductGallery from "@/app/components/ProductGallery";
 
 export default async function ProductPage({ params }: { params: { slug: string } }) {
   const product: Product = await client.fetch(
@@ -37,25 +37,15 @@ export default async function ProductPage({ params }: { params: { slug: string }
 
   return (
     <div className="container mx-auto p-4 md:p-8 lg:p-12">
+        <div className="mb-6">
+            <h1 className="text-3xl lg:text-4xl font-bold text-gray-800">{product.name}</h1>
+            {/* Breadcrumbs or category can go here */}
+        </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* Image Gallery */}
-        <div className="lg:col-span-2">
-          <h1 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-4">{product.name}</h1>
-          <div className="grid grid-cols-2 gap-4">
-            {product.gallery?.map((image: SanityImage, index: number) => (
-              <div key={image.asset._ref} className={`relative w-full ${index === 0 ? 'col-span-2 h-96' : 'h-48'}`}>
-                <Image
-                  src={urlForImage(image).url()}
-                  alt={`${product.name} image ${index + 1}`}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-lg shadow-md"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+        <ProductGallery gallery={product.gallery} />
 
         {/* Pricing & Booking Sidebar */}
         <div className="lg:col-span-1">
@@ -75,7 +65,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
         </div>
 
         {/* Details Section */}
-        <div className="lg:col-span-2 mt-8">
+        <div className="lg:col-span-2 mt-8 lg:mt-0">
             {/* Highlights */}
             {product.highlights && (
                 <div className="mb-8">
