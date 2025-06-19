@@ -32,4 +32,15 @@ export interface Product extends ProductCard {
     instructorInfo?: string;
     isPrivateGroup?: boolean;
     importantInformation?: PortableTextBlock[]; // Use specific Portable Text type
+
+    bookingWidget?: {
+        enableWidget?: boolean;
+        bookingProductId?: number;
+        groupByBillingTerm?: boolean;
+        displayBillingTerm?: boolean;
+        useLargeSlots?: boolean;
+        showQuantity?: boolean;
+        quantityLabel?: string;
+        bookNowLabel?: string;
+    };
 } 

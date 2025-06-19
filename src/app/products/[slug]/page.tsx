@@ -7,26 +7,13 @@ import { PortableText } from "@portabletext/react";
 import { groq } from "next-sanity";
 import { notFound } from "next/navigation";
 import ProductGallery from "@/app/components/ProductGallery";
+import BookingWidget from "@/app/components/BookingWidget";
 
 export default async function ProductPage({ params }: { params: { slug: string } }) {
   const product: Product = await client.fetch(
     groq`*[_type == "product" && slug.current == $slug][0]{
-      _id,
-      name,
-      "slug": slug.current,
-      gallery,
-      price,
-      priceSubtitle,
-      highlights,
-      fullDescription,
-      includes,
-      notIncludes,
-      features,
-      freeCancellation,
-      reserveNowPayLater,
-      instructorInfo,
-      isPrivateGroup,
-      importantInformation
+      ..., // Fetch all fields
+      "slug": slug.current, // Re-alias slug to be a string
     }`,
     { slug: params.slug }
   );
@@ -134,6 +121,16 @@ export default async function ProductPage({ params }: { params: { slug: string }
             )}
         </div>
       </div>
+
+      {/* Booking Widget Section */}
+      {product.bookingWidget?.enableWidget && product.bookingWidget.bookingProductId && (
+        <div className="mt-12 pt-8 border-t">
+          <h2 className="text-3xl font-bold text-center mb-6">Realizar Reserva</h2>
+          <div className="max-w-4xl mx-auto">
+            <BookingWidget config={product.bookingWidget} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
