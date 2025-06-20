@@ -191,102 +191,141 @@ const DesktopNavItem = ({ item }: { item: MenuItem }) => {
   );
 }
 
-const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen: (open: boolean) => void, menu: NavigationData | null, settings: SiteSettings | null }) => {
-  return (
-    <Dialog as="div" className="lg:hidden" open={open} onClose={setOpen}>
-      <div className="fixed inset-0 z-50" />
-      <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-        <div className="flex items-center justify-between mb-6">
-          <Link href="/" className="-m-1.5 p-1.5" onClick={() => setOpen(false)}>
-            <span className="sr-only">{settings?.title || 'Hang Loose Ibiza'}</span>
-            {settings?.logo?.asset ? (
-              <Image
-                src={urlForImage(settings.logo)?.width(100).height(100).url() || ''}
-                alt={settings.title || 'Hang Loose Ibiza Logo'}
-                width={64}
-                height={64}
-                className="object-contain w-auto h-16"
-                priority
-              />
-            ) : (
-              <span className="text-3xl font-extrabold tracking-tight text-gray-900">{settings?.title || 'Brand'}</span>
-            )}
-          </Link>
-          <button type="button" className="-m-2.5 rounded-md p-2.5 text-gray-700" onClick={() => setOpen(false)}>
-            <span className="sr-only">Close menu</span>
-            <XMarkIcon className="w-6 h-6" aria-hidden="true" />
-          </button>
-        </div>
-        
-        <div className="mt-6 flow-root">
-          <div className="-my-6 divide-y divide-gray-500/10">
-            <div className="space-y-2 py-6">
-              {menu?.items?.map((item) => <MobileNavItem key={item._key} item={item} closeMenu={() => setOpen(false)} />)}
-            </div>
-            <div className="py-6 space-y-4">
-              {settings?.contactPhoneNumberDisplay && (
-                 <a href={`tel:${settings.contactPhoneNumber}`} className="flex items-center gap-x-3 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                   <PhoneIcon className="w-5 h-5" />
-                   {settings.contactPhoneNumberDisplay}
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      </Dialog.Panel>
-    </Dialog>
-  )
-}
-
 const MobileNavItem = ({ item, closeMenu }: { item: MenuItem, closeMenu: () => void }) => {
   const hasSubmenu = item.submenu && item.submenu.length > 0;
   
-  if (!hasSubmenu) {
+  if (!hasSubmenu && item.link?.slug?.current) {
     return (
       <Link
-        href={`/categories/${item.link?.slug?.current}`}
-        className="px-3 py-2 text-base font-medium text-gray-700 transition-all duration-200 rounded-lg hover:bg-gray-100/80 hover:text-gray-900"
+        href={`/categories/${item.link.slug.current}`}
+        onClick={closeMenu}
+        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
       >
         {item.text}
       </Link>
     );
   }
   
+  const [isSubmenuOpen, setSubmenuOpen] = useState(false);
+
   return (
-    <Popover>
-      {({ open }) => (
-        <>
-          <Popover.Button className="flex items-center justify-between w-full px-3 py-2 -mx-3 text-base font-semibold leading-7 text-gray-900 rounded-lg hover:bg-gray-50">
-            {item.text}
-            <ChevronDownIcon className={`${open ? 'rotate-180' : ''} h-5 w-5 flex-none transition-transform duration-200`} />
-          </Popover.Button>
-          <Transition
+    <div>
+      <div
+        className="flex w-full items-center justify-between rounded-lg py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
+        onClick={() => setSubmenuOpen(!isSubmenuOpen)}
+      >
+        <span className="flex-1 px-3">{item.text}</span>
+        {hasSubmenu && (
+            <ChevronDownIcon
+              className={`h-5 w-5 flex-none transition-transform duration-200 ${
+                isSubmenuOpen ? 'rotate-180' : ''
+              }`}
+            />
+        )}
+      </div>
+      <div
+        className={`mt-1 space-y-1 overflow-hidden transition-all duration-300 ${
+          isSubmenuOpen ? 'max-h-96' : 'max-h-0'
+        }`}
+      >
+        {item.submenu?.map((subItem) => (
+          subItem.link?.slug && (
+            <Link
+              key={subItem._key}
+              href={`/products/${subItem.link.slug.current}`}
+              onClick={closeMenu}
+              className="block rounded-lg py-2 pl-9 pr-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+            >
+              {subItem.text}
+            </Link>
+          )
+        ))}
+      </div>
+    </div>
+  )
+}
+
+const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen: (open: boolean) => void, menu: NavigationData | null, settings: SiteSettings | null }) => {
+  return (
+    <Transition.Root show={open} as={Fragment}>
+      <Dialog as="div" className="relative z-50 lg:hidden" onClose={setOpen}>
+        <Transition.Child
+          as={Fragment}
+          enter="transition-opacity ease-linear duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition-opacity ease-linear duration-300"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-black bg-opacity-40" />
+        </Transition.Child>
+
+        <div className="fixed inset-0 flex justify-end">
+          <Transition.Child
             as={Fragment}
-            enter="transition ease-out duration-200"
-            enterFrom="opacity-0 translate-y-1"
-            enterTo="opacity-100 translate-y-0"
-            leave="transition ease-in duration-150"
-            leaveFrom="opacity-100 translate-y-0"
-            leaveTo="opacity-0 translate-y-1"
+            enter="transition ease-in-out duration-300 transform"
+            enterFrom="translate-x-full"
+            enterTo="translate-x-0"
+            leave="transition ease-in-out duration-300 transform"
+            leaveFrom="translate-x-0"
+            leaveTo="translate-x-full"
           >
-            <Popover.Panel className="mt-2 space-y-2 pl-6">
-              {item.link?.slug && (
-                <Link href={`/categories/${item.link.slug.current}`} onClick={closeMenu} className="block py-2 pr-3 text-sm font-semibold leading-7 text-gray-700 rounded-lg pl-9 hover:bg-gray-50">
-                  {item.text} (Main)
-                </Link>
-              )}
-              {item.submenu?.map((subItem) => (
-                subItem.link?.slug && (
-                  <Link key={subItem._key} href={`/products/${subItem.link.slug.current}`} onClick={closeMenu} className="block py-2 pr-3 text-sm font-semibold leading-7 text-gray-700 rounded-lg pl-9 hover:bg-gray-50">
-                    {subItem.text}
-                  </Link>
-                )
-              ))}
-            </Popover.Panel>
-          </Transition>
-        </>
-      )}
-    </Popover>
+            <Dialog.Panel className="relative w-full max-w-xs bg-white shadow-xl flex flex-col overflow-y-auto">
+              <div className="flex items-center justify-between px-4 pt-5 pb-2">
+                 <Link href="/" className="-m-1.5 p-1.5" onClick={() => setOpen(false)}>
+                  <span className="sr-only">{settings?.title || 'Hang Loose Ibiza'}</span>
+                    {settings?.logo?.asset ? (
+                        <div className="h-10 w-auto">
+                        <Image
+                            src={urlForImage(settings.logo).width(200).url()}
+                            alt={settings.title || 'Logo'}
+                            width={100}
+                            height={40}
+                            className="h-full w-full object-contain"
+                            priority
+                        />
+                        </div>
+                    ) : (
+                        <span className="text-xl font-bold text-gray-900">
+                        {settings?.title || 'Brand'}
+                        </span>
+                    )}
+                 </Link>
+                <button
+                  type="button"
+                  className="-m-2.5 rounded-md p-2.5 text-gray-700"
+                  onClick={() => setOpen(false)}
+                >
+                  <span className="sr-only">Close menu</span>
+                  <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                </button>
+              </div>
+
+              {/* Links */}
+              <div className="mt-6 px-4 space-y-1">
+                {menu?.items?.map((item) => <MobileNavItem key={item._key} item={item} closeMenu={() => setOpen(false)} />)}
+              </div>
+
+              <div className="mt-auto border-t border-gray-200 p-4">
+                <div className="mb-4">
+                  <SearchBar />
+                </div>
+                {settings?.contactPhoneNumber && (
+                  <a
+                    href={`tel:${settings.contactPhoneNumber}`}
+                    className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-gray-100 px-3.5 py-2.5 text-base font-semibold text-gray-900 shadow-sm hover:bg-gray-200"
+                  >
+                    <PhoneIcon className="h-5 w-5 flex-shrink-0 text-gray-600" />
+                    <span>{settings.contactPhoneNumberDisplay}</span>
+                  </a>
+                )}
+              </div>
+            </Dialog.Panel>
+          </Transition.Child>
+        </div>
+      </Dialog>
+    </Transition.Root>
   )
 }
 
