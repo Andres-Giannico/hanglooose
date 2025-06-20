@@ -29,7 +29,7 @@ export default async function Home() {
             <div className="block overflow-hidden rounded-lg border border-gray-200 shadow-md transition-shadow duration-300 hover:shadow-xl">
               <div className="relative h-64 w-full overflow-hidden">
                 {product.mainImage ? (
-                  <Image
+            <Image
                     src={urlForImage(product.mainImage).width(500).height(400).url()}
                     alt={product.name}
                     layout="fill"
@@ -56,7 +56,7 @@ export default async function Home() {
             </div>
           </Link>
         ))}
-      </div>
-    </main>
+        </div>
+      </main>
   );
 }

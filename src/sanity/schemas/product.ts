@@ -143,6 +143,46 @@ export default defineType({
         initialValue: false,
     }),
 
+    // --- Guarantees & Payment ---
+    defineField({
+      name: 'bookingGuarantees',
+      title: 'Booking Guarantees',
+      type: 'array',
+      description: 'e.g., "Quick and easy reservation", "Instant confirmation"',
+      of: [{type: 'string'}],
+      options: {
+        layout: 'tags'
+      },
+      initialValue: [
+        'Quick and easy reservation',
+        'Instant confirmation',
+        'Flexible cancellation policy',
+        'All-inclusive experiences',
+        'Expert guides and personalized attention',
+        'Partial online payment',
+      ],
+    }),
+    defineField({
+        name: 'paymentMethods',
+        title: 'Payment Methods Section',
+        type: 'object',
+        fields: [
+            {
+                name: 'text',
+                title: 'Text',
+                type: 'text',
+                rows: 4,
+                description: 'e.g., "Secure payment through major credit cards, Apple Pay, and Google Pay. All transactions are securely processed by Stripe."'
+            },
+            {
+                name: 'logos',
+                title: 'Payment Logos Image',
+                type: 'image',
+                description: 'Upload an image showing the logos (Visa, Mastercard, Stripe, etc.)'
+            }
+        ]
+    }),
+
     // --- Important Info ---
     defineField({
         name: 'importantInformation',

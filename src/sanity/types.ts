@@ -1,6 +1,7 @@
 import type { PortableTextBlock } from "@portabletext/types";
 
 export interface SanityImage {
+    _key?: string;
     _type: 'image';
     asset: {
         _ref: string;
@@ -32,6 +33,11 @@ export interface Product extends ProductCard {
     instructorInfo?: string;
     isPrivateGroup?: boolean;
     importantInformation?: PortableTextBlock[]; // Use specific Portable Text type
+    bookingGuarantees?: string[];
+    paymentMethods?: {
+        text?: string;
+        logos?: SanityImage;
+    };
 
     bookingWidget?: {
         enableWidget?: boolean;
