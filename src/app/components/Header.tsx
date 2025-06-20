@@ -8,7 +8,7 @@ import {urlForImage, SanityImage} from '@/sanity/image'
 import type { SVGProps } from 'react';
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Menu as HeadlessMenu, Transition } from '@headlessui/react'
-import { Bars3Icon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, ChevronDownIcon, XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import SearchBar from './SearchBar'
 
 // Types
@@ -123,9 +123,12 @@ const DesktopNavItem = ({ item }: { item: MenuItem }) => {
   if (hasSubmenu) {
     return (
       <HeadlessMenu as="div" className="relative inline-block text-left">
-        <HeadlessMenu.Button className="inline-flex items-center justify-center px-3 py-2 text-base font-medium text-gray-700 transition-all duration-200 rounded-lg hover:bg-gray-100/80 hover:text-gray-900">
-          <span>{item.text}</span>
-          <ChevronDownIcon className="w-5 h-5 ml-1 text-gray-500" aria-hidden="true" />
+        <HeadlessMenu.Button className="inline-flex items-center justify-center px-4 py-2 text-base font-medium text-gray-700 transition-all duration-300 rounded-lg hover:text-blue-600 group">
+          <span className="relative">
+            {item.text}
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+          </span>
+          <ChevronDownIcon className="w-5 h-5 ml-1 text-gray-500 group-hover:text-blue-600 transition-colors" aria-hidden="true" />
         </HeadlessMenu.Button>
         <Transition
           as={Fragment}
@@ -136,7 +139,7 @@ const DesktopNavItem = ({ item }: { item: MenuItem }) => {
           leaveFrom="opacity-100 translate-y-0"
           leaveTo="opacity-0 translate-y-1"
         >
-          <HeadlessMenu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right bg-white rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <HeadlessMenu.Items className="absolute right-0 z-10 mt-2 w-60 origin-top-right bg-white rounded-xl shadow-lg ring-1 ring-black/5 focus:outline-none divide-y divide-gray-100">
             <div className="py-1">
               {hasLink && (
                 <HeadlessMenu.Item>
@@ -144,29 +147,39 @@ const DesktopNavItem = ({ item }: { item: MenuItem }) => {
                     <Link
                       href={`/categories/${item.link?.slug?.current}`}
                       className={`${
-                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                      } block px-4 py-2 text-sm font-medium`}
+                        active ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
+                      } flex items-center px-4 py-3 text-sm font-medium group`}
                     >
-                      {item.text} (Main)
+                      <span className="flex-1">{item.text} (All)</span>
+                      <span className={`${active ? 'opacity-100' : 'opacity-0'} transform transition-all duration-300 text-blue-600`}>
+                        →
+                      </span>
                     </Link>
                   )}
                 </HeadlessMenu.Item>
               )}
-              {item.submenu?.map((subItem) => (
-                <HeadlessMenu.Item key={subItem._key}>
-                  {({ active }) => (
-                    <Link
-                      href={`/products/${subItem.link?.slug?.current}`}
-                      className={`${
-                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                      } block px-4 py-2 text-sm`}
-                    >
-                      {subItem.text}
-                    </Link>
-                  )}
-                </HeadlessMenu.Item>
-              ))}
             </div>
+            {item.submenu && item.submenu.length > 0 && (
+              <div className="py-1">
+                {item.submenu?.map((subItem) => (
+                  <HeadlessMenu.Item key={subItem._key}>
+                    {({ active }) => (
+                      <Link
+                        href={`/products/${subItem.link?.slug?.current}`}
+                        className={`${
+                          active ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
+                        } flex items-center px-4 py-2 text-sm group`}
+                      >
+                        <span className="flex-1">{subItem.text}</span>
+                        <span className={`${active ? 'opacity-100' : 'opacity-0'} transform transition-all duration-300 text-blue-600`}>
+                          →
+                        </span>
+                      </Link>
+                    )}
+                  </HeadlessMenu.Item>
+                ))}
+              </div>
+            )}
           </HeadlessMenu.Items>
         </Transition>
       </HeadlessMenu>
@@ -177,15 +190,18 @@ const DesktopNavItem = ({ item }: { item: MenuItem }) => {
     return (
       <Link
         href={`/categories/${item.link?.slug?.current}`}
-        className="px-3 py-2 text-base font-medium text-gray-700 transition-all duration-200 rounded-lg hover:bg-gray-100/80 hover:text-gray-900"
+        className="px-4 py-2 text-base font-medium text-gray-700 transition-all duration-300 hover:text-blue-600 group relative"
       >
-        {item.text}
+        <span className="relative">
+          {item.text}
+          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+        </span>
       </Link>
     );
   }
   
   return (
-    <span className="px-3 py-2 text-base font-medium text-gray-700 rounded-lg">
+    <span className="px-4 py-2 text-base font-medium text-gray-700 rounded-lg">
       {item.text}
     </span>
   );
@@ -206,7 +222,7 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 flex justify-end">
@@ -258,12 +274,12 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
                       <div>
                         <button
                           onClick={() => setActiveSubmenu(activeSubmenu === item._key ? null : item._key)}
-                          className="flex w-full items-center justify-between rounded-lg py-3 px-3 text-base font-semibold text-gray-900 hover:bg-gray-50 transition-colors"
+                          className="flex w-full items-center justify-between rounded-lg py-3 px-3 text-base font-semibold text-gray-900 hover:bg-blue-50 hover:text-blue-600 transition-colors"
                         >
                           <span>{item.text}</span>
                           <ChevronDownIcon
-                            className={`h-5 w-5 flex-none transition-transform duration-200 text-gray-500 ${
-                              activeSubmenu === item._key ? 'rotate-180' : ''
+                            className={`h-5 w-5 flex-none transition-transform duration-200 ${
+                              activeSubmenu === item._key ? 'rotate-180 text-blue-600' : 'text-gray-500'
                             }`}
                           />
                         </button>
@@ -272,13 +288,23 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
                             activeSubmenu === item._key ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                           }`}
                         >
+                          {item.link?.slug && (
+                            <Link
+                              href={`/categories/${item.link.slug.current}`}
+                              onClick={() => setOpen(false)}
+                              className="block rounded-lg py-2 pl-8 pr-3 text-sm font-medium text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                            >
+                              All {item.text}
+                            </Link>
+                          )}
+                          
                           {item.submenu.map((subItem) => (
                             subItem.link?.slug && (
                               <Link
                                 key={subItem._key}
                                 href={`/products/${subItem.link.slug.current}`}
                                 onClick={() => setOpen(false)}
-                                className="block rounded-lg py-2 pl-8 pr-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                                className="block rounded-lg py-2 pl-8 pr-3 text-sm font-medium text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors"
                               >
                                 {subItem.text}
                               </Link>
@@ -291,7 +317,7 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
                         <Link
                           href={`/categories/${item.link.slug.current}`}
                           onClick={() => setOpen(false)}
-                          className="block rounded-lg px-3 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 transition-colors"
+                          className="block rounded-lg px-3 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-blue-50 hover:text-blue-600 transition-colors"
                         >
                           {item.text}
                         </Link>
@@ -308,10 +334,10 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
                 {settings?.contactPhoneNumber && (
                   <a
                     href={`tel:${settings.contactPhoneNumber}`}
-                    className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-blue-600 px-3.5 py-3 text-base font-semibold text-white shadow-sm hover:bg-blue-700 transition-colors"
+                    className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-blue-600 px-3.5 py-3 text-base font-semibold text-white shadow-sm hover:bg-blue-700 transition-all hover:shadow-md"
                   >
                     <PhoneIcon className="h-5 w-5 flex-shrink-0" />
-                    <span>{settings.contactPhoneNumberDisplay}</span>
+                    <span>{settings.contactPhoneNumberDisplay || settings.contactPhoneNumber}</span>
                   </a>
                 )}
               </div>
@@ -327,6 +353,20 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
 export default function Header() {
   const { settings, menu, loading } = useHeaderData()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  
+  // Track scroll position for enhanced header effects
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 10;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [scrolled]);
 
   if (loading) {
     return <header className="h-20 bg-white border-b border-gray-200" />
@@ -334,7 +374,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
+      <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-md' : 'bg-white'}`}>
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
           <div className="flex h-20 items-center justify-between">
             {/* Logo section */}
@@ -360,27 +400,29 @@ export default function Header() {
             </div>
 
             {/* Navigation section */}
-            <div className="hidden lg:flex lg:items-center lg:gap-x-8">
-              <nav className="flex gap-x-4" aria-label="Main navigation">
+            <div className="hidden lg:flex lg:items-center lg:gap-x-6">
+              <nav className="flex gap-x-2" aria-label="Main navigation">
                 {menu?.items?.map((item) => (
                   <DesktopNavItem key={item._key} item={item} />
                 ))}
               </nav>
-              <div className="h-6 w-px bg-gray-200" />
-              <div className="w-64">
-                <SearchBar />
-              </div>
             </div>
 
-            {/* Contact section */}
-            <div className="hidden lg:flex lg:items-center lg:gap-x-6">
+            {/* Right section - Search & Contact */}
+            <div className="hidden lg:flex lg:items-center lg:gap-x-4">
+              <div className="w-64 relative">
+                <SearchBar />
+              </div>
+              
+              <div className="h-8 w-px mx-2 bg-gray-200" />
+              
               {settings?.contactPhoneNumber && (
                 <a
                   href={`tel:${settings.contactPhoneNumber}`}
-                  className="flex items-center gap-x-2 rounded-lg px-3 py-2 text-base font-medium text-gray-700 transition-all duration-200 hover:bg-gray-100/80 hover:text-gray-900"
+                  className="flex items-center gap-x-2 rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-blue-700 hover:shadow-md"
                 >
-                  <PhoneIcon className="h-5 w-5 flex-shrink-0" />
-                  <span>{settings.contactPhoneNumberDisplay}</span>
+                  <PhoneIcon className="h-4 w-4 flex-shrink-0" />
+                  <span>{settings.contactPhoneNumberDisplay || settings.contactPhoneNumber}</span>
                 </a>
               )}
             </div>
@@ -389,7 +431,7 @@ export default function Header() {
             <div className="flex lg:hidden">
               <button
                 type="button"
-                className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+                className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-all"
                 onClick={() => setMobileMenuOpen(true)}
               >
                 <span className="sr-only">Open main menu</span>
