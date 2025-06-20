@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
 /* Forzar modo claro - eliminar variables dinámicas */
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 255, 255, 255;
+  color-scheme: light only;
+}
+
 html {
-  color-scheme: light;
+  color-scheme: light only;
+  background-color: #ffffff;
 }
 
 body {
@@ -15,7 +22,7 @@ body {
 /* Asegurar que todos los elementos raíz usen fondo blanco */
 #__next,
 .main {
-  background: #ffffff;
+  background: #ffffff !important;
 }
 
 /* Prevenir cualquier fondo oscuro automático */
@@ -23,14 +30,41 @@ body {
   color-scheme: light;
 }
 
+/* Fix específico para Safari iOS */
+@supports (-webkit-touch-callout: none) {
+  body {
+    background-color: #ffffff !important;
+  }
+  
+  #__next,
+  .main,
+  main {
+    background-color: #ffffff !important;
+  }
+}
+
 /* Estilos adicionales para mejorar el responsive */
 @media (max-width: 768px) {
   body {
-    background: #ffffff;
+    background: #ffffff !important;
   }
   
   /* Asegurar que el header móvil no tenga fondo oscuro */
   header {
     background: #ffffff !important;
+  }
+}
+
+/* Configuración explícita para modo no oscuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 0, 0, 0;
+    --background-rgb: 255, 255, 255;
+    color-scheme: light;
+  }
+  
+  html, body {
+    background-color: #ffffff !important;
+    color: #171717;
   }
 }
