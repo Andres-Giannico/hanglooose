@@ -40,10 +40,10 @@ export default function CategoryClientPage({ category }: CategoryClientPageProps
   return (
     <div className="bg-white min-h-screen">
       {/* Hero Header */}
-      <div className="relative h-[50vh] min-h-[400px] bg-gradient-to-br from-blue-900 to-indigo-900 text-white overflow-hidden">
+      <div className="relative h-[35vh] min-h-[280px] bg-gradient-to-r from-blue-800 to-indigo-800 text-white overflow-hidden">
         {/* Decorative circles */}
-        <div className="absolute -left-20 -top-20 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl"></div>
-        <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute -left-20 -top-20 w-60 h-60 bg-blue-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute -right-20 -bottom-20 w-60 h-60 bg-indigo-600/20 rounded-full blur-3xl"></div>
         
         {/* Background image with parallax effect */}
         <div className="absolute inset-0 overflow-hidden">
@@ -74,23 +74,23 @@ export default function CategoryClientPage({ category }: CategoryClientPageProps
         </div>
         
         {/* Hero content */}
-        <div className="relative container mx-auto px-4 flex flex-col justify-center h-full pb-12">
+        <div className="relative container mx-auto px-4 flex flex-col justify-center h-full pb-8">
           <div className="max-w-3xl">
-            <h1 className="text-4xl sm:text-6xl font-extrabold mb-6 tracking-tight drop-shadow-md">
+            <h1 className="text-3xl sm:text-5xl font-extrabold mb-4 tracking-tight drop-shadow-md">
               <span className="inline-block motion-safe:animate-fade-in-up">{category.title}</span>
             </h1>
             
             {category.shortDescription && (
-              <p className="text-xl text-blue-50 mb-8 max-w-2xl motion-safe:animate-fade-in-up motion-safe:animate-delay-200 drop-shadow-sm">
+              <p className="text-lg text-blue-50 mb-5 max-w-2xl motion-safe:animate-fade-in-up motion-safe:animate-delay-200 drop-shadow-sm">
                 {category.shortDescription}
               </p>
             )}
             
             {/* Activity count badge */}
             <div className="flex flex-wrap gap-4 motion-safe:animate-fade-in-up motion-safe:animate-delay-300">
-              <div className="inline-flex items-center rounded-full bg-blue-600/90 px-5 py-2.5 text-sm font-medium text-white shadow-lg border border-blue-500/30">
+              <div className="inline-flex items-center rounded-full bg-blue-700/80 px-3.5 py-1.5 text-sm font-medium text-white shadow-md border border-blue-600/20">
                 <svg 
-                  className="w-5 h-5 mr-2 text-blue-300" 
+                  className="w-4 h-4 mr-1.5 text-blue-300" 
                   fill="none" 
                   viewBox="0 0 24 24" 
                   stroke="currentColor"
@@ -106,24 +106,24 @@ export default function CategoryClientPage({ category }: CategoryClientPageProps
         
         {/* Wave divider */}
         <div className="absolute -bottom-1 left-0 right-0 overflow-hidden">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" fill="white" preserveAspectRatio="none" className="h-10 w-full">
-            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" fill="white" preserveAspectRatio="none" className="h-8 w-full">
+            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"></path>
           </svg>
         </div>
       </div>
       
       {/* Content Area */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6">
         {/* Information Banner */}
-        <div className="max-w-7xl mx-auto mb-12">
-          <div className="bg-blue-50 border border-blue-200 p-5 rounded-xl shadow-sm flex items-center">
-            <div className="flex-shrink-0 bg-blue-100 rounded-full p-2.5 shadow-inner">
-              <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="max-w-7xl mx-auto mb-8">
+          <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg shadow-sm flex items-center">
+            <div className="flex-shrink-0 bg-blue-100 rounded-full p-2 shadow-inner">
+              <svg className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <div className="ml-4">
-              <p className="text-blue-800 font-medium">
+            <div className="ml-3">
+              <p className="text-blue-800 font-medium text-sm">
                 Book in advance to secure your spot. Flexible cancellation available on most activities.
               </p>
             </div>

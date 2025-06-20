@@ -79,7 +79,8 @@ async function getSettings() {
 
 // This is the new Server Component
 export default async function ProductPage({ params }: ProductPageProps) {
-  const product = await getProduct(params.slug);
+  const slug = params.slug;
+  const product = await getProduct(slug);
   const settings = await getSettings();
 
   if (!product) {

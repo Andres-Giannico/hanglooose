@@ -66,7 +66,8 @@ async function getCategory(slug: string) {
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
-  const category = await getCategory(params.slug) as Category
+  const slug = params.slug;
+  const category = await getCategory(slug) as Category
   
   if (!category) {
     return {
@@ -81,7 +82,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const category = await getCategory(params.slug) as Category
+  const slug = params.slug;
+  const category = await getCategory(slug) as Category
 
   if (!category) {
     return (
