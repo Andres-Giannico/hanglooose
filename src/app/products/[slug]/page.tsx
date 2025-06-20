@@ -2,12 +2,20 @@ import { client } from "@/sanity/client";
 import type { Product } from "@/sanity/types";
 import { groq } from "next-sanity";
 import { notFound } from "next/navigation";
+import type { Viewport } from 'next';
 import ProductClientPage from "./ProductClientPage";
 
 // Prevent automatic scroll restoration
 export const dynamic = 'force-dynamic';
-export const viewport = {
-  scrollBehavior: 'manual'
+export const viewport: Viewport = {
+  themeColor: '#1e3a8a'
+};
+
+// Configuración personalizada para el comportamiento de scroll
+export const metadata = {
+  other: {
+    scrollBehavior: 'manual'
+  }
 };
 
 interface ProductPageProps {
@@ -79,7 +87,8 @@ async function getSettings() {
 
 // This is the new Server Component
 export default async function ProductPage({ params }: ProductPageProps) {
-  const slug = params.slug;
+  // Desestructurar params directamente
+  const { slug } = params;
   const product = await getProduct(slug);
   const settings = await getSettings();
 
@@ -92,7 +101,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   return (
-    <div className="min-h-screen scroll-smooth" style={{ scrollBehavior: 'auto' }}>
+    <div className="min-h-screen">
       <ProductClientPage product={product} whatsappSettings={settings} />
     </div>
   );

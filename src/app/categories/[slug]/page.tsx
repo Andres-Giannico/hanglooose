@@ -5,8 +5,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { urlForImage } from '@/sanity/image'
 import type { SanityImage } from '@/sanity/types'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import CategoryClientPage from './CategoryClientPage'
+
+// Configuración de viewport
+export const viewport: Viewport = {
+  themeColor: '#1e3a8a'
+}
 
 interface Product {
   _id: string
@@ -66,7 +71,7 @@ async function getCategory(slug: string) {
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
-  const slug = params.slug;
+  const { slug } = params;
   const category = await getCategory(slug) as Category
   
   if (!category) {
@@ -82,7 +87,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const slug = params.slug;
+  const { slug } = params;
   const category = await getCategory(slug) as Category
 
   if (!category) {

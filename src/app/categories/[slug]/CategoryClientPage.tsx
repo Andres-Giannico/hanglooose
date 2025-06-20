@@ -63,13 +63,13 @@ export default function CategoryClientPage({ category }: CategoryClientPageProps
         </div>
         
         {/* Breadcrumbs */}
-        <div className="relative container mx-auto px-4 pt-8">
-          <nav className="flex text-sm font-medium">
+        <div className="relative container mx-auto px-4 pt-6 sm:pt-8">
+          <nav className="flex text-xs sm:text-sm font-medium">
             <Link href="/" className="text-blue-100 hover:text-white transition">
               Inicio
             </Link>
-            <span className="mx-2 text-blue-200">/</span>
-            <span className="text-white">{category.title}</span>
+            <span className="mx-1 sm:mx-2 text-blue-200">/</span>
+            <span className="text-white truncate max-w-[200px]">{category.title}</span>
           </nav>
         </div>
         
@@ -88,9 +88,9 @@ export default function CategoryClientPage({ category }: CategoryClientPageProps
             
             {/* Activity count badge */}
             <div className="flex flex-wrap gap-4 motion-safe:animate-fade-in-up motion-safe:animate-delay-300">
-              <div className="inline-flex items-center rounded-full bg-blue-700/80 px-3.5 py-1.5 text-sm font-medium text-white shadow-md border border-blue-600/20">
+              <div className="inline-flex items-center rounded-full bg-blue-700/80 px-2.5 sm:px-3.5 py-1.5 text-xs sm:text-sm font-medium text-white shadow-md border border-blue-600/20">
                 <svg 
-                  className="w-4 h-4 mr-1.5 text-blue-300" 
+                  className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 text-blue-300" 
                   fill="none" 
                   viewBox="0 0 24 24" 
                   stroke="currentColor"
@@ -98,7 +98,8 @@ export default function CategoryClientPage({ category }: CategoryClientPageProps
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
                 <span className="mr-1 font-bold">{productCount}</span> 
-                <span>{productCount === 1 ? 'activity' : 'activities'} available</span>
+                <span className="hidden xs:inline">{productCount === 1 ? 'activity' : 'activities'} </span>
+                <span>available</span>
               </div>
             </div>
           </div>
@@ -116,14 +117,14 @@ export default function CategoryClientPage({ category }: CategoryClientPageProps
       <div className="container mx-auto px-4 py-6">
         {/* Information Banner */}
         <div className="max-w-7xl mx-auto mb-8">
-          <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg shadow-sm flex items-center">
-            <div className="flex-shrink-0 bg-blue-100 rounded-full p-2 shadow-inner">
-              <svg className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="bg-blue-50 border border-blue-200 p-3 sm:p-4 rounded-lg shadow-sm flex flex-col sm:flex-row sm:items-center">
+            <div className="flex-shrink-0 bg-blue-100 rounded-full p-2 shadow-inner w-fit mb-2 sm:mb-0">
+              <svg className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <div className="ml-3">
-              <p className="text-blue-800 font-medium text-sm">
+            <div className="sm:ml-3">
+              <p className="text-blue-800 font-medium text-xs sm:text-sm">
                 Book in advance to secure your spot. Flexible cancellation available on most activities.
               </p>
             </div>
@@ -149,13 +150,13 @@ export default function CategoryClientPage({ category }: CategoryClientPageProps
         
         {/* Filters and Sort Row */}
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 pb-6 border-b border-gray-200">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-4 sm:mb-10 sm:pb-6 border-b border-gray-200">
             <div className="flex-1">
-              <h2 className="text-3xl font-bold text-gray-900 flex items-center">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 flex items-center">
                 {productCount > 0 ? (
                   <>
                     <span>Available Activities</span>
-                    <span className="ml-3 text-sm font-medium text-blue-600 bg-blue-100 px-3 py-1 rounded-full">
+                    <span className="ml-2 sm:ml-3 text-xs sm:text-sm font-medium text-blue-600 bg-blue-100 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full">
                       {productCount}
                     </span>
                   </>
@@ -165,14 +166,14 @@ export default function CategoryClientPage({ category }: CategoryClientPageProps
               </h2>
             </div>
             
-            <div className="flex items-center space-x-4 mt-4 md:mt-0">
+            <div className="flex items-center space-x-2 sm:space-x-4 mt-3 md:mt-0">
               {/* Sort Dropdown (static in SSR) */}
               <div className="flex items-center">
-                <span className="text-sm text-gray-500 mr-2">Sort by:</span>
+                <span className="text-xs sm:text-sm text-gray-500 mr-1 sm:mr-2">Sort by:</span>
                 <div className="relative">
-                  <span className="text-sm font-medium bg-white border border-gray-300 rounded-lg px-4 py-2 inline-flex items-center cursor-default">
+                  <span className="text-xs sm:text-sm font-medium bg-white border border-gray-300 rounded-lg px-2 sm:px-4 py-1 sm:py-2 inline-flex items-center cursor-default">
                     Most Popular
-                    <svg className="ml-2 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="ml-1 sm:ml-2 w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </span>
@@ -219,23 +220,23 @@ export default function CategoryClientPage({ category }: CategoryClientPageProps
         
         {/* Bottom CTA */}
         {productCount > 0 && (
-          <div className="mt-20 max-w-6xl mx-auto">
-            <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-10 text-white shadow-lg overflow-hidden relative">
+          <div className="mt-16 sm:mt-20 max-w-6xl mx-auto">
+            <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl sm:rounded-2xl p-6 sm:p-10 text-white shadow-lg overflow-hidden relative">
               {/* Decorative elements */}
-              <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-500/30 rounded-full blur-xl"></div>
-              <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/30 rounded-full blur-xl"></div>
+              <div className="absolute -bottom-10 -left-10 w-32 sm:w-40 h-32 sm:h-40 bg-blue-500/30 rounded-full blur-xl"></div>
+              <div className="absolute -top-10 -right-10 w-32 sm:w-40 h-32 sm:h-40 bg-indigo-500/30 rounded-full blur-xl"></div>
               
               <div className="relative z-10 text-center max-w-3xl mx-auto">
-                <h3 className="text-2xl font-bold mb-4">Can't find what you're looking for?</h3>
-                <p className="text-blue-100 mb-8 text-lg">
+                <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Can't find what you're looking for?</h3>
+                <p className="text-blue-100 mb-6 sm:mb-8 text-base sm:text-lg">
                   We have many more options available. Explore all our activities or get in touch with us for assistance.
                 </p>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center px-8 py-4 border border-transparent text-base font-bold rounded-lg shadow-lg bg-white text-blue-600 hover:bg-blue-50 hover:scale-105 transform transition-all duration-300"
+                  className="inline-flex items-center px-6 sm:px-8 py-2.5 sm:py-4 border border-transparent text-sm sm:text-base font-bold rounded-lg shadow-lg bg-white text-blue-600 hover:bg-blue-50 hover:scale-105 transform transition-all duration-300"
                 >
                   Contact Us
-                  <svg className="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="ml-2 h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
                 </Link>

@@ -5,7 +5,7 @@ import Footer from './components/Footer'
 import WhatsAppButton from './components/WhatsAppButton'
 import { client } from '@/sanity/client'
 import { groq } from 'next-sanity'
-import { Metadata } from 'next'
+import { Metadata, Viewport } from 'next'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -31,6 +31,14 @@ const settingsQuery = groq`*[_type == "siteSettings"][0]{
 }`
 
 export const metadata: Metadata = {
+  title: {
+    template: '%s | Hang Loose Ibiza',
+    default: 'Hang Loose Ibiza'
+  },
+  description: 'Experience the best boat rentals and water activities in Ibiza'
+}
+
+export const viewport: Viewport = {
   themeColor: '#ffffff',
 }
 
