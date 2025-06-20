@@ -206,7 +206,7 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm" />
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 flex justify-end">
@@ -219,14 +219,14 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
           >
-            <Dialog.Panel className="relative w-full max-w-xs bg-white shadow-xl flex flex-col overflow-y-auto">
-              <div className="flex items-center justify-between px-4 pt-5 pb-2">
+            <Dialog.Panel className="relative w-full max-w-xs bg-white shadow-2xl flex flex-col overflow-y-auto min-h-full">
+              <div className="flex items-center justify-between px-4 pt-6 pb-4 border-b border-gray-100">
                  <Link href="/" className="-m-1.5 p-1.5" onClick={() => setOpen(false)}>
                   <span className="sr-only">{settings?.title || 'Hang Loose Ibiza'}</span>
                     {settings?.logo?.asset ? (
                         <div className="h-10 w-auto">
                         <Image
-                            src={urlForImage(settings.logo).width(200).url()}
+                            src={urlForImage(settings.logo)?.width(200).url() || ''}
                             alt={settings.title || 'Logo'}
                             width={100}
                             height={40}
@@ -242,7 +242,7 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
                  </Link>
                 <button
                   type="button"
-                  className="-m-2.5 rounded-md p-2.5 text-gray-700"
+                  className="-m-2.5 rounded-md p-2.5 text-gray-700 hover:bg-gray-100 transition-colors"
                   onClick={() => setOpen(false)}
                 >
                   <span className="sr-only">Close menu</span>
@@ -251,25 +251,25 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
               </div>
 
               {/* Links */}
-              <div className="mt-6 px-4 space-y-1">
+              <div className="flex-1 px-4 py-6 space-y-2">
                 {menu?.items?.map((item) => (
                   <div key={item._key}>
                     {item.submenu && item.submenu.length > 0 ? (
                       <div>
                         <button
                           onClick={() => setActiveSubmenu(activeSubmenu === item._key ? null : item._key)}
-                          className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                          className="flex w-full items-center justify-between rounded-lg py-3 px-3 text-base font-semibold text-gray-900 hover:bg-gray-50 transition-colors"
                         >
                           <span>{item.text}</span>
                           <ChevronDownIcon
-                            className={`h-5 w-5 flex-none transition-transform duration-200 ${
+                            className={`h-5 w-5 flex-none transition-transform duration-200 text-gray-500 ${
                               activeSubmenu === item._key ? 'rotate-180' : ''
                             }`}
                           />
                         </button>
                         <div
                           className={`mt-1 space-y-1 overflow-hidden transition-all duration-300 ${
-                            activeSubmenu === item._key ? 'max-h-96' : 'max-h-0'
+                            activeSubmenu === item._key ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                           }`}
                         >
                           {item.submenu.map((subItem) => (
@@ -278,7 +278,7 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
                                 key={subItem._key}
                                 href={`/products/${subItem.link.slug.current}`}
                                 onClick={() => setOpen(false)}
-                                className="block rounded-lg py-2 pl-9 pr-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                                className="block rounded-lg py-2 pl-8 pr-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
                               >
                                 {subItem.text}
                               </Link>
@@ -291,7 +291,7 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
                         <Link
                           href={`/categories/${item.link.slug.current}`}
                           onClick={() => setOpen(false)}
-                          className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                          className="block rounded-lg px-3 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 transition-colors"
                         >
                           {item.text}
                         </Link>
@@ -301,16 +301,16 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
                 ))}
               </div>
 
-              <div className="mt-auto border-t border-gray-200 p-4">
+              <div className="border-t border-gray-100 p-4 bg-gray-50">
                 <div className="mb-4">
                   <SearchBar />
                 </div>
                 {settings?.contactPhoneNumber && (
                   <a
                     href={`tel:${settings.contactPhoneNumber}`}
-                    className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-gray-100 px-3.5 py-2.5 text-base font-semibold text-gray-900 shadow-sm hover:bg-gray-200"
+                    className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-blue-600 px-3.5 py-3 text-base font-semibold text-white shadow-sm hover:bg-blue-700 transition-colors"
                   >
-                    <PhoneIcon className="h-5 w-5 flex-shrink-0 text-gray-600" />
+                    <PhoneIcon className="h-5 w-5 flex-shrink-0" />
                     <span>{settings.contactPhoneNumberDisplay}</span>
                   </a>
                 )}
