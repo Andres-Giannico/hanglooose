@@ -32,8 +32,8 @@ export default async function RootLayout({
   const settings = await client.fetch(settingsQuery)
 
   return (
-    <html lang="en" className="h-full">
-      <body className={`${inter.className} min-h-full flex flex-col`}>
+    <html lang="en" className="h-full bg-white">
+      <body className={`${inter.className} h-full flex flex-col`}>
         <Header />
         <main className="flex-grow">
           {children}

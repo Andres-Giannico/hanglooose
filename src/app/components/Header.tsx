@@ -7,7 +7,7 @@ import {groq} from 'next-sanity'
 import {urlForImage, SanityImage} from '@/sanity/image'
 import type { SVGProps } from 'react';
 import { Fragment, useState, useEffect } from 'react'
-import { Dialog, Menu as HeadlessMenu, Popover, Transition } from '@headlessui/react'
+import { Dialog, Menu as HeadlessMenu, Transition } from '@headlessui/react'
 import { Bars3Icon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import SearchBar from './SearchBar'
 
