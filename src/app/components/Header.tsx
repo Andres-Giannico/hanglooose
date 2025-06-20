@@ -8,7 +8,7 @@ import {urlForImage, SanityImage} from '@/sanity/image'
 import type { SVGProps } from 'react';
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Menu as HeadlessMenu, Popover, Transition } from '@headlessui/react'
-import { Bars3Icon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
+import { Bars3Icon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import SearchBar from './SearchBar'
 
 // Types
@@ -191,61 +191,9 @@ const DesktopNavItem = ({ item }: { item: MenuItem }) => {
   );
 }
 
-const MobileNavItem = ({ item, closeMenu }: { item: MenuItem, closeMenu: () => void }) => {
-  const hasSubmenu = item.submenu && item.submenu.length > 0;
-  
-  if (!hasSubmenu && item.link?.slug?.current) {
-    return (
-      <Link
-        href={`/categories/${item.link.slug.current}`}
-        onClick={closeMenu}
-        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-      >
-        {item.text}
-      </Link>
-    );
-  }
-  
-  const [isSubmenuOpen, setSubmenuOpen] = useState(false);
-
-  return (
-    <div>
-      <div
-        className="flex w-full items-center justify-between rounded-lg py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-        onClick={() => setSubmenuOpen(!isSubmenuOpen)}
-      >
-        <span className="flex-1 px-3">{item.text}</span>
-        {hasSubmenu && (
-            <ChevronDownIcon
-              className={`h-5 w-5 flex-none transition-transform duration-200 ${
-                isSubmenuOpen ? 'rotate-180' : ''
-              }`}
-            />
-        )}
-      </div>
-      <div
-        className={`mt-1 space-y-1 overflow-hidden transition-all duration-300 ${
-          isSubmenuOpen ? 'max-h-96' : 'max-h-0'
-        }`}
-      >
-        {item.submenu?.map((subItem) => (
-          subItem.link?.slug && (
-            <Link
-              key={subItem._key}
-              href={`/products/${subItem.link.slug.current}`}
-              onClick={closeMenu}
-              className="block rounded-lg py-2 pl-9 pr-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-            >
-              {subItem.text}
-            </Link>
-          )
-        ))}
-      </div>
-    </div>
-  )
-}
-
 const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen: (open: boolean) => void, menu: NavigationData | null, settings: SiteSettings | null }) => {
+  const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50 lg:hidden" onClose={setOpen}>
@@ -258,7 +206,7 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-40" />
+          <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 flex justify-end">
@@ -304,7 +252,53 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
 
               {/* Links */}
               <div className="mt-6 px-4 space-y-1">
-                {menu?.items?.map((item) => <MobileNavItem key={item._key} item={item} closeMenu={() => setOpen(false)} />)}
+                {menu?.items?.map((item) => (
+                  <div key={item._key}>
+                    {item.submenu && item.submenu.length > 0 ? (
+                      <div>
+                        <button
+                          onClick={() => setActiveSubmenu(activeSubmenu === item._key ? null : item._key)}
+                          className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                        >
+                          <span>{item.text}</span>
+                          <ChevronDownIcon
+                            className={`h-5 w-5 flex-none transition-transform duration-200 ${
+                              activeSubmenu === item._key ? 'rotate-180' : ''
+                            }`}
+                          />
+                        </button>
+                        <div
+                          className={`mt-1 space-y-1 overflow-hidden transition-all duration-300 ${
+                            activeSubmenu === item._key ? 'max-h-96' : 'max-h-0'
+                          }`}
+                        >
+                          {item.submenu.map((subItem) => (
+                            subItem.link?.slug && (
+                              <Link
+                                key={subItem._key}
+                                href={`/products/${subItem.link.slug.current}`}
+                                onClick={() => setOpen(false)}
+                                className="block rounded-lg py-2 pl-9 pr-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                              >
+                                {subItem.text}
+                              </Link>
+                            )
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      item.link?.slug && (
+                        <Link
+                          href={`/categories/${item.link.slug.current}`}
+                          onClick={() => setOpen(false)}
+                          className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                        >
+                          {item.text}
+                        </Link>
+                      )
+                    )}
+                  </div>
+                ))}
               </div>
 
               <div className="mt-auto border-t border-gray-200 p-4">
