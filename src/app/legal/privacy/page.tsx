@@ -1,111 +1,78 @@
-export default function PrivacyPage() {
+export default function PrivacyPolicyPage() {
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="max-w-3xl mx-auto prose prose-lg">
-        <h1 className="text-3xl font-bold mb-8">Privacy Policy</h1>
+    <div className="container mx-auto px-4 py-12">
+      <h1 className="text-3xl font-bold mb-8">Privacy Policy</h1>
+      
+      <div className="prose max-w-none">
+        <p>Last updated: {new Date().toLocaleDateString()}</p>
         
-        <p className="text-gray-600 mb-8">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
-          <p>
-            At Hang Loose Ibiza, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
-          </p>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">2. Information We Collect</h2>
-          
-          <h3 className="text-xl font-semibold mb-3">2.1 Personal Information</h3>
-          <p className="mb-4">We may collect personal information that you voluntarily provide, including:</p>
-          <ul className="list-disc pl-6 mb-6">
-            <li>Name and contact information</li>
-            <li>Payment information</li>
-            <li>Identification documents</li>
-            <li>Boating licenses and certifications</li>
-            <li>Emergency contact details</li>
-          </ul>
-
-          <h3 className="text-xl font-semibold mb-3">2.2 Automatically Collected Information</h3>
-          <p className="mb-4">When you visit our website, we automatically collect:</p>
-          <ul className="list-disc pl-6 mb-6">
-            <li>IP address and device information</li>
-            <li>Browser type and version</li>
-            <li>Usage patterns and preferences</li>
-            <li>Location data (with your consent)</li>
-          </ul>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">3. Use of Your Information</h2>
-          <p className="mb-4">We use the collected information for:</p>
-          <ul className="list-disc pl-6 mb-6">
-            <li>Processing your reservations and payments</li>
-            <li>Providing customer support</li>
-            <li>Sending booking confirmations and updates</li>
-            <li>Improving our services and website</li>
-            <li>Complying with legal obligations</li>
-            <li>Marketing communications (with your consent)</li>
-          </ul>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">4. Data Protection</h2>
-          <p className="mb-4">
-            We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction. These measures include:
-          </p>
-          <ul className="list-disc pl-6 mb-6">
-            <li>Encryption of data in transit and at rest</li>
-            <li>Regular security assessments</li>
-            <li>Access controls and authentication</li>
-            <li>Employee training on data protection</li>
-          </ul>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">5. Your Rights Under GDPR</h2>
-          <p className="mb-4">Under the General Data Protection Regulation (GDPR), you have the right to:</p>
-          <ul className="list-disc pl-6 mb-6">
-            <li>Access your personal data</li>
-            <li>Rectify inaccurate personal data</li>
-            <li>Request erasure of your personal data</li>
-            <li>Object to processing of your personal data</li>
-            <li>Data portability</li>
-            <li>Withdraw consent at any time</li>
-          </ul>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">6. Third-Party Services</h2>
-          <p className="mb-4">
-            We may use third-party service providers to facilitate our services. These providers have access to your personal information only to perform specific tasks on our behalf and are obligated to protect your information.
-          </p>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">7. Data Retention</h2>
-          <p className="mb-4">
-            We retain your personal information for as long as necessary to:
-          </p>
-          <ul className="list-disc pl-6 mb-6">
-            <li>Provide our services</li>
-            <li>Comply with legal obligations</li>
-            <li>Resolve disputes</li>
-            <li>Enforce our agreements</li>
-          </ul>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">8. Contact Us</h2>
-          <p className="mb-4">
-            For any questions about this Privacy Policy or to exercise your rights, please contact our Data Protection Officer at:
-          </p>
-          <ul className="list-none pl-6 mb-6">
-            <li>Email: privacy@ibizahire.boats</li>
-            <li>Phone: +34-654-082-728</li>
-            <li>Address: Calle progreso n 2, San Antonio 07820 Ibiza</li>
-          </ul>
-        </section>
+        <h2 className="text-xl font-semibold mt-6 mb-4">1. Introduction</h2>
+        <p>
+          Welcome to our Privacy Policy. This document explains how we collect, use, and process your personal information 
+          when you use our website and services. We are committed to protecting and respecting your privacy and personal data.
+        </p>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">2. Information We Collect</h2>
+        <p>We may collect the following information:</p>
+        <ul>
+          <li>Personal information such as name, email address, phone number, and billing details when you make a booking or create an account</li>
+          <li>Information about your browsing behavior on our website</li>
+          <li>Information from third parties, including social media platforms</li>
+          <li>Communication data that you send to us</li>
+        </ul>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">3. How We Use Your Information</h2>
+        <p>We use your information for the following purposes:</p>
+        <ul>
+          <li>To provide and manage the services you request</li>
+          <li>To communicate with you regarding your bookings</li>
+          <li>To personalize and improve your experience on our website</li>
+          <li>To process payments</li>
+          <li>To comply with legal obligations</li>
+          <li>For marketing purposes if you have opted in</li>
+        </ul>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">4. Sharing Your Information</h2>
+        <p>
+          We may share your information with third-party service providers who help us deliver our services, 
+          such as payment processors and booking partners. We ensure that these providers adhere to strict data protection standards.
+        </p>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">5. Cookies</h2>
+        <p>
+          Our website uses cookies to enhance your browsing experience. You can manage cookie preferences through your browser settings.
+          For more information, please refer to our <a href="/legal/cookies" className="text-blue-600 hover:underline">Cookie Policy</a>.
+        </p>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">6. Your Rights</h2>
+        <p>You have the following rights regarding your personal data:</p>
+        <ul>
+          <li>The right to access your data</li>
+          <li>The right to rectification</li>
+          <li>The right to erasure</li>
+          <li>The right to restrict processing</li>
+          <li>The right to data portability</li>
+          <li>The right to object</li>
+        </ul>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">7. Data Security</h2>
+        <p>
+          We implement appropriate technical and organizational measures to protect your personal data against unauthorized or 
+          unlawful processing, accidental loss, destruction, or damage.
+        </p>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">8. Changes to This Privacy Policy</h2>
+        <p>
+          We may update this Privacy Policy from time to time. We will notify you of any significant changes by posting the 
+          updated policy on our website with a revised effective date.
+        </p>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">9. Contact Us</h2>
+        <p>
+          If you have any questions about this Privacy Policy or how we handle your personal data, please contact us at 
+          <a href="mailto:info@example.com" className="text-blue-600 hover:underline mx-1">info@example.com</a>
+          or using the contact form on our website.
+        </p>
       </div>
     </div>
   )

@@ -1,94 +1,88 @@
-export default function TermsPage() {
+export default function TermsConditionsPage() {
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="max-w-3xl mx-auto prose prose-lg">
-        <h1 className="text-3xl font-bold mb-8">Terms of Service</h1>
+    <div className="container mx-auto px-4 py-12">
+      <h1 className="text-3xl font-bold mb-8">Terms and Conditions</h1>
+      
+      <div className="prose max-w-none">
+        <p>Last updated: {new Date().toLocaleDateString()}</p>
         
-        <p className="text-gray-600 mb-8">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
-          <p>
-            Welcome to Hang Loose Ibiza. These Terms of Service govern your use of our website, services, and boat rental operations. By accessing or using our services, you agree to be bound by these terms.
-          </p>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">2. Rental Terms & Conditions</h2>
-          <h3 className="text-xl font-semibold mb-3">2.1 Booking and Reservation</h3>
-          <ul className="list-disc pl-6 mb-6">
-            <li>All bookings are subject to availability and confirmation by Hang Loose Ibiza.</li>
-            <li>A valid credit card and deposit may be required to secure your reservation.</li>
-            <li>Cancellation policies apply as specified in Section 3.</li>
-          </ul>
-
-          <h3 className="text-xl font-semibold mb-3">2.2 Requirements and Documentation</h3>
-          <ul className="list-disc pl-6 mb-6">
-            <li>Valid identification is required for all renters.</li>
-            <li>Specific licenses may be required for certain boat categories.</li>
-            <li>All participants must sign liability waivers before departure.</li>
-          </ul>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">3. Cancellation Policy</h2>
-          <ul className="list-disc pl-6 mb-6">
-            <li>Full refund for cancellations made 48 hours or more before the scheduled rental time.</li>
-            <li>50% refund for cancellations made 24-48 hours before the scheduled rental time.</li>
-            <li>No refund for cancellations made less than 24 hours before the scheduled rental time.</li>
-            <li>Weather-related cancellations will be handled on a case-by-case basis.</li>
-          </ul>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">4. Safety and Regulations</h2>
-          <p className="mb-4">
-            Safety is our top priority. All renters must:
-          </p>
-          <ul className="list-disc pl-6 mb-6">
-            <li>Follow all maritime safety regulations and local laws.</li>
-            <li>Wear provided safety equipment at all times.</li>
-            <li>Maintain communication with our base as instructed.</li>
-            <li>Not exceed the maximum passenger capacity.</li>
-            <li>Not operate vessels under the influence of alcohol or drugs.</li>
-          </ul>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">5. Liability and Insurance</h2>
-          <p className="mb-4">
-            Our rental fees include basic insurance coverage. However:
-          </p>
-          <ul className="list-disc pl-6 mb-6">
-            <li>Renters are responsible for any damage caused by negligence or violation of terms.</li>
-            <li>Personal belongings are not covered under our insurance.</li>
-            <li>Additional insurance options are available for purchase.</li>
-          </ul>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">6. Dispute Resolution</h2>
-          <p>
-            Any disputes arising from these terms or our services shall be resolved through:
-          </p>
-          <ol className="list-decimal pl-6 mb-6">
-            <li>Direct negotiation between parties</li>
-            <li>Mediation with a mutually agreed-upon mediator</li>
-            <li>Binding arbitration under Spanish law</li>
-          </ol>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">7. Contact Information</h2>
-          <p>
-            For any questions regarding these terms, please contact us at:
-          </p>
-          <ul className="list-none pl-6 mb-6">
-            <li>Email: info@ibizahire.boats</li>
-            <li>Phone: +34-654-082-728</li>
-            <li>Address: Calle progreso n 2, San Antonio 07820 Ibiza</li>
-          </ul>
-        </section>
+        <h2 className="text-xl font-semibold mt-6 mb-4">1. Introduction</h2>
+        <p>
+          Welcome to our website. These terms and conditions govern your use of our website and services. 
+          By using our website, you accept these terms and conditions in full. If you disagree with these 
+          terms and conditions or any part of them, you must not use our website.
+        </p>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">2. Booking and Reservations</h2>
+        <p>
+          When making a booking or reservation through our website, you must provide accurate and complete information. 
+          All bookings are subject to availability and confirmation. We reserve the right to refuse any booking for any reason.
+        </p>
+        
+        <p className="mt-3">
+          Payment terms and cancellation policies vary by activity and are specified during the booking process. 
+          Please review these carefully before completing your booking.
+        </p>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">3. User Obligations</h2>
+        <p>You must not:</p>
+        <ul>
+          <li>Use our website in any way or take any action that causes, or may cause, damage to the website or impairment of its performance, availability, or accessibility</li>
+          <li>Use our website in any way that is unlawful, illegal, fraudulent, or harmful</li>
+          <li>Use our website to copy, store, host, transmit, send, use, publish, or distribute any material that consists of or is linked to any malicious computer software</li>
+          <li>Conduct any systematic or automated data collection activities on or in relation to our website without our express written consent</li>
+          <li>Use data collected from our website for any direct marketing activity</li>
+        </ul>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">4. Intellectual Property</h2>
+        <p>
+          All content on our website, including but not limited to text, graphics, logos, images, audio clips, 
+          digital downloads, and data compilations, is our property or that of our content suppliers and is protected 
+          by international copyright laws.
+        </p>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">5. Safety and Conduct</h2>
+        <p>
+          Our activities may involve inherent risks. All participants must follow safety instructions provided by our staff. 
+          We reserve the right to refuse service to anyone who does not comply with safety guidelines or whose behavior may 
+          endanger themselves, others, or property.
+        </p>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">6. Limitation of Liability</h2>
+        <p>
+          To the maximum extent permitted by applicable law, we exclude all representations, warranties, and conditions 
+          relating to our website and the use of our website. We will not be liable for any loss or damage of any nature, 
+          including but not limited to:
+        </p>
+        <ul>
+          <li>Loss of profits, business, or revenue</li>
+          <li>Loss of contracts or business opportunities</li>
+          <li>Business interruption</li>
+          <li>Loss of anticipated savings</li>
+          <li>Loss of business information</li>
+          <li>Loss of goodwill</li>
+          <li>Any other indirect or consequential loss</li>
+        </ul>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">7. Changes to These Terms</h2>
+        <p>
+          We may revise these terms and conditions at any time by amending this page. Please check this page 
+          regularly to ensure you are familiar with the current version.
+        </p>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">8. Applicable Law</h2>
+        <p>
+          These terms and conditions are governed by and construed in accordance with the laws of Spain, 
+          and any disputes relating to these terms and conditions will be subject to the exclusive jurisdiction 
+          of the courts of Spain.
+        </p>
+        
+        <h2 className="text-xl font-semibold mt-6 mb-4">9. Contact Information</h2>
+        <p>
+          If you have any questions about these terms and conditions, please contact us at
+          <a href="mailto:info@example.com" className="text-blue-600 hover:underline mx-1">info@example.com</a>
+          or using the contact form on our website.
+        </p>
       </div>
     </div>
   )

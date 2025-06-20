@@ -1,5 +1,5 @@
 import {defineField, defineType} from 'sanity'
-import {MenuIcon} from '@sanity/icons'
+import {MenuIcon, LinkIcon} from '@sanity/icons'
 
 export default defineType({
   name: 'navigationMenu',
@@ -40,10 +40,51 @@ export default defineType({
               to: [{type: 'category'}],
             }),
             defineField({
+              name: 'submenuType',
+              title: 'Submenu Type',
+              type: 'string',
+              options: {
+                list: [
+                  {title: 'No submenu', value: 'none'},
+                  {title: 'Products Submenu', value: 'products'},
+                  {title: 'Categories Submenu', value: 'categories'},
+                  {title: 'Custom Links', value: 'custom'}
+                ],
+                layout: 'radio'
+              },
+              initialValue: 'none',
+            }),
+            defineField({
+              name: 'submenuColumns',
+              title: 'Number of Columns',
+              type: 'number',
+              description: 'For wider submenus, you can display items in multiple columns',
+              options: {
+                list: [
+                  {title: '1 Column', value: 1},
+                  {title: '2 Columns', value: 2},
+                  {title: '3 Columns', value: 3}
+                ]
+              },
+              initialValue: 1,
+              hidden: ({parent}) => parent.submenuType === 'none',
+            }),
+            defineField({
+              name: 'featuredImage',
+              title: 'Featured Image',
+              type: 'image',
+              description: 'Optional image to display in the submenu',
+              options: {
+                hotspot: true
+              },
+              hidden: ({parent}) => parent.submenuType === 'none',
+            }),
+            defineField({
               name: 'submenu',
-              title: 'Sub-Menu',
+              title: 'Custom Submenu Items',
               type: 'array',
               description: 'Add items to create a dropdown menu.',
+              hidden: ({parent}) => parent.submenuType !== 'custom',
               of: [
                 {
                   name: 'subMenuItem',
@@ -57,47 +98,129 @@ export default defineType({
                       validation: (Rule) => Rule.required(),
                     }),
                     defineField({
-                      name: 'link',
+                      name: 'linkType',
+                      title: 'Link Type',
+                      type: 'string',
+                      options: {
+                        list: [
+                          {title: 'Category', value: 'category'},
+                          {title: 'Product', value: 'product'},
+                          {title: 'External URL', value: 'external'},
+                          {title: 'Internal Page', value: 'internal'}
+                        ]
+                      },
+                      initialValue: 'category',
+                    }),
+                    defineField({
+                      name: 'categoryLink',
                       title: 'Link to Category',
                       type: 'reference',
                       to: [{type: 'category'}],
-                      validation: (Rule) => Rule.required(),
+                      hidden: ({parent}) => parent.linkType !== 'category',
+                    }),
+                    defineField({
+                      name: 'productLink',
+                      title: 'Link to Product',
+                      type: 'reference',
+                      to: [{type: 'product'}],
+                      hidden: ({parent}) => parent.linkType !== 'product',
+                    }),
+                    defineField({
+                      name: 'externalUrl',
+                      title: 'External URL',
+                      type: 'url',
+                      hidden: ({parent}) => parent.linkType !== 'external',
+                    }),
+                    defineField({
+                      name: 'internalPage',
+                      title: 'Internal Page',
+                      type: 'string',
+                      description: 'Path to internal page (e.g., "/about" or "/contact")',
+                      hidden: ({parent}) => parent.linkType !== 'internal',
+                    }),
+                    defineField({
+                      name: 'icon',
+                      title: 'Icon',
+                      type: 'string',
+                      description: 'Optional icon name (e.g., "boat", "water", "atv")',
                     }),
                   ],
                   preview: {
                     select: {
                       title: 'text',
-                      subtitle: 'link.name',
+                      linkType: 'linkType',
+                      categoryName: 'categoryLink.title',
+                      productName: 'productLink.name',
+                      url: 'externalUrl',
+                      page: 'internalPage'
                     },
-                    prepare({title, subtitle}) {
+                    prepare({title, linkType, categoryName, productName, url, page}) {
+                      let subtitle = '';
+                      if (linkType === 'category') {
+                        subtitle = `Category: ${categoryName || 'Not selected'}`;
+                      } else if (linkType === 'product') {
+                        subtitle = `Product: ${productName || 'Not selected'}`;
+                      } else if (linkType === 'external') {
+                        subtitle = url || 'No URL';
+                      } else if (linkType === 'internal') {
+                        subtitle = page || 'No path';
+                      }
+                      
                       return {
                         title: title,
-                        subtitle: `-> ${subtitle || 'No category selected'}`,
+                        subtitle: subtitle,
+                        media: LinkIcon
                       }
                     },
                   }
                 },
               ],
             }),
+            defineField({
+              name: 'productsFilter',
+              title: 'Products Filter',
+              type: 'object',
+              description: 'Filter products to show in submenu',
+              hidden: ({parent}) => parent.submenuType !== 'products',
+              fields: [
+                defineField({
+                  name: 'category',
+                  title: 'From Category',
+                  type: 'reference',
+                  to: [{type: 'category'}],
+                }),
+                defineField({
+                  name: 'limit',
+                  title: 'Maximum Products',
+                  type: 'number',
+                  initialValue: 6
+                }),
+              ]
+            }),
           ],
           preview: {
             select: {
               title: 'text',
-              link: 'link.name',
+              link: 'link.title',
+              submenuType: 'submenuType',
               submenu: 'submenu',
             },
-            prepare({title, link, submenu}) {
-              const hasSubmenu = submenu && submenu.length > 0;
+            prepare({title, link, submenuType, submenu}) {
               let subtitle = '';
-              if (link && hasSubmenu) {
-                subtitle = `Links to "${link}" | Sub-menu: ${submenu.length} items`;
-              } else if (link) {
-                subtitle = `Links to: "${link}"`;
-              } else if (hasSubmenu) {
-                subtitle = `Sub-menu: ${submenu.length} items`;
-              } else {
-                subtitle = 'No link or sub-menu';
+              if (link) {
+                subtitle = `Links to "${link}" | `;
               }
+              
+              if (submenuType === 'none') {
+                subtitle += 'No submenu';
+              } else if (submenuType === 'products') {
+                subtitle += 'Products submenu';
+              } else if (submenuType === 'categories') {
+                subtitle += 'Categories submenu';
+              } else if (submenuType === 'custom') {
+                subtitle += `Custom submenu (${(submenu || []).length} items)`;
+              }
+              
               return {
                 title: title,
                 subtitle: subtitle,

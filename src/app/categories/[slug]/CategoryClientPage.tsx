@@ -1,0 +1,288 @@
+'use client';
+
+import Image from 'next/image'
+import Link from 'next/link'
+import { urlForImage } from '@/sanity/image'
+import type { SanityImage } from '@/sanity/types'
+import ProductCard from '@/app/components/ProductCard'
+
+interface Product {
+  _id: string
+  name: string
+  slug: string
+  mainImage?: SanityImage
+  shortDescription?: string
+  price?: number
+  priceSubtitle?: string
+  duration?: string
+  rating?: number
+  reviewCount?: number
+  isBestSeller?: boolean
+  isLikelyToSellOut?: boolean
+}
+
+interface Category {
+  title: string
+  description?: string
+  shortDescription?: string
+  headerImage?: SanityImage
+  seoDescription?: string
+  products?: Product[]
+}
+
+interface CategoryClientPageProps {
+  category: Category
+}
+
+export default function CategoryClientPage({ category }: CategoryClientPageProps) {
+  const productCount = category.products?.length || 0;
+
+  return (
+    <div className="bg-white min-h-screen">
+      {/* Hero Header */}
+      <div className="relative h-[50vh] min-h-[400px] bg-gradient-to-br from-blue-900 to-indigo-900 text-white overflow-hidden">
+        {/* Decorative circles */}
+        <div className="absolute -left-20 -top-20 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl"></div>
+        
+        {/* Background image with parallax effect */}
+        <div className="absolute inset-0 overflow-hidden">
+          {category.headerImage && (
+            <div className="h-full w-full relative scale-[1.15] origin-center motion-safe:animate-subtle-zoom">
+              <Image
+                src={urlForImage(category.headerImage)?.width(1920).height(1080).url() || ''}
+                alt={category.title}
+                fill
+                sizes="100vw"
+                className="object-cover opacity-40"
+                priority
+              />
+            </div>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 to-indigo-900/80 backdrop-blur-sm" />
+        </div>
+        
+        {/* Breadcrumbs */}
+        <div className="relative container mx-auto px-4 pt-8">
+          <nav className="flex text-sm font-medium">
+            <Link href="/" className="text-blue-100 hover:text-white transition">
+              Inicio
+            </Link>
+            <span className="mx-2 text-blue-200">/</span>
+            <span className="text-white">{category.title}</span>
+          </nav>
+        </div>
+        
+        {/* Hero content */}
+        <div className="relative container mx-auto px-4 flex flex-col justify-center h-full pb-12">
+          <div className="max-w-3xl">
+            <h1 className="text-4xl sm:text-6xl font-extrabold mb-6 tracking-tight drop-shadow-md">
+              <span className="inline-block motion-safe:animate-fade-in-up">{category.title}</span>
+            </h1>
+            
+            {category.shortDescription && (
+              <p className="text-xl text-blue-50 mb-8 max-w-2xl motion-safe:animate-fade-in-up motion-safe:animate-delay-200 drop-shadow-sm">
+                {category.shortDescription}
+              </p>
+            )}
+            
+            {/* Activity count badge */}
+            <div className="flex flex-wrap gap-4 motion-safe:animate-fade-in-up motion-safe:animate-delay-300">
+              <div className="inline-flex items-center rounded-full bg-blue-600/90 px-5 py-2.5 text-sm font-medium text-white shadow-lg border border-blue-500/30">
+                <svg 
+                  className="w-5 h-5 mr-2 text-blue-300" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                <span className="mr-1 font-bold">{productCount}</span> 
+                <span>{productCount === 1 ? 'activity' : 'activities'} available</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Wave divider */}
+        <div className="absolute -bottom-1 left-0 right-0 overflow-hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" fill="white" preserveAspectRatio="none" className="h-10 w-full">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
+          </svg>
+        </div>
+      </div>
+      
+      {/* Content Area */}
+      <div className="container mx-auto px-4 py-8">
+        {/* Information Banner */}
+        <div className="max-w-7xl mx-auto mb-12">
+          <div className="bg-blue-50 border border-blue-200 p-5 rounded-xl shadow-sm flex items-center">
+            <div className="flex-shrink-0 bg-blue-100 rounded-full p-2.5 shadow-inner">
+              <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-blue-800 font-medium">
+                Book in advance to secure your spot. Flexible cancellation available on most activities.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        {/* Description */}
+        {category.description && (
+          <div className="mb-16 max-w-4xl mx-auto bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800 flex items-center">
+              <span className="bg-blue-100 text-blue-600 p-1.5 rounded-lg mr-3">
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </span>
+              About {category.title}
+            </h2>
+            <div className="prose max-w-none text-gray-700 leading-relaxed">
+              <p>{category.description}</p>
+            </div>
+          </div>
+        )}
+        
+        {/* Filters and Sort Row */}
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 pb-6 border-b border-gray-200">
+            <div className="flex-1">
+              <h2 className="text-3xl font-bold text-gray-900 flex items-center">
+                {productCount > 0 ? (
+                  <>
+                    <span>Available Activities</span>
+                    <span className="ml-3 text-sm font-medium text-blue-600 bg-blue-100 px-3 py-1 rounded-full">
+                      {productCount}
+                    </span>
+                  </>
+                ) : (
+                  'No Activities Available'
+                )}
+              </h2>
+            </div>
+            
+            <div className="flex items-center space-x-4 mt-4 md:mt-0">
+              {/* Sort Dropdown (static in SSR) */}
+              <div className="flex items-center">
+                <span className="text-sm text-gray-500 mr-2">Sort by:</span>
+                <div className="relative">
+                  <span className="text-sm font-medium bg-white border border-gray-300 rounded-lg px-4 py-2 inline-flex items-center cursor-default">
+                    Most Popular
+                    <svg className="ml-2 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Products Grid */}
+        {productCount > 0 ? (
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+              {category.products?.map((product: Product, index: number) => (
+                <div 
+                  key={product._id} 
+                  className="transform hover:-translate-y-2 transition-all duration-300 hover:shadow-xl"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-20 bg-gray-50 rounded-2xl shadow-inner max-w-4xl mx-auto">
+            <div className="mx-auto h-32 w-32 text-gray-300">
+              <svg className="h-full w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 className="mt-4 text-xl font-bold text-gray-900">No Activities Available</h3>
+            <p className="mt-2 text-gray-500 max-w-md mx-auto">We're constantly adding new experiences to our catalog. Please check back soon or explore our other categories.</p>
+            <div className="mt-8">
+              <Link 
+                href="/" 
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+              >
+                Browse All Categories
+              </Link>
+            </div>
+          </div>
+        )}
+        
+        {/* Bottom CTA */}
+        {productCount > 0 && (
+          <div className="mt-20 max-w-6xl mx-auto">
+            <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-10 text-white shadow-lg overflow-hidden relative">
+              {/* Decorative elements */}
+              <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-500/30 rounded-full blur-xl"></div>
+              <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/30 rounded-full blur-xl"></div>
+              
+              <div className="relative z-10 text-center max-w-3xl mx-auto">
+                <h3 className="text-2xl font-bold mb-4">Can't find what you're looking for?</h3>
+                <p className="text-blue-100 mb-8 text-lg">
+                  We have many more options available. Explore all our activities or get in touch with us for assistance.
+                </p>
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center px-8 py-4 border border-transparent text-base font-bold rounded-lg shadow-lg bg-white text-blue-600 hover:bg-blue-50 hover:scale-105 transform transition-all duration-300"
+                >
+                  Contact Us
+                  <svg className="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      
+      {/* Add some custom animations */}
+      <style jsx global>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes subtleZoom {
+          from {
+            transform: scale(1.15);
+          }
+          to {
+            transform: scale(1);
+          }
+        }
+        
+        .animate-fade-in-up {
+          animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .animate-delay-200 {
+          animation-delay: 200ms;
+        }
+        
+        .animate-delay-300 {
+          animation-delay: 300ms;
+        }
+        
+        .animate-subtle-zoom {
+          animation: subtleZoom 15s ease-out forwards;
+        }
+      `}</style>
+    </div>
+  )
+} 
