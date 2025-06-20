@@ -3,10 +3,12 @@ import category from '../schemas/category'
 import product from '../schemas/product'
 import siteSettings from '../schemas/siteSettings'
 import navigationMenu from '../schemas/navigation'
+import homeSettings from '../schemas/homeSettings'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   product,
   category,
   siteSettings,
   navigationMenu,
+  homeSettings,
 ]

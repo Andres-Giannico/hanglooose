@@ -34,6 +34,7 @@ export interface Product {
   gallery: SanityImage[]
   price: number
   showFromPrice?: boolean
+  showOnHome?: boolean
   priceSubtitle?: string
   shortDescription?: string
   duration?: string
@@ -87,4 +88,38 @@ export interface FooterSettings {
   }>
   footerCopyright?: string
   footerCredits?: string
+}
+
+export interface HomeFeature {
+  title: string
+  description: string
+  icon?: string
+}
+
+export interface AboutFeature {
+  title: string
+  description: string
+}
+
+export interface HomeSettings {
+  heroTitle: string
+  heroSubtitle: string
+  heroImage: SanityImage
+  heroButtonText: string
+  heroButtonLink: string
+  
+  aboutTitle: string
+  aboutDescription: string
+  aboutFeatures: AboutFeature[]
+  
+  featuresTitle: string
+  features: HomeFeature[]
+  
+  featuredProductsTitle: string
+  featuredProductsCount: number
+  
+  ctaTitle: string
+  ctaDescription: string
+  ctaButtonText: string
+  ctaButtonLink: string
 } 

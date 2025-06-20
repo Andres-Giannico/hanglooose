@@ -4,7 +4,7 @@
  * This configuration is used to for the Sanity Studio that's mounted on the `/app/studio/[[...tool]]/page.tsx` route
  */
 
-import {CogIcon, MenuIcon} from '@sanity/icons'
+import {CogIcon, MenuIcon, HomeIcon} from '@sanity/icons'
 import {visionTool} from '@sanity/vision'
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
@@ -35,6 +35,16 @@ export default defineConfig({
                 S.document()
                   .schemaType('siteSettings')
                   .documentId('siteSettings')
+              ),
+            // Singleton for Home Settings
+            S.listItem()
+              .title('Home Page Settings')
+              .id('homeSettings')
+              .icon(HomeIcon)
+              .child(
+                S.document()
+                  .schemaType('homeSettings')
+                  .documentId('homeSettings')
               ),
             // Singleton for Navigation Menu
             S.listItem()

@@ -308,12 +308,12 @@ export default function Header() {
             <div className="flex-shrink-0">
               <Link href="/" className="block" aria-label="Home">
                 {settings?.logo?.asset ? (
-                  <div className="h-14 w-14">
+                  <div className="h-16 w-16">
                     <Image
-                      src={urlForImage(settings.logo)?.width(120).height(120).url() || ''}
+                      src={urlForImage(settings.logo)?.width(150).height(150).url() || ''}
                       alt={settings.title || 'Logo'}
-                      width={120}
-                      height={120}
+                      width={150}
+                      height={150}
                       className="h-full w-full object-contain"
                       priority
                     />
