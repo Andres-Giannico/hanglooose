@@ -10,37 +10,75 @@ export const viewport = {
   scrollBehavior: 'manual'
 };
 
-// This is the new Server Component
-export default async function ProductPage({ params }: { params: { slug: string } }) {
-  const product: Product = await client.fetch(
+interface ProductPageProps {
+  params: {
+    slug: string
+  }
+}
+
+async function getProduct(slug: string) {
+  return await client.fetch(
     groq`*[_type == "product" && slug.current == $slug][0]{
-      ...,
+      _id,
+      name,
       "slug": slug.current,
-      "gallery": gallery[]{
-        _key,
-        _type,
-        asset,
-        hotspot,
-        crop
-      },
-      "paymentMethods": {
+      mainImage,
+      gallery,
+      shortDescription,
+      fullDescription[]{
         ...,
-        "logos": logos{
-          _type,
-          asset->{
-            _id,
-            _type,
-            _ref,
-            url
-          }
+        _type == "image" => {
+          ...,
+          asset->
+        },
+        _type == "htmlContent" => {
+          ...,
+          code
         }
+      },
+      price,
+      showFromPrice,
+      priceSubtitle,
+      duration,
+      rating,
+      reviewCount,
+      isBestSeller,
+      isLikelyToSellOut,
+      features,
+      includes,
+      notIncludes,
+      freeCancellation,
+      reserveNowPayLater,
+      instructorInfo,
+      isPrivateGroup,
+      bookingGuarantees,
+      paymentMethods,
+      importantInformation,
+      bookingWidget,
+      "faqs": faqs[]{
+        question,
+        answer
+      },
+      category->{
+        _id,
+        title,
+        "slug": slug.current
       }
     }`,
-    { slug: params.slug }
+    { slug }
   );
+}
+
+// This is the new Server Component
+export default async function ProductPage({ params }: ProductPageProps) {
+  const product = await getProduct(params.slug);
 
   if (!product) {
-    notFound();
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <h1 className="text-4xl font-bold text-gray-900">Producto no encontrado</h1>
+      </div>
+    );
   }
 
   return (

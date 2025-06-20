@@ -1,0 +1,55 @@
+products:
+  - name: "Boat Hire No License"
+    slug: "boat-hire-no-license-ibiza"
+    price: 230
+    showFromPrice: true
+    priceSubtitle: "Half Day Rental"
+    duration: "4 Hours"
+    shortDescription: "Perfect for beginners, no license required. Explore Ibiza's beautiful coast."
+    features:
+      - key: "Capacity"
+        value: "6 persons"
+      - key: "Length"
+        value: "5 meters"
+      - key: "Engine"
+        value: "40HP"
+    includes:
+      - "Fuel"
+      - "Life jackets"
+      - "Safety equipment"
+    notIncludes:
+      - "Transport"
+      - "Food and drinks"
+    bookingGuarantees:
+      - "Instant confirmation"
+      - "Flexible cancellation policy"
+      - "Quick and easy reservation"
+      - "Partial online payment"
+    faqs:
+      - question: "Do I need experience to rent a boat?"
+        answer: "No experience needed! Our boats are easy to handle and we provide full instructions."
+      - question: "What happens if the weather is bad?"
+        answer: "In case of bad weather, you can reschedule or get a full refund."
+    bookingWidget:
+      enableWidget: true
+      bookingProductId: 123
+      billingTermIds: [1, 2]
+      showQuantity: true
+    mainImage:
+      _type: "image"
+      asset:
+        _ref: "image-reference-1"
+    gallery:
+      - _type: "image"
+        asset:
+          _ref: "image-reference-2"
+      - _type: "image"
+        asset:
+          _ref: "image-reference-3"
+    
+  - name: "Speed Boat with Captain"
+    slug: "speed-boat-with-captain"
+    price: 450
+    showFromPrice: true
+    priceSubtitle: "Full Day"
+    # ... más productos 

@@ -32,7 +32,9 @@ interface SubMenuItem {
   _key: string;
   text: string;
   link?: {
-    slug: string;
+    slug: {
+      current: string;
+    };
   }
 }
 
@@ -40,7 +42,9 @@ interface MenuItem {
   _key: string;
   text: string;
   link?: {
-    slug: string;
+    slug: {
+      current: string;
+    };
   };
   submenu?: SubMenuItem[];
 }
@@ -65,13 +69,13 @@ const menuQuery = groq`*[_type == "navigationMenu" && _id == "main-menu"][0]{
     _key,
     text,
     link->{
-      "slug": slug.current
+      slug
     },
     submenu[]{
       _key,
       text,
       link->{
-        "slug": slug.current
+        slug
       }
     }
   }
@@ -138,7 +142,7 @@ const DesktopNavItem = ({ item }: { item: MenuItem }) => {
                 <HeadlessMenu.Item>
                   {({ active }) => (
                     <Link
-                      href={`/categories/${item.link?.slug}`}
+                      href={`/categories/${item.link?.slug?.current}`}
                       className={`${
                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                       } block px-4 py-2 text-sm font-medium`}
@@ -152,7 +156,7 @@ const DesktopNavItem = ({ item }: { item: MenuItem }) => {
                 <HeadlessMenu.Item key={subItem._key}>
                   {({ active }) => (
                     <Link
-                      href={`/products/${subItem.link?.slug}`}
+                      href={`/products/${subItem.link?.slug?.current}`}
                       className={`${
                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                       } block px-4 py-2 text-sm`}
@@ -172,7 +176,7 @@ const DesktopNavItem = ({ item }: { item: MenuItem }) => {
   if (hasLink) {
     return (
       <Link
-        href={`/categories/${item.link?.slug}`}
+        href={`/categories/${item.link?.slug?.current}`}
         className="px-3 py-2 text-base font-medium text-gray-700 transition-all duration-200 rounded-lg hover:bg-gray-100/80 hover:text-gray-900"
       >
         {item.text}
@@ -239,7 +243,10 @@ const MobileNavItem = ({ item, closeMenu }: { item: MenuItem, closeMenu: () => v
   
   if (!hasSubmenu) {
     return (
-      <Link href={item.link?.slug ? `/categories/${item.link.slug}` : '#'} onClick={closeMenu} className="block px-3 py-2 -mx-3 text-base font-semibold leading-7 text-gray-900 rounded-lg hover:bg-gray-50">
+      <Link
+        href={`/categories/${item.link?.slug?.current}`}
+        className="px-3 py-2 text-base font-medium text-gray-700 transition-all duration-200 rounded-lg hover:bg-gray-100/80 hover:text-gray-900"
+      >
         {item.text}
       </Link>
     );
@@ -264,13 +271,13 @@ const MobileNavItem = ({ item, closeMenu }: { item: MenuItem, closeMenu: () => v
           >
             <Popover.Panel className="mt-2 space-y-2 pl-6">
               {item.link?.slug && (
-                <Link href={`/categories/${item.link.slug}`} onClick={closeMenu} className="block py-2 pr-3 text-sm font-semibold leading-7 text-gray-700 rounded-lg pl-9 hover:bg-gray-50">
+                <Link href={`/categories/${item.link.slug.current}`} onClick={closeMenu} className="block py-2 pr-3 text-sm font-semibold leading-7 text-gray-700 rounded-lg pl-9 hover:bg-gray-50">
                   {item.text} (Main)
                 </Link>
               )}
               {item.submenu?.map((subItem) => (
                 subItem.link?.slug && (
-                  <Link key={subItem._key} href={`/products/${subItem.link.slug}`} onClick={closeMenu} className="block py-2 pr-3 text-sm font-semibold leading-7 text-gray-700 rounded-lg pl-9 hover:bg-gray-50">
+                  <Link key={subItem._key} href={`/products/${subItem.link.slug.current}`} onClick={closeMenu} className="block py-2 pr-3 text-sm font-semibold leading-7 text-gray-700 rounded-lg pl-9 hover:bg-gray-50">
                     {subItem.text}
                   </Link>
                 )

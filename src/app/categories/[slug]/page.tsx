@@ -1,16 +1,15 @@
 import { client } from '@/sanity/client'
 import { groq } from 'next-sanity'
-import { notFound } from 'next/navigation'
 import ProductCard from '@/app/components/ProductCard'
-import type { Product } from '@/sanity/types'
 
-interface Category {
-  title: string
-  products: Product[]
+interface CategoryPageProps {
+  params: {
+    slug: string
+  }
 }
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
-  const category: Category = await client.fetch(
+async function getCategory(slug: string) {
+  return await client.fetch(
     groq`*[_type == "category" && slug.current == $slug][0]{
       title,
       "products": *[_type == "product" && references(^._id)]{
@@ -18,9 +17,9 @@ export default async function CategoryPage({ params }: { params: { slug: string 
         name,
         "slug": slug.current,
         mainImage,
+        shortDescription,
         price,
         priceSubtitle,
-        shortDescription,
         duration,
         rating,
         reviewCount,
@@ -28,26 +27,30 @@ export default async function CategoryPage({ params }: { params: { slug: string 
         isLikelyToSellOut
       }
     }`,
-    { slug: params.slug }
+    { slug }
   )
+}
+
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const category = await getCategory(params.slug)
 
   if (!category) {
-    notFound()
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <h1 className="text-4xl font-bold text-gray-900">Categoría no encontrada</h1>
+      </div>
+    )
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">{category.title}</h1>
+    <div className="container mx-auto px-4 py-16">
+      <h1 className="text-4xl font-bold text-gray-900 mb-8">{category.title}</h1>
       
-      {category.products && category.products.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {category.products.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
-        </div>
-      ) : (
-        <p className="text-gray-500">No products found in this category.</p>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {category.products?.map((product: any) => (
+          <ProductCard key={product._id} product={product} />
+        ))}
+      </div>
     </div>
   )
 } 

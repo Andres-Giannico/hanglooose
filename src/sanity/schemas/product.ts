@@ -20,6 +20,16 @@ export default defineType({
       title: 'Visibility Settings',
       options: { collapsible: true, collapsed: false },
     },
+    {
+      name: 'pricing',
+      title: 'Pricing Options',
+      options: { collapsible: true, collapsed: false },
+    },
+    {
+      name: 'faq',
+      title: 'Frequently Asked Questions',
+      options: { collapsible: true, collapsed: false },
+    },
   ],
   fields: [
     // --- Basic Info ---
@@ -63,12 +73,22 @@ export default defineType({
       title: 'Price',
       type: 'number',
       validation: (Rule) => Rule.required(),
+      fieldset: 'pricing',
+    }),
+    defineField({
+      name: 'showFromPrice',
+      title: 'Show "From" before price',
+      type: 'boolean',
+      description: 'Enable this if you want to show "from" before the price',
+      initialValue: false,
+      fieldset: 'pricing',
     }),
     defineField({
       name: 'priceSubtitle',
       title: 'Price Subtitle',
       description: 'e.g., "per group up to 4", "Half day"',
       type: 'string',
+      fieldset: 'pricing',
     }),
     
     // --- Media ---
@@ -420,6 +440,35 @@ export default defineType({
       type: 'string',
       description: 'e.g., "2 hours", "Half Day", "Full Day"',
       validation: Rule => Rule.required(),
+    }),
+
+    // --- FAQs ---
+    defineField({
+      name: 'faqs',
+      title: 'FAQs',
+      description: 'Frequently asked questions about this product',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'faq',
+          fields: [
+            {
+              name: 'question',
+              title: 'Question',
+              type: 'string',
+              validation: Rule => Rule.required()
+            },
+            {
+              name: 'answer',
+              title: 'Answer',
+              type: 'text',
+              validation: Rule => Rule.required()
+            }
+          ]
+        }
+      ],
+      fieldset: 'faq'
     }),
   ],
 
