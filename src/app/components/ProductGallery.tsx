@@ -1,20 +1,21 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { urlForImage } from '@/sanity/image'
 import type { SanityImage } from '@/sanity/types'
 
 interface ProductGalleryProps {
-  gallery?: (SanityImage | null)[]
+  gallery: SanityImage[]
 }
 
-const isValidSanityImage = (image: SanityImage | null | undefined): image is SanityImage => {
-  if (!image || !image.asset || !image.asset._ref) {
-    // console.warn('Invalid image:', image) // Silenced for production
-    return false
-  }
-  return true
+const isValidSanityImage = (image: unknown): image is SanityImage => {
+  return image !== null && 
+         typeof image === 'object' && 
+         image !== null &&
+         'asset' in image &&
+         image.asset !== null &&
+         typeof image.asset === 'object'
 }
 
 const getImageUrl = (image: SanityImage | null | undefined, width: number, height: number): string | undefined => {
@@ -50,117 +51,94 @@ const GalleryImage = ({ image, index, openLightbox, priority = false }: { image:
 }
 
 export default function ProductGallery({ gallery: initialGallery }: ProductGalleryProps) {
+  const [gallery] = useState(initialGallery || [])
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  const [mainImageUrl, setMainImageUrl] = useState<string | undefined>()
 
-  const gallery = initialGallery?.filter(isValidSanityImage) || []
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!lightboxOpen) return
-      if (e.key === 'Escape') closeLightbox()
-      if (e.key === 'ArrowRight') goToNext()
-      if (e.key === 'ArrowLeft') goToPrevious()
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [lightboxOpen])
-
-  if (gallery.length === 0) {
-    return (
-      <div className="lg:col-span-2">
-        <div className="bg-gray-200 rounded-lg w-full h-96 flex items-center justify-center">
-          <p className="text-gray-500">No images available</p>
-        </div>
-      </div>
-    )
-  }
-
-  const openLightbox = (index: number) => {
+  const openLightbox = useCallback((index: number) => {
     setSelectedImageIndex(index)
     setLightboxOpen(true)
-    document.body.style.overflow = 'hidden'
-  }
+  }, [])
 
-  const closeLightbox = () => {
+  const closeLightbox = useCallback(() => {
     setLightboxOpen(false)
-    document.body.style.overflow = 'auto'
-  }
+  }, [])
 
-  const goToPrevious = () => {
-    setSelectedImageIndex(prevIndex => (prevIndex === 0 ? gallery.length - 1 : prevIndex - 1))
-  }
+  const goToNext = useCallback(() => {
+    setSelectedImageIndex((prevIndex) => (prevIndex + 1) % gallery.length)
+  }, [gallery.length])
 
-  const goToNext = () => {
-    setSelectedImageIndex(prevIndex => (prevIndex === gallery.length - 1 ? 0 : prevIndex + 1))
-  }
+  const goToPrevious = useCallback(() => {
+    setSelectedImageIndex((prevIndex) => (prevIndex - 1 + gallery.length) % gallery.length)
+  }, [gallery.length])
 
-  const mainImage = gallery[selectedImageIndex]
-  const mainImageUrl = getImageUrl(mainImage, 1200, 1200)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!lightboxOpen) return
+
+      switch (event.key) {
+        case 'ArrowRight':
+          goToNext()
+          break
+        case 'ArrowLeft':
+          goToPrevious()
+          break
+        case 'Escape':
+          closeLightbox()
+          break
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [lightboxOpen, goToNext, goToPrevious, closeLightbox])
+
+  useEffect(() => {
+    if (lightboxOpen && gallery[selectedImageIndex]) {
+      const url = getImageUrl(gallery[selectedImageIndex], 1200, 1200)
+      setMainImageUrl(url)
+    }
+  }, [selectedImageIndex, lightboxOpen, gallery])
 
   const renderGrid = () => {
-    const count = gallery.length
-    
-    if (count === 1) {
+    if (!gallery || gallery.length === 0) {
       return (
-        <div className="h-96 md:h-[500px]">
+        <div className="aspect-[4/3] bg-gray-200 rounded-lg animate-pulse" />
+      )
+    }
+
+    if (gallery.length === 1) {
+      return (
+        <div className="aspect-[4/3]">
           <GalleryImage image={gallery[0]} index={0} openLightbox={openLightbox} priority />
         </div>
       )
     }
 
-    if (count === 2) {
+    if (gallery.length === 2) {
       return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 h-96 md:h-[500px]">
-          <GalleryImage image={gallery[0]} index={0} openLightbox={openLightbox} priority />
-          <GalleryImage image={gallery[1]} index={1} openLightbox={openLightbox} />
+        <div className="grid grid-cols-2 gap-4">
+          {gallery.map((image, index) => (
+            <div key={index} className="aspect-[4/3]">
+              <GalleryImage image={image} index={index} openLightbox={openLightbox} priority={index === 0} />
+            </div>
+          ))}
         </div>
       )
     }
 
-    if (count === 3) {
-      return (
-        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-2 h-96 md:h-[500px]">
-          <div className="md:col-span-2 md:row-span-2">
-            <GalleryImage image={gallery[0]} index={0} openLightbox={openLightbox} priority />
-          </div>
-          <div className="hidden md:block">
-            <GalleryImage image={gallery[1]} index={1} openLightbox={openLightbox} />
-          </div>
-          <div className="hidden md:block">
-            <GalleryImage image={gallery[2]} index={2} openLightbox={openLightbox} />
-          </div>
-        </div>
-      )
-    }
-
-    if (count === 4) {
-      return (
-        <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 gap-2 h-96 md:h-[500px]">
-          <GalleryImage image={gallery[0]} index={0} openLightbox={openLightbox} priority />
-          <GalleryImage image={gallery[1]} index={1} openLightbox={openLightbox} />
-          <GalleryImage image={gallery[2]} index={2} openLightbox={openLightbox} />
-          <GalleryImage image={gallery[3]} index={3} openLightbox={openLightbox} />
-        </div>
-      )
-    }
-    
-    // 5 or more images
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-2 h-96 md:h-[500px]">
-        <div className="md:col-span-2 md:row-span-2">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="aspect-[4/3]">
           <GalleryImage image={gallery[0]} index={0} openLightbox={openLightbox} priority />
         </div>
-        <div className="hidden md:block">
-          {gallery[1] && <GalleryImage image={gallery[1]} index={1} openLightbox={openLightbox} />}
-        </div>
-        <div className="hidden md:block relative">
-          {gallery[2] && <GalleryImage image={gallery[2]} index={2} openLightbox={openLightbox} />}
-          {count > 3 && (
-            <button onClick={() => openLightbox(2)} className="absolute inset-0 bg-black/50 text-white flex items-center justify-center text-2xl font-bold rounded-lg">
-              +{count - 3}
-            </button>
-          )}
+        <div className="grid grid-rows-2 gap-4">
+          {gallery.slice(1, 3).map((image, index) => (
+            <div key={index} className="aspect-[4/3]">
+              <GalleryImage image={image} index={index + 1} openLightbox={openLightbox} />
+            </div>
+          ))}
         </div>
       </div>
     )

@@ -4,11 +4,30 @@ export default defineType({
   name: 'siteSettings',
   title: 'Site Settings',
   type: 'document',
+  groups: [
+    {
+      name: 'header',
+      title: 'Header Settings',
+    },
+    {
+      name: 'footer',
+      title: 'Footer Settings',
+    },
+    {
+      name: 'contact',
+      title: 'Contact Information',
+    },
+    {
+      name: 'social',
+      title: 'Social Media',
+    },
+  ],
   fields: [
     defineField({
       name: 'title',
       title: 'Site Title',
       type: 'string',
+      group: 'header',
       description: 'The title of the website, used for SEO and internal reference.',
       validation: (Rule) => Rule.required(),
     }),
@@ -16,88 +35,167 @@ export default defineType({
       name: 'logo',
       title: 'Logo',
       type: 'image',
+      group: 'header',
       description: 'Upload the main logo for the header.',
       options: {
-        hotspot: true, // Allows for better cropping
+        hotspot: true,
       },
     }),
+    // Contact Information
     defineField({
       name: 'contactPhoneNumber',
       title: 'Contact Phone Number (for link)',
       type: 'string',
+      group: 'contact',
       description: 'The phone number for the link, e.g., +34871180297',
     }),
     defineField({
       name: 'contactPhoneNumberDisplay',
       title: 'Contact Phone Number (to display)',
       type: 'string',
+      group: 'contact',
       description: 'The text to display for the phone number, e.g., IBIZA: +34-871-180-297',
     }),
     defineField({
-      name: 'contactButtonText',
-      title: 'Contact Button Text',
+      name: 'contactEmail',
+      title: 'Contact Email',
       type: 'string',
-      description: 'The text for the main call-to-action button in the header.',
-      initialValue: 'Contact Us',
+      group: 'contact',
+      description: 'Main contact email address',
     }),
     defineField({
-      name: 'contactButtonLink',
-      title: 'Contact Button Link',
-      type: 'url',
-      description: 'The URL the contact button links to (e.g., a WhatsApp link or /contact page).',
-      validation: (Rule) =>
-        Rule.uri({
-          scheme: ['http', 'https', 'mailto', 'tel'],
-        }),
+      name: 'address',
+      title: 'Business Address',
+      type: 'text',
+      group: 'contact',
+      rows: 2,
     }),
+    // Footer Settings
+    defineField({
+      name: 'footerLogo',
+      title: 'Footer Logo',
+      type: 'image',
+      group: 'footer',
+      description: 'Upload a logo specific for the footer (optional, will use main logo if not provided)',
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: 'footerTagline',
+      title: 'Footer Tagline',
+      type: 'text',
+      group: 'footer',
+      rows: 2,
+      description: 'A short description or tagline to show in the footer',
+    }),
+    defineField({
+      name: 'footerQuickLinks',
+      title: 'Quick Links Section',
+      type: 'object',
+      group: 'footer',
+      fields: [
+        {
+          name: 'title',
+          title: 'Section Title',
+          type: 'string',
+          initialValue: 'Quick Links',
+        },
+        {
+          name: 'links',
+          title: 'Links',
+          type: 'array',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                {name: 'text', title: 'Link Text', type: 'string'},
+                {name: 'url', title: 'URL', type: 'string'},
+              ],
+            },
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: 'footerLegalLinks',
+      title: 'Legal Links Section',
+      type: 'object',
+      group: 'footer',
+      fields: [
+        {
+          name: 'title',
+          title: 'Section Title',
+          type: 'string',
+          initialValue: 'Legal',
+        },
+        {
+          name: 'links',
+          title: 'Links',
+          type: 'array',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                {name: 'text', title: 'Link Text', type: 'string'},
+                {name: 'url', title: 'URL', type: 'string'},
+              ],
+            },
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: 'footerSocialTitle',
+      title: 'Social Media Section Title',
+      type: 'string',
+      group: 'footer',
+      initialValue: 'Connect With Us',
+    }),
+    // Social Media Links
     defineField({
       name: 'socialLinks',
       title: 'Social Media Links',
       type: 'array',
-      description: 'Add links to your social media profiles. They will appear as icons in the header.',
+      group: 'social',
+      description: 'Add links to your social media profiles',
       of: [
         {
-          name: 'socialLink',
-          title: 'Social Link',
           type: 'object',
           fields: [
-            defineField({
+            {
               name: 'platform',
               title: 'Platform',
               type: 'string',
               options: {
                 list: [
+                  { title: 'Twitter', value: 'twitter' },
                   { title: 'Instagram', value: 'instagram' },
                   { title: 'Facebook', value: 'facebook' },
-                  { title: 'TripAdvisor', value: 'tripadvisor' },
+                  { title: 'LinkedIn', value: 'linkedin' },
                   { title: 'WhatsApp', value: 'whatsapp' },
-                  { title: 'YouTube', value: 'youtube' },
+                  { title: 'TripAdvisor', value: 'tripadvisor' },
                 ],
               },
-              validation: (Rule) => Rule.required(),
-            }),
-            defineField({
-              name: 'url',
-              title: 'URL',
-              type: 'url',
-              validation: (Rule) => Rule.required(),
-            }),
+            },
+            { name: 'url', title: 'URL', type: 'url' },
           ],
-          preview: {
-            select: {
-              title: 'platform',
-              subtitle: 'url'
-            },
-            prepare({ title, subtitle }) {
-              const platformTitle = title ? title.charAt(0).toUpperCase() + title.slice(1) : 'No platform selected';
-              return {
-                title: platformTitle,
-                subtitle: subtitle,
-              };
-            },
-          }
         },
       ],
+    }),
+    defineField({
+      name: 'footerCopyright',
+      title: 'Copyright Text',
+      type: 'string',
+      group: 'footer',
+      description: 'Copyright notice (year will be added automatically)',
+    }),
+    defineField({
+      name: 'footerCredits',
+      title: 'Credits Text',
+      type: 'string',
+      group: 'footer',
+      description: 'Credits or additional footer text',
     }),
   ],
   preview: {

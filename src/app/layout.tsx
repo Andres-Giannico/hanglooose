@@ -1,27 +1,45 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import Header from "./components/Header";
+import './globals.css'
+import { Inter } from 'next/font/google'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import { client } from '@/sanity/client'
+import { groq } from 'next-sanity'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
-  title: "Hang Loose Ibiza | Boat Rental & Watersports",
-  description: "The best boat rentals, boat trips and watersports in Ibiza. No license required for many of our boats.",
-};
+const settingsQuery = groq`*[_type == "siteSettings"][0]{
+  title,
+  logo,
+  footerLogo,
+  footerTagline,
+  contactEmail,
+  contactPhoneNumber,
+  contactPhoneNumberDisplay,
+  address,
+  footerQuickLinks,
+  footerLegalLinks,
+  footerSocialTitle,
+  socialLinks,
+  footerCopyright,
+  footerCredits
+}`
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
+  const settings = await client.fetch(settingsQuery)
+
   return (
-    <html lang="es">
-      <body className={inter.className}>
+    <html lang="en" className="h-full">
+      <body className={`${inter.className} min-h-full flex flex-col`}>
         <Header />
-        <main>{children}</main>
-        {/* A footer can be added here later */}
+        <main className="flex-grow">
+          {children}
+        </main>
+        <Footer settings={settings} />
       </body>
     </html>
-  );
+  )
 }
