@@ -4,6 +4,12 @@ import { groq } from "next-sanity";
 import { notFound } from "next/navigation";
 import ProductClientPage from "./ProductClientPage";
 
+// Prevent automatic scroll restoration
+export const dynamic = 'force-dynamic';
+export const viewport = {
+  scrollBehavior: 'manual'
+};
+
 // This is the new Server Component
 export default async function ProductPage({ params }: { params: { slug: string } }) {
   const product: Product = await client.fetch(
@@ -13,12 +19,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
       "gallery": gallery[]{
         _key,
         _type,
-        asset->{
-          _id,
-          _type,
-          _ref,
-          url
-        },
+        asset,
         hotspot,
         crop
       },
@@ -42,7 +43,11 @@ export default async function ProductPage({ params }: { params: { slug: string }
     notFound();
   }
 
-  return <ProductClientPage product={product} />;
+  return (
+    <div className="min-h-screen scroll-smooth" style={{ scrollBehavior: 'auto' }}>
+      <ProductClientPage product={product} />
+    </div>
+  );
 }
 
 // Re-enable static page generation for better performance and SEO

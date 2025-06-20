@@ -1,10 +1,20 @@
 'use client'
 
+import { useEffect } from 'react'
 import { PortableText } from '@portabletext/react'
 import type { Product } from '@/sanity/types'
 import ProductGallery from '@/app/components/ProductGallery'
 import BookingWidget from '@/app/components/BookingWidget'
 import { urlFor } from '@/sanity/lib/image'
+
+// Configuración personalizada para PortableText
+const portableTextComponents = {
+  types: {
+    htmlContent: ({ value }: { value: { code: string } }) => (
+      <div dangerouslySetInnerHTML={{ __html: value.code }} />
+    ),
+  },
+}
 
 const BookingCard = ({ product, onCheckAvailabilityClick }: { product: Product, onCheckAvailabilityClick: () => void }) => {
   return (
@@ -61,10 +71,35 @@ const PaymentMethodsSection = ({ paymentMethods }: { paymentMethods: Product['pa
     )
 }
 
-
 export default function ProductClientPage({ product }: { product: Product }) {
+  // Force scroll to top on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0)
+    }
+  }, [])
+
   const handleCheckAvailability = () => {
-    document.getElementById('booking-widget-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    const bookingSection = document.getElementById('booking-widget-section')
+    if (bookingSection) {
+      // Load the widget if it hasn't been loaded yet
+      if (typeof window !== 'undefined' && window.loadBookingWidget) {
+        window.loadBookingWidget()
+      }
+
+      // Scroll to the widget section
+      const header = document.querySelector('header')
+      const headerHeight = header?.getBoundingClientRect().height || 0
+      const yOffset = -headerHeight - 20 // 20px extra padding
+      const y = bookingSection.getBoundingClientRect().top + window.pageYOffset + yOffset
+
+      setTimeout(() => {
+        window.scrollTo({
+          top: y,
+          behavior: 'smooth'
+        })
+      }, 100) // Small delay to ensure widget starts loading first
+    }
   }
 
   return (
@@ -91,7 +126,7 @@ export default function ProductClientPage({ product }: { product: Product }) {
             {product.fullDescription && (
               <div className="prose max-w-none">
                 <h2 className="text-2xl font-bold mb-3">Full description</h2>
-                <PortableText value={product.fullDescription} />
+                <PortableText value={product.fullDescription} components={portableTextComponents} />
               </div>
             )}
             {(product.includes && product.includes.length > 0) || (product.notIncludes && product.notIncludes.length > 0) ? (
@@ -130,7 +165,7 @@ export default function ProductClientPage({ product }: { product: Product }) {
             {product.importantInformation && (
               <div className="prose max-w-none bg-gray-50 p-4 rounded-lg">
                 <h2 className="text-2xl font-bold mb-3">Important information</h2>
-                <PortableText value={product.importantInformation} />
+                <PortableText value={product.importantInformation} components={portableTextComponents} />
               </div>
             )}
           </div>
@@ -152,7 +187,7 @@ export default function ProductClientPage({ product }: { product: Product }) {
       {/* Booking Widget Section */}
       {product.bookingWidget?.enableWidget && product.bookingWidget.bookingProductId && (
         <div id="booking-widget-section" className="mt-12 pt-8 border-t">
-          <h2 className="text-3xl font-bold text-center mb-8">Realizar Reserva</h2>
+          <h2 className="text-3xl font-bold text-center mb-8">Make a Reservation</h2>
           <div className="max-w-4xl mx-auto bg-white p-4 sm:p-6 lg:p-8 rounded-xl shadow-2xl">
             <BookingWidget config={product.bookingWidget} />
           </div>
@@ -160,4 +195,12 @@ export default function ProductClientPage({ product }: { product: Product }) {
       )}
     </div>
   )
+}
+
+// Add userInitiatedScroll to Window interface
+declare global {
+  interface Window {
+    userInitiatedScroll?: boolean;
+    loadBookingWidget?: () => void;
+  }
 } 

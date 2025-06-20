@@ -10,6 +10,13 @@ export interface SanityImage {
     [key: string]: unknown; // Allow other properties like hotspot, crop etc.
 }
 
+// Tipo personalizado para bloques HTML
+export interface HTMLBlock {
+    _type: 'htmlContent';
+    _key?: string;
+    code: string;
+}
+
 // Type for the product cards shown on the homepage grid
 export interface ProductCard {
     _id: string;
@@ -24,7 +31,7 @@ export interface ProductCard {
 export interface Product extends ProductCard {
     gallery?: SanityImage[];
     highlights?: string[];
-    fullDescription?: PortableTextBlock[]; // Use specific Portable Text type
+    fullDescription?: (PortableTextBlock | HTMLBlock)[]; // Ahora acepta bloques HTML
     includes?: string[];
     notIncludes?: string[];
     features?: { key: string; value: string }[];
@@ -42,6 +49,7 @@ export interface Product extends ProductCard {
     bookingWidget?: {
         enableWidget?: boolean;
         bookingProductId?: number;
+        billingTermIds?: number[];
         groupByBillingTerm?: boolean;
         displayBillingTerm?: boolean;
         useLargeSlots?: boolean;

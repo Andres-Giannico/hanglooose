@@ -10,6 +10,16 @@ export default defineType({
       title: 'Booking Widget',
       options: { collapsible: true, collapsed: true },
     },
+    {
+      name: 'marketing',
+      title: 'Marketing & Reviews',
+      options: { collapsible: true, collapsed: false },
+    },
+    {
+      name: 'visibility',
+      title: 'Visibility Settings',
+      options: { collapsible: true, collapsed: false },
+    },
   ],
   fields: [
     // --- Basic Info ---
@@ -37,21 +47,40 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     
+    // --- Visibility ---
+    defineField({
+      name: 'showOnHome',
+      title: 'Show on Homepage',
+      type: 'boolean',
+      fieldset: 'visibility',
+      description: 'If enabled, this product will be displayed on the homepage',
+      initialValue: false,
+    }),
+    
     // --- Pricing ---
     defineField({
-        name: 'price',
-        title: 'Price',
-        type: 'number',
-        validation: (Rule) => Rule.required(),
+      name: 'price',
+      title: 'Price',
+      type: 'number',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
-        name: 'priceSubtitle',
-        title: 'Price Subtitle',
-        description: 'e.g., "per group up to 4", "Half day"',
-        type: 'string',
+      name: 'priceSubtitle',
+      title: 'Price Subtitle',
+      description: 'e.g., "per group up to 4", "Half day"',
+      type: 'string',
     }),
     
     // --- Media ---
+    defineField({
+      name: 'mainImage',
+      title: 'Main Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      validation: (Rule) => Rule.required(),
+    }),
     defineField({
       name: 'gallery',
       title: 'Image Gallery',
@@ -73,74 +102,155 @@ export default defineType({
       validation: (Rule) => Rule.required().max(200),
     }),
     defineField({
-        name: 'highlights',
-        title: 'Highlights',
-        type: 'array',
-        of: [{type: 'string'}],
-        description: 'Key selling points, shown as a bulleted list.'
+      name: 'highlights',
+      title: 'Highlights',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'Key selling points, shown as a bulleted list.'
     }),
     defineField({
-        name: 'fullDescription',
-        title: 'Full Description',
-        type: 'array', 
-        of: [{type: 'block'}]
+      name: 'fullDescription',
+      title: 'Full Description',
+      type: 'array',
+      of: [
+        {
+          type: 'block',
+          styles: [
+            {title: 'Normal', value: 'normal'},
+            {title: 'H1', value: 'h1'},
+            {title: 'H2', value: 'h2'},
+            {title: 'H3', value: 'h3'},
+            {title: 'Quote', value: 'blockquote'}
+          ],
+          marks: {
+            decorators: [
+              {title: 'Strong', value: 'strong'},
+              {title: 'Emphasis', value: 'em'},
+              {title: 'Code', value: 'code'},
+              {title: 'Underline', value: 'underline'},
+              {title: 'Strike', value: 'strike-through'},
+            ],
+            annotations: [
+              {
+                title: 'URL',
+                name: 'link',
+                type: 'object',
+                fields: [
+                  {
+                    title: 'URL',
+                    name: 'href',
+                    type: 'url',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+        {
+          type: 'image',
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative text',
+              description: 'Important for SEO and accessibility.',
+            },
+            {
+              name: 'caption',
+              type: 'string',
+              title: 'Caption',
+              description: 'Optional caption for the image',
+            },
+          ],
+        },
+        {
+          type: 'object',
+          name: 'htmlContent',
+          title: 'HTML Content',
+          fields: [
+            {
+              name: 'code',
+              title: 'HTML Code',
+              type: 'text',
+              rows: 10,
+              options: {
+                language: 'html'
+              }
+            }
+          ],
+          preview: {
+            select: {
+              code: 'code'
+            },
+            prepare({ code }) {
+              return {
+                title: 'HTML Content',
+                subtitle: code ? code.substring(0, 50) + '...' : 'Empty HTML'
+              }
+            }
+          }
+        }
+      ],
     }),
 
     // --- Included / Not Included ---
     defineField({
-        name: 'includes',
-        title: 'Includes',
-        type: 'array',
-        of: [{type: 'string'}]
+      name: 'includes',
+      title: 'Includes',
+      type: 'array',
+      of: [{type: 'string'}]
     }),
     defineField({
-        name: 'notIncludes',
-        title: 'Not Includes',
-        type: 'array',
-        of: [{type: 'string'}]
+      name: 'notIncludes',
+      title: 'Not Includes',
+      type: 'array',
+      of: [{type: 'string'}]
     }),
     
     // --- Key Features ---
     defineField({
-        name: 'features',
-        title: 'Technical Features',
-        type: 'array',
-        description: 'For key-value pairs like Length, Capacity, Engine, Duration, etc.',
-        of: [
-            defineField({
-                name: 'feature',
-                title: 'Feature',
-                type: 'object',
-                fields: [
-                    { name: 'key', title: 'Feature Name (e.g. Length, Duration)', type: 'string' },
-                    { name: 'value', title: 'Feature Value (e.g. 5.70 m, 3 Hours)', type: 'string' }
-                ]
-            })
-        ]
+      name: 'features',
+      title: 'Technical Features',
+      type: 'array',
+      description: 'For key-value pairs like Length, Capacity, Engine, Duration, etc.',
+      of: [
+        defineField({
+          name: 'feature',
+          title: 'Feature',
+          type: 'object',
+          fields: [
+            { name: 'key', title: 'Feature Name (e.g. Length, Duration)', type: 'string' },
+            { name: 'value', title: 'Feature Value (e.g. 5.70 m, 3 Hours)', type: 'string' }
+          ]
+        })
+      ]
     }),
     defineField({
-        name: 'freeCancellation',
-        title: 'Free Cancellation Available',
-        type: 'boolean',
-        initialValue: true,
+      name: 'freeCancellation',
+      title: 'Free Cancellation Available',
+      type: 'boolean',
+      initialValue: true,
     }),
     defineField({
-        name: 'reserveNowPayLater',
-        title: 'Reserve Now & Pay Later Available',
-        type: 'boolean',
-        initialValue: true,
+      name: 'reserveNowPayLater',
+      title: 'Reserve Now & Pay Later Available',
+      type: 'boolean',
+      initialValue: true,
     }),
     defineField({
-        name: 'instructorInfo',
-        title: 'Instructor Information',
-        type: 'string',
-        description: 'e.g., "Spanish, English"'
+      name: 'instructorInfo',
+      title: 'Instructor Information',
+      type: 'string',
+      description: 'e.g., "Spanish, English"'
     }),
     defineField({
-        name: 'isPrivateGroup',
-        title: 'Private Group Option',
-        type: 'boolean',
-        initialValue: false,
+      name: 'isPrivateGroup',
+      title: 'Private Group Option',
+      type: 'boolean',
+      initialValue: false,
     }),
 
     // --- Guarantees & Payment ---
@@ -163,33 +273,36 @@ export default defineType({
       ],
     }),
     defineField({
-        name: 'paymentMethods',
-        title: 'Payment Methods Section',
-        type: 'object',
-        fields: [
-            {
-                name: 'text',
-                title: 'Text',
-                type: 'text',
-                rows: 4,
-                description: 'e.g., "Secure payment through major credit cards, Apple Pay, and Google Pay. All transactions are securely processed by Stripe."'
-            },
-            {
-                name: 'logos',
-                title: 'Payment Logos Image',
-                type: 'image',
-                description: 'Upload an image showing the logos (Visa, Mastercard, Stripe, etc.)'
-            }
-        ]
+      name: 'paymentMethods',
+      title: 'Payment Methods Section',
+      type: 'object',
+      fields: [
+        {
+          name: 'text',
+          title: 'Text',
+          type: 'text',
+          rows: 4,
+          description: 'e.g., "Secure payment through major credit cards, Apple Pay, and Google Pay. All transactions are securely processed by Stripe."'
+        },
+        {
+          name: 'logos',
+          title: 'Payment Logos Image',
+          type: 'image',
+          description: 'Upload an image showing the logos (Visa, Mastercard, Stripe, etc.)',
+          options: {
+            hotspot: true
+          }
+        }
+      ]
     }),
 
     // --- Important Info ---
     defineField({
-        name: 'importantInformation',
-        title: 'Important Information',
-        description: 'e.g., "What to bring: Beachwear"',
-        type: 'array',
-        of: [{type: 'block'}]
+      name: 'importantInformation',
+      title: 'Important Information',
+      description: 'e.g., "What to bring: Beachwear"',
+      type: 'array',
+      of: [{type: 'block'}]
     }),
 
     // --- Booking Widget ---
@@ -211,6 +324,17 @@ export default defineType({
           type: 'number',
           description: 'The numeric ID of the product from the Turbobooking system.',
           hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+        defineField({
+          name: 'billingTermIds',
+          title: 'Billing Term IDs',
+          type: 'array',
+          of: [{ type: 'number' }],
+          description: 'Specify which billing terms to show. Leave empty to show all terms.',
+          hidden: ({ parent }) => !parent?.enableWidget,
+          options: {
+            layout: 'tags'
+          }
         }),
         defineField({
           name: 'groupByBillingTerm',
@@ -241,36 +365,68 @@ export default defineType({
           hidden: ({ parent }) => !parent?.enableWidget,
         }),
         defineField({
-            name: 'quantityLabel',
-            title: '"Quantity" Label',
-            type: 'string',
-            placeholder: 'Quantity',
-            hidden: ({ parent }) => !parent?.enableWidget || !parent?.showQuantity,
+          name: 'quantityLabel',
+          title: '"Quantity" Label',
+          type: 'string',
+          placeholder: 'Quantity',
+          hidden: ({ parent }) => !parent?.enableWidget || !parent?.showQuantity,
         }),
         defineField({
-            name: 'bookNowLabel',
-            title: '"Book Now" Button Label',
-            type: 'string',
-            placeholder: 'Book Now',
-            hidden: ({ parent }) => !parent?.enableWidget,
+          name: 'bookNowLabel',
+          title: '"Book Now" Button Label',
+          type: 'string',
+          placeholder: 'Book Now',
+          hidden: ({ parent }) => !parent?.enableWidget,
         }),
       ]
+    }),
+
+    // --- Marketing & Reviews ---
+    defineField({
+      name: 'isBestSeller',
+      title: 'Best Seller',
+      type: 'boolean',
+      fieldset: 'marketing',
+      initialValue: false,
+      description: 'Show "Best Seller" badge on the product card',
+    }),
+    defineField({
+      name: 'isLikelyToSellOut',
+      title: 'Likely to Sell Out',
+      type: 'boolean',
+      fieldset: 'marketing',
+      initialValue: false,
+      description: 'Show "Likely to Sell Out" badge on the product card',
+    }),
+    defineField({
+      name: 'rating',
+      title: 'Rating',
+      type: 'number',
+      fieldset: 'marketing',
+      validation: Rule => Rule.min(0).max(5).precision(1),
+      description: 'Product rating from 0 to 5 (can use decimals)',
+    }),
+    defineField({
+      name: 'reviewCount',
+      title: 'Number of Reviews',
+      type: 'number',
+      fieldset: 'marketing',
+      validation: Rule => Rule.min(0).integer(),
+      description: 'Total number of reviews',
+    }),
+    defineField({
+      name: 'duration',
+      title: 'Duration',
+      type: 'string',
+      description: 'e.g., "2 hours", "Half Day", "Full Day"',
+      validation: Rule => Rule.required(),
     }),
   ],
 
   preview: {
     select: {
       title: 'name',
-      media: 'gallery.0.asset',
-      category: 'category.title',
-    },
-    prepare(selection) {
-      const {title, media, category} = selection
-      return {
-        title,
-        media,
-        subtitle: category ? `in ${category}` : 'Uncategorized',
-      }
+      media: 'mainImage',
     },
   },
 }) 

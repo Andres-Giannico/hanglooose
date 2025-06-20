@@ -9,6 +9,7 @@ import type { SVGProps } from 'react';
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Menu as HeadlessMenu, Popover, Transition } from '@headlessui/react'
 import { Bars3Icon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
+import SearchBar from './SearchBar'
 
 // Types
 interface SocialLink {
@@ -105,11 +106,11 @@ const SocialIcon = ({ platform, ...props }: { platform: string } & SVGProps<SVGS
   return Icon ? Icon(props) : null;
 };
 
-// Component
-export default function Header() {
+// HOOKS
+function useHeaderData() {
   const [settings, setSettings] = useState<SiteSettings | null>(null)
   const [menu, setMenu] = useState<NavigationData | null>(null)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchHeaderData = async () => {
@@ -122,129 +123,247 @@ export default function Header() {
         setMenu(menuData);
       } catch (error) {
         console.error('Failed to fetch header data:', error);
+      } finally {
+        setLoading(false)
       }
     };
     fetchHeaderData();
   }, []);
 
-  return (
-    <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-24 items-center justify-between">
-          {/* Logo */}
-          <div className="flex flex-shrink-0 items-center">
-            <Link href="/" className="flex items-center space-x-2" aria-label="Back to homepage">
-              {settings?.logo?.asset ? (
-                <Image
-                  src={urlForImage(settings.logo)?.width(500).url() || ''}
-                  alt={settings.title || 'Hang Loose Ibiza Logo'}
-                  width={240}
-                  height={70}
-                  className="h-20 w-auto object-contain"
-                  priority
-                />
-              ) : (
-                <span className="text-3xl font-extrabold tracking-tight text-gray-900">{settings?.title || 'HANG LOOSE'}</span>
-              )}
-            </Link>
-          </div>
+  return { settings, menu, loading }
+}
 
-          {/* Navigation Links (Desktop) */}
-          <nav className="hidden lg:flex lg:items-center lg:space-x-8">
-            {menu?.items?.map((item) => {
-              const hasSubmenu = item.submenu && item.submenu.length > 0;
-              const hasLink = item.link?.slug;
+// SUB-COMPONENTS
+const DesktopNavItem = ({ item }: { item: MenuItem }) => {
+  const hasSubmenu = item.submenu && item.submenu.length > 0;
+  const hasLink = item.link?.slug;
 
-              if (hasSubmenu) {
-                return (
-                  <HeadlessMenu as="div" className="relative inline-block text-left" key={item._key}>
-                    <HeadlessMenu.Button className="inline-flex w-full justify-center items-center rounded-md px-3 py-2 text-base font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
-                      {item.text}
-                      <ChevronDownIcon
-                        className="-mr-1 ml-2 h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                    </HeadlessMenu.Button>
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-100"
-                      enterFrom="transform opacity-0 scale-95"
-                      enterTo="transform opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="transform opacity-100 scale-100"
-                      leaveTo="transform opacity-0 scale-95"
+  if (hasSubmenu) {
+    return (
+      <HeadlessMenu as="div" className="relative inline-block text-left">
+        <HeadlessMenu.Button className="inline-flex items-center justify-center px-3 py-2 text-base font-medium text-gray-700 transition-all duration-200 rounded-lg hover:bg-gray-100/80 hover:text-gray-900">
+          <span>{item.text}</span>
+          <ChevronDownIcon className="w-5 h-5 ml-1 text-gray-500" aria-hidden="true" />
+        </HeadlessMenu.Button>
+        <Transition
+          as={Fragment}
+          enter="transition ease-out duration-200"
+          enterFrom="opacity-0 translate-y-1"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition ease-in duration-150"
+          leaveFrom="opacity-100 translate-y-0"
+          leaveTo="opacity-0 translate-y-1"
+        >
+          <HeadlessMenu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right bg-white rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <div className="py-1">
+              {hasLink && (
+                <HeadlessMenu.Item>
+                  {({ active }) => (
+                    <Link
+                      href={`/categories/${item.link?.slug}`}
+                      className={`${
+                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
+                      } block px-4 py-2 text-sm font-medium`}
                     >
-                      <HeadlessMenu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
-                        <div className="px-1 py-1 ">
-                          {hasLink && (
-                             <HeadlessMenu.Item>
-                              {({ active }) => (
-                                <Link
-                                  href={`/categories/${item.link?.slug}`}
-                                  className={`${
-                                    active ? 'bg-blue-500 text-white' : 'text-gray-900'
-                                  } group flex w-full items-center rounded-md px-2 py-2 text-sm font-semibold`}
-                                >
-                                  {item.text} (Main)
-                                </Link>
-                              )}
-                            </HeadlessMenu.Item>
-                          )}
-                          {item.submenu?.map((subItem) => (
-                             <HeadlessMenu.Item key={subItem._key}>
-                              {({ active }) => (
-                                <Link
-                                  href={`/products/${subItem.link?.slug}`}
-                                  className={`${
-                                    active ? 'bg-blue-500 text-white' : 'text-gray-900'
-                                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                >
-                                  {subItem.text}
-                                </Link>
-                              )}
-                            </HeadlessMenu.Item>
-                          ))}
-                        </div>
-                      </HeadlessMenu.Items>
-                    </Transition>
-                  </HeadlessMenu>
-                );
-              }
+                      {item.text} (Main)
+                    </Link>
+                  )}
+                </HeadlessMenu.Item>
+              )}
+              {item.submenu?.map((subItem) => (
+                <HeadlessMenu.Item key={subItem._key}>
+                  {({ active }) => (
+                    <Link
+                      href={`/products/${subItem.link?.slug}`}
+                      className={`${
+                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
+                      } block px-4 py-2 text-sm`}
+                    >
+                      {subItem.text}
+                    </Link>
+                  )}
+                </HeadlessMenu.Item>
+              ))}
+            </div>
+          </HeadlessMenu.Items>
+        </Transition>
+      </HeadlessMenu>
+    );
+  }
 
-              if (hasLink) {
-                return (
-                  <Link
-                    key={item._key}
-                    href={`/categories/${item.link?.slug}`}
-                    className="rounded-md px-3 py-2 text-base font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
-                  >
-                    {item.text}
-                  </Link>
-                );
-              }
-              
-              // Fallback for items that are neither a link nor a submenu (e.g. just text)
-              return (
-                <span key={item._key} className="rounded-md px-3 py-2 text-base font-medium text-gray-700">
-                  {item.text}
-                </span>
-              );
-            })}
-          </nav>
+  if (hasLink) {
+    return (
+      <Link
+        href={`/categories/${item.link?.slug}`}
+        className="px-3 py-2 text-base font-medium text-gray-700 transition-all duration-200 rounded-lg hover:bg-gray-100/80 hover:text-gray-900"
+      >
+        {item.text}
+      </Link>
+    );
+  }
+  
+  return (
+    <span className="px-3 py-2 text-base font-medium text-gray-700 rounded-lg">
+      {item.text}
+    </span>
+  );
+}
 
-          {/* Contact & Mobile Menu Button */}
-          <div className="flex items-center">
-            <div className="hidden lg:flex lg:items-center">
-              {settings?.contactPhoneNumberDisplay && settings?.contactPhoneNumber && (
-                <a href={`tel:${settings.contactPhoneNumber}`} className="flex items-center space-x-2 rounded-md px-3 py-2 text-base font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900">
-                  <PhoneIcon className="h-5 w-5" />
-                  <span>{settings.contactPhoneNumberDisplay}</span>
+const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen: (open: boolean) => void, menu: NavigationData | null, settings: SiteSettings | null }) => {
+  return (
+    <Dialog as="div" className="lg:hidden" open={open} onClose={setOpen}>
+      <div className="fixed inset-0 z-50" />
+      <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+        <div className="flex items-center justify-between mb-6">
+          <Link href="/" className="-m-1.5 p-1.5" onClick={() => setOpen(false)}>
+            <span className="sr-only">{settings?.title || 'Hang Loose Ibiza'}</span>
+            {settings?.logo?.asset ? (
+              <Image
+                src={urlForImage(settings.logo)?.width(100).height(100).url() || ''}
+                alt={settings.title || 'Hang Loose Ibiza Logo'}
+                width={64}
+                height={64}
+                className="object-contain w-auto h-16"
+                priority
+              />
+            ) : (
+              <span className="text-3xl font-extrabold tracking-tight text-gray-900">{settings?.title || 'Brand'}</span>
+            )}
+          </Link>
+          <button type="button" className="-m-2.5 rounded-md p-2.5 text-gray-700" onClick={() => setOpen(false)}>
+            <span className="sr-only">Close menu</span>
+            <XMarkIcon className="w-6 h-6" aria-hidden="true" />
+          </button>
+        </div>
+        
+        <div className="mt-6 flow-root">
+          <div className="-my-6 divide-y divide-gray-500/10">
+            <div className="space-y-2 py-6">
+              {menu?.items?.map((item) => <MobileNavItem key={item._key} item={item} closeMenu={() => setOpen(false)} />)}
+            </div>
+            <div className="py-6 space-y-4">
+              {settings?.contactPhoneNumberDisplay && (
+                 <a href={`tel:${settings.contactPhoneNumber}`} className="flex items-center gap-x-3 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                   <PhoneIcon className="w-5 h-5" />
+                   {settings.contactPhoneNumberDisplay}
                 </a>
               )}
-              {settings?.contactButtonText && settings.contactButtonLink && (
-                <Link href={settings.contactButtonLink} className="ml-4 inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700">
-                  {settings.contactButtonText}
+            </div>
+          </div>
+        </div>
+      </Dialog.Panel>
+    </Dialog>
+  )
+}
+
+const MobileNavItem = ({ item, closeMenu }: { item: MenuItem, closeMenu: () => void }) => {
+  const hasSubmenu = item.submenu && item.submenu.length > 0;
+  
+  if (!hasSubmenu) {
+    return (
+      <Link href={item.link?.slug ? `/categories/${item.link.slug}` : '#'} onClick={closeMenu} className="block px-3 py-2 -mx-3 text-base font-semibold leading-7 text-gray-900 rounded-lg hover:bg-gray-50">
+        {item.text}
+      </Link>
+    );
+  }
+  
+  return (
+    <Popover>
+      {({ open }) => (
+        <>
+          <Popover.Button className="flex items-center justify-between w-full px-3 py-2 -mx-3 text-base font-semibold leading-7 text-gray-900 rounded-lg hover:bg-gray-50">
+            {item.text}
+            <ChevronDownIcon className={`${open ? 'rotate-180' : ''} h-5 w-5 flex-none transition-transform duration-200`} />
+          </Popover.Button>
+          <Transition
+            as={Fragment}
+            enter="transition ease-out duration-200"
+            enterFrom="opacity-0 translate-y-1"
+            enterTo="opacity-100 translate-y-0"
+            leave="transition ease-in duration-150"
+            leaveFrom="opacity-100 translate-y-0"
+            leaveTo="opacity-0 translate-y-1"
+          >
+            <Popover.Panel className="mt-2 space-y-2 pl-6">
+              {item.link?.slug && (
+                <Link href={`/categories/${item.link.slug}`} onClick={closeMenu} className="block py-2 pr-3 text-sm font-semibold leading-7 text-gray-700 rounded-lg pl-9 hover:bg-gray-50">
+                  {item.text} (Main)
                 </Link>
+              )}
+              {item.submenu?.map((subItem) => (
+                subItem.link?.slug && (
+                  <Link key={subItem._key} href={`/products/${subItem.link.slug}`} onClick={closeMenu} className="block py-2 pr-3 text-sm font-semibold leading-7 text-gray-700 rounded-lg pl-9 hover:bg-gray-50">
+                    {subItem.text}
+                  </Link>
+                )
+              ))}
+            </Popover.Panel>
+          </Transition>
+        </>
+      )}
+    </Popover>
+  )
+}
+
+// MAIN COMPONENT
+export default function Header() {
+  const { settings, menu, loading } = useHeaderData()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  if (loading) {
+    return <header className="h-20 bg-white border-b border-gray-200" />
+  }
+
+  return (
+    <>
+      <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
+        <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
+          <div className="flex h-20 items-center justify-between">
+            {/* Logo section */}
+            <div className="flex-shrink-0">
+              <Link href="/" className="block" aria-label="Home">
+                {settings?.logo?.asset ? (
+                  <div className="h-14 w-14">
+                    <Image
+                      src={urlForImage(settings.logo)?.width(120).height(120).url() || ''}
+                      alt={settings.title || 'Logo'}
+                      width={120}
+                      height={120}
+                      className="h-full w-full object-contain"
+                      priority
+                    />
+                  </div>
+                ) : (
+                  <span className="text-2xl font-bold text-gray-900">
+                    {settings?.title || 'Brand'}
+                  </span>
+                )}
+              </Link>
+            </div>
+
+            {/* Navigation section */}
+            <div className="hidden lg:flex lg:items-center lg:gap-x-8">
+              <nav className="flex gap-x-4" aria-label="Main navigation">
+                {menu?.items?.map((item) => (
+                  <DesktopNavItem key={item._key} item={item} />
+                ))}
+              </nav>
+              <div className="h-6 w-px bg-gray-200" />
+              <div className="w-64">
+                <SearchBar />
+              </div>
+            </div>
+
+            {/* Contact section */}
+            <div className="hidden lg:flex lg:items-center lg:gap-x-6">
+              {settings?.contactPhoneNumber && (
+                <a
+                  href={`tel:${settings.contactPhoneNumber}`}
+                  className="flex items-center gap-x-2 rounded-lg px-3 py-2 text-base font-medium text-gray-700 transition-all duration-200 hover:bg-gray-100/80 hover:text-gray-900"
+                >
+                  <PhoneIcon className="h-5 w-5 flex-shrink-0" />
+                  <span>{settings.contactPhoneNumberDisplay}</span>
+                </a>
               )}
             </div>
 
@@ -260,138 +379,15 @@ export default function Header() {
               </button>
             </div>
           </div>
-        </div>
-      </div>
+        </nav>
+      </header>
 
-      {/* Mobile menu */}
-      <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
-        <div className="fixed inset-0 z-50" />
-        <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="-m-1.5 p-1.5">
-              <span className="sr-only">{settings?.title || 'Hang Loose Ibiza'}</span>
-              {settings?.logo?.asset ? (
-                <Image
-                  src={urlForImage(settings.logo)?.width(500).url() || ''}
-                  alt={settings.title || 'Hang Loose Ibiza Logo'}
-                  width={160}
-                  height={48}
-                  className="h-12 w-auto"
-                />
-              ) : (
-                <span className="text-xl font-bold text-gray-900">{settings?.title}</span>
-              )}
-            </Link>
-            <button
-              type="button"
-              className="-m-2.5 rounded-md p-2.5 text-gray-700"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <span className="sr-only">Close menu</span>
-              <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-            </button>
-          </div>
-          <div className="mt-6 flow-root">
-            <div className="-my-6 divide-y divide-gray-500/10">
-              <div className="space-y-2 py-6">
-                 {menu?.items?.map((item) => (
-                  <Popover className="relative" key={item._key}>
-                  {({ open }) => (
-                    <>
-                      <div className="flex items-center justify-between">
-                        {item.link?.slug && (!item.submenu || item.submenu.length === 0) ? (
-                            <Link 
-                              href={`/categories/${item.link.slug}`} 
-                              className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                              onClick={() => setMobileMenuOpen(false)}
-                            >
-                              {item.text}
-                            </Link>
-                          ) : (
-                            <span className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900">
-                              {item.text}
-                            </span>
-                        )}
-                        {item.submenu && item.submenu.length > 0 && (
-                          <Popover.Button
-                            className={`${
-                              open ? 'text-gray-900' : 'text-gray-700'
-                            } group flex items-center rounded-md p-2 text-base font-semibold hover:bg-gray-50`}
-                          >
-                            <ChevronDownIcon
-                              className={`${open ? 'rotate-180' : ''} h-5 w-5 flex-none transition-transform duration-200`}
-                              aria-hidden="true"
-                            />
-                          </Popover.Button>
-                        )}
-                      </div>
-
-                      {item.submenu && (
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-200"
-                          enterFrom="opacity-0 translate-y-1"
-                          enterTo="opacity-100 translate-y-0"
-                          leave="transition ease-in duration-150"
-                          leaveFrom="opacity-100 translate-y-0"
-                          leaveTo="opacity-0 translate-y-1"
-                        >
-                          <Popover.Panel className="mt-2 space-y-2 pl-6">
-                             {item.link?.slug && (
-                              <Link
-                                key={`${item._key}-main`}
-                                href={`/categories/${item.link.slug}`}
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-700 hover:bg-gray-50"
-                              >
-                                {item.text} (Main)
-                              </Link>
-                            )}
-                            {item.submenu.map((subItem) =>
-                              subItem.link?.slug ? (
-                                <Link
-                                  key={subItem._key}
-                                  href={`/products/${subItem.link.slug}`}
-                                  onClick={() => setMobileMenuOpen(false)}
-                                  className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-700 hover:bg-gray-50"
-                                >
-                                  {subItem.text}
-                                </Link>
-                              ) : null
-                            )}
-                          </Popover.Panel>
-                        </Transition>
-                      )}
-                    </>
-                  )}
-                  </Popover>
-                ))}
-              </div>
-              <div className="py-6">
-                {settings?.contactButtonText && settings.contactButtonLink && (
-                  <Link href={settings.contactButtonLink} className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                    {settings.contactButtonText}
-                  </Link>
-                )}
-                 {settings?.contactPhoneNumberDisplay && settings.contactPhoneNumber && (
-                   <a href={`tel:${settings.contactPhoneNumber}`} className="-mx-3 flex items-center gap-x-2 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                     <PhoneIcon className="h-5 w-5" />
-                    {settings.contactPhoneNumberDisplay}
-                  </a>
-                )}
-                <div className="mt-4 flex items-center space-x-4">
-                  {settings?.socialLinks?.map((social) => (
-                    <a key={social._key} href={social.url} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-500">
-                       <span className="sr-only">{social.platform}</span>
-                       <SocialIcon platform={social.platform} className="h-6 w-6" />
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </Dialog.Panel>
-      </Dialog>
-    </header>
+      <MobileMenu
+        open={mobileMenuOpen}
+        setOpen={setMobileMenuOpen}
+        menu={menu}
+        settings={settings}
+      />
+    </>
   )
 } 

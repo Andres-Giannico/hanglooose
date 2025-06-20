@@ -4,8 +4,9 @@ import product from '../schemas/product'
 import siteSettings from '../schemas/siteSettings'
 import navigationMenu from '../schemas/navigation'
 
-export const schemaTypes = [product, category, siteSettings, navigationMenu]
-
-export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [],
-}
+export const schemaTypes: SchemaTypeDefinition[] = [
+  product,
+  category,
+  siteSettings,
+  navigationMenu,
+]

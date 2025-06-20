@@ -29,6 +29,7 @@ export default defineConfig({
             // Singleton for Site Settings
             S.listItem()
               .title('Site Settings')
+              .id('siteSettings')
               .icon(CogIcon)
               .child(
                 S.document()
@@ -38,6 +39,7 @@ export default defineConfig({
             // Singleton for Navigation Menu
             S.listItem()
               .title('Navigation Menu')
+              .id('navigationMenu')
               .icon(MenuIcon)
               .child(
                 S.document()
@@ -47,8 +49,12 @@ export default defineConfig({
             // Divider
             S.divider(),
             // Document lists
-            S.documentTypeListItem('product').title('Products'),
-            S.documentTypeListItem('category').title('Categories'),
+            S.documentTypeListItem('product')
+              .id('products')
+              .title('Products'),
+            S.documentTypeListItem('category')
+              .id('categories')
+              .title('Categories'),
           ]),
     }),
     // Vision is for querying with GROQ from inside the Studio
