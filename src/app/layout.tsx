@@ -2,6 +2,7 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import WhatsAppButton from './components/WhatsAppButton'
 import { client } from '@/sanity/client'
 import { groq } from 'next-sanity'
 import { Metadata } from 'next'
@@ -16,6 +17,10 @@ const settingsQuery = groq`*[_type == "siteSettings"][0]{
   contactEmail,
   contactPhoneNumber,
   contactPhoneNumberDisplay,
+  whatsappNumber,
+  whatsappDefaultMessage,
+  whatsappButtonText,
+  showWhatsAppButton,
   address,
   footerQuickLinks,
   footerLegalLinks,
@@ -50,6 +55,14 @@ export default async function RootLayout({
           {children}
         </main>
         <Footer settings={settings} />
+        {settings.showWhatsAppButton !== false && settings.whatsappNumber && (
+          <WhatsAppButton 
+            phoneNumber={settings.whatsappNumber}
+            defaultMessage={settings.whatsappDefaultMessage}
+            buttonText={settings.whatsappButtonText}
+            className="global-whatsapp-button"
+          />
+        )}
       </body>
     </html>
   )

@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { PortableText } from '@portabletext/react'
 import ProductGallery from '@/app/components/ProductGallery'
 import BookingWidget from '@/app/components/BookingWidget'
+import WhatsAppButton from '@/app/components/WhatsAppButton'
 import FAQ from '@/app/components/FAQ'
 import { urlForImage } from '@/sanity/image'
 import type { Product } from '@/types'
@@ -38,6 +39,11 @@ interface BookingWidget {
 
 interface ProductClientPageProps {
   product: Product
+  whatsappSettings?: {
+    whatsappNumber?: string
+    whatsappDefaultMessage?: string
+    whatsappButtonText?: string
+  }
 }
 
 const portableTextComponents = {
@@ -171,7 +177,7 @@ function BookingCard({ product, onCheckAvailabilityClick }: { product: Product, 
   )
 }
 
-export default function ProductClientPage({ product }: ProductClientPageProps) {
+export default function ProductClientPage({ product, whatsappSettings }: ProductClientPageProps) {
   // Force scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -183,6 +189,17 @@ export default function ProductClientPage({ product }: ProductClientPageProps) {
       bookingSection.scrollIntoView({ behavior: 'smooth' })
     }
   }
+
+  // Ocultar el botón global de WhatsApp cuando estamos en la página de un producto
+  useEffect(() => {
+    // Agregar una clase al body para ocultar el botón global de WhatsApp
+    document.body.classList.add('hide-global-whatsapp')
+    
+    return () => {
+      // Eliminar la clase cuando se desmonte el componente
+      document.body.classList.remove('hide-global-whatsapp')
+    }
+  }, [])
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -313,6 +330,16 @@ export default function ProductClientPage({ product }: ProductClientPageProps) {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Botón de WhatsApp específico para el producto */}
+      {whatsappSettings?.whatsappNumber && (
+        <WhatsAppButton 
+          phoneNumber={whatsappSettings.whatsappNumber}
+          productName={product.name}
+          defaultMessage={whatsappSettings.whatsappDefaultMessage}
+          buttonText={whatsappSettings.whatsappButtonText}
+        />
       )}
     </div>
   )

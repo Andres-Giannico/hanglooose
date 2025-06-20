@@ -72,6 +72,10 @@ export interface FooterSettings {
   contactEmail?: string
   contactPhoneNumber?: string
   contactPhoneNumberDisplay?: string
+  whatsappNumber?: string
+  whatsappDefaultMessage?: string
+  whatsappButtonText?: string
+  showWhatsAppButton?: boolean
   address?: string
   footerQuickLinks?: {
     title: string

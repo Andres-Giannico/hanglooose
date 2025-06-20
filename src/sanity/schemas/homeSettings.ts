@@ -29,7 +29,7 @@ export default defineType({
       title: 'Hero Title',
       type: 'string',
       group: 'hero',
-      initialValue: "Discover Ibiza's Best Adventures",
+      initialValue: "Experience Unforgettable Adventures",
     }),
     defineField({
       name: 'heroSubtitle',
@@ -37,7 +37,7 @@ export default defineType({
       type: 'text',
       rows: 2,
       group: 'hero',
-      initialValue: "Experience the magic of Ibiza's crystal-clear waters and secluded coves. No license needed for selected boats.",
+      initialValue: "Discover the magic of our premium services designed for your perfect vacation experience.",
     }),
     defineField({
       name: 'heroImage',
@@ -53,14 +53,14 @@ export default defineType({
       title: 'Hero Button Text',
       type: 'string',
       group: 'hero',
-      initialValue: 'Explore Our Boats',
+      initialValue: 'Explore Services',
     }),
     defineField({
       name: 'heroButtonLink',
       title: 'Hero Button Link',
       type: 'string',
       group: 'hero',
-      initialValue: '/categories/boat-hire-ibiza',
+      initialValue: '/categories',
     }),
 
     // About Section
@@ -69,7 +69,7 @@ export default defineType({
       title: 'About Section Title',
       type: 'string',
       group: 'about',
-      initialValue: 'Your Premier Boat Rental Service in Ibiza',
+      initialValue: 'Your Premier Experience Provider',
     }),
     defineField({
       name: 'aboutDescription',
@@ -77,7 +77,7 @@ export default defineType({
       type: 'text',
       rows: 4,
       group: 'about',
-      initialValue: "At Hang Loose Ibiza, we specialize in providing unforgettable boating experiences around the beautiful island of Ibiza. Whether you're looking for a relaxing day trip to Formentera, an exciting coastal adventure, or a sunset cruise, we have the perfect boat for you.",
+      initialValue: "We specialize in providing unforgettable experiences that create lasting memories. Whether you're looking for relaxation, adventure, or something in between, our services are tailored to exceed your expectations.",
     }),
     defineField({
       name: 'aboutFeatures',
@@ -95,12 +95,12 @@ export default defineType({
       group: 'about',
       initialValue: [
         {
-          title: 'No License Required',
-          description: 'Perfect for beginners with our easy-to-handle boats',
+          title: 'Premium Quality',
+          description: 'We only offer top-tier services for the best experience',
         },
         {
-          title: 'Best Locations',
-          description: "Access to Ibiza's most beautiful coves and beaches",
+          title: 'Perfect Locations',
+          description: "Access to the most beautiful spots in the area",
         },
         {
           title: 'Expert Support',
@@ -115,7 +115,7 @@ export default defineType({
       title: 'Features Section Title',
       type: 'string',
       group: 'features',
-      initialValue: 'Why Choose Hang Loose Ibiza',
+      initialValue: 'Why Choose Our Services',
     }),
     defineField({
       name: 'features',
@@ -152,12 +152,12 @@ export default defineType({
         },
         {
           title: 'Flexible Hours',
-          description: 'Choose from half-day or full-day rentals to suit your schedule',
+          description: 'Choose from different time slots to suit your schedule',
           icon: 'clock',
         },
         {
           title: 'Safety First',
-          description: 'All boats equipped with latest safety equipment',
+          description: 'All equipment and services follow strict safety standards',
           icon: 'shield',
         },
         {
@@ -182,21 +182,21 @@ export default defineType({
       type: 'text',
       rows: 2,
       group: 'cta',
-      initialValue: "Book your boat today and discover the magic of Ibiza's waters",
+      initialValue: "Book your experience today and create memories that will last a lifetime",
     }),
     defineField({
       name: 'ctaButtonText',
       title: 'CTA Button Text',
       type: 'string',
       group: 'cta',
-      initialValue: 'View All Boats',
+      initialValue: 'View All Services',
     }),
     defineField({
       name: 'ctaButtonLink',
       title: 'CTA Button Link',
       type: 'string',
       group: 'cta',
-      initialValue: '/categories/boat-hire-ibiza',
+      initialValue: '/categories',
     }),
   ],
 }) 

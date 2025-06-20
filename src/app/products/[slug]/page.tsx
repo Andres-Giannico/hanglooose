@@ -69,9 +69,18 @@ async function getProduct(slug: string) {
   );
 }
 
+async function getSettings() {
+  return await client.fetch(groq`*[_type == "siteSettings"][0]{
+    whatsappNumber,
+    whatsappDefaultMessage,
+    whatsappButtonText
+  }`);
+}
+
 // This is the new Server Component
 export default async function ProductPage({ params }: ProductPageProps) {
   const product = await getProduct(params.slug);
+  const settings = await getSettings();
 
   if (!product) {
     return (
@@ -83,7 +92,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <div className="min-h-screen scroll-smooth" style={{ scrollBehavior: 'auto' }}>
-      <ProductClientPage product={product} />
+      <ProductClientPage product={product} whatsappSettings={settings} />
     </div>
   );
 }
