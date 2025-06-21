@@ -1,62 +1,53 @@
 #!/bin/bash
 
-# Colores para la salida
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+# Generic script to import products from YAML files to Sanity
+# Usage: ./import-products.sh path/to/products.yaml
 
-echo -e "${YELLOW}Script de importación de productos a Sanity${NC}"
-echo "------------------------------------------"
-
-# Verificar que las variables de entorno necesarias estén configuradas
-if [ -z "$NEXT_PUBLIC_SANITY_PROJECT_ID" ]; then
-  echo -e "${RED}Error: La variable de entorno NEXT_PUBLIC_SANITY_PROJECT_ID no está configurada${NC}"
-  echo "Por favor, configura las variables de entorno necesarias:"
-  echo "export NEXT_PUBLIC_SANITY_PROJECT_ID=tu-project-id"
-  echo "export NEXT_PUBLIC_SANITY_DATASET=production"
-  echo "export SANITY_API_TOKEN=tu-token-con-permisos-de-escritura"
+# Check if a file path was provided
+if [ -z "$1" ]; then
+  echo "Error: No YAML file specified."
+  echo "Usage: ./import-products.sh path/to/products.yaml"
   exit 1
+fi
+
+# Check if the file exists
+if [ ! -f "$1" ]; then
+  echo "Error: File $1 does not exist."
+  exit 1
+fi
+
+# Ask for Sanity credentials if not set
+if [ -z "$NEXT_PUBLIC_SANITY_PROJECT_ID" ]; then
+  echo "Enter your Sanity Project ID:"
+  read NEXT_PUBLIC_SANITY_PROJECT_ID
 fi
 
 if [ -z "$NEXT_PUBLIC_SANITY_DATASET" ]; then
-  echo -e "${YELLOW}Advertencia: Variable NEXT_PUBLIC_SANITY_DATASET no configurada, usando 'production' por defecto${NC}"
-  export NEXT_PUBLIC_SANITY_DATASET=production
+  echo "Enter your Sanity Dataset (default: production):"
+  read NEXT_PUBLIC_SANITY_DATASET
+  if [ -z "$NEXT_PUBLIC_SANITY_DATASET" ]; then
+    NEXT_PUBLIC_SANITY_DATASET="production"
+  fi
 fi
 
 if [ -z "$SANITY_API_TOKEN" ]; then
-  echo -e "${RED}Error: La variable SANITY_API_TOKEN no está configurada${NC}"
-  echo "Esta variable es necesaria para poder escribir en Sanity."
-  echo "export SANITY_API_TOKEN=tu-token-con-permisos-de-escritura"
-  exit 1
+  echo "Enter your Sanity API Token (with write permissions):"
+  read -s SANITY_API_TOKEN
 fi
 
-# Comprobar si el archivo YAML existe
-if [ ! -f "scripts/products.yaml" ]; then
-  echo -e "${RED}Error: No se encontró el archivo scripts/products.yaml${NC}"
-  exit 1
-fi
-
-# Mostrar información de la configuración
-echo -e "${GREEN}Usando configuración:${NC}"
-echo "Project ID: $NEXT_PUBLIC_SANITY_PROJECT_ID"
-echo "Dataset: $NEXT_PUBLIC_SANITY_DATASET"
-echo "Token: ${SANITY_API_TOKEN:0:5}..."
-
-# Crear un archivo temporal con los valores reales
-cat > scripts/importConfig.js << EOF
-module.exports = {
-  projectId: '$NEXT_PUBLIC_SANITY_PROJECT_ID',
-  dataset: '$NEXT_PUBLIC_SANITY_DATASET',
-  token: '$SANITY_API_TOKEN'
-};
+# Create temporary config file
+echo "Creating temporary configuration file..."
+cat > scripts/temp-config.js << EOF
+require('dotenv').config();
+process.env.NEXT_PUBLIC_SANITY_PROJECT_ID = '${NEXT_PUBLIC_SANITY_PROJECT_ID}';
+process.env.NEXT_PUBLIC_SANITY_DATASET = '${NEXT_PUBLIC_SANITY_DATASET}';
+process.env.SANITY_API_TOKEN = '${SANITY_API_TOKEN}';
 EOF
 
-# Ejecutar el script
-echo -e "${YELLOW}Ejecutando importación...${NC}"
-node scripts/importProducts.js
+echo "Importing products from $1..."
+node -r ./scripts/temp-config.js scripts/importProducts.js "$1"
 
-# Limpiar
-rm scripts/importConfig.js
+# Clean up
+rm scripts/temp-config.js
 
-echo -e "${GREEN}Proceso completado!${NC}"
+echo "Import process completed."

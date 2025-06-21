@@ -1,0 +1,187 @@
+products:
+  - name: "Saxdor 320 Yacht Tour"
+    slug: "saxdor-320-yacht-tour"
+    shortDescription: "Experience premium yacht luxury with our Saxdor 320 in Ibiza & Formentera. Perfect for exploring hidden coves or enjoying spectacular sunsets with family and friends."
+    highlights:
+      - "12.8-meter yacht with 2 Mercury V8 350hp engines"
+      - "Capacity for 12 people plus captain"
+      - "Cruising speed of 50 knots"
+      - "2 cabins, bathroom, and 2 showers"
+      - "Premium sound system and water toys included"
+    fullDescription:
+      - _type: "block"
+        style: "normal"
+        _key: "intro"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "Discover unparalleled luxury and performance aboard our Saxdor 400, a state-of-the-art vessel that delivers an exceptional boating experience. With its impressive 50-knot cruising speed and spacious layout, this premium yacht offers the perfect combination of thrilling performance and luxurious comfort."
+            _key: "intro-span"
+      - _type: "block"
+        style: "normal"
+        _key: "experience"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "Whether you're seeking a breathtaking sunset cruise along Ibiza's west coast, a full-day exploration of hidden coves and beaches, or an unforgettable journey to Formentera's paradise-like waters, our experienced captain will ensure your journey is nothing short of extraordinary. With premium amenities and complimentary refreshments, every moment aboard the Saxdor 400 is designed to create lasting memories."
+            _key: "experience-span"
+      - _type: "block"
+        style: "normal"
+        _key: "conclusion"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: ["strong"]
+            text: "Experience the pinnacle of modern boating with cutting-edge design and luxurious amenities!"
+            _key: "conclusion-span"
+    price: 1500
+    showFromPrice: true
+    priceSubtitle: "Half Day"
+    duration: "3.5 hours or 7 hours"
+    rating: 4.9
+    reviewCount: 60
+    isBestSeller: true
+    isLikelyToSellOut: true
+    features:
+      - key: "Length"
+        value: "12.8 meters"
+      - key: "Capacity"
+        value: "12 people + captain"
+      - key: "Engines"
+        value: "2 x Mercury V8 350hp"
+      - key: "Speed"
+        value: "50 knots"
+      - key: "Facilities"
+        value: "2 cabins, 1 WC, 2 showers"
+    includes:
+      - "Professional captain"
+      - "Beach towels"
+      - "Paddle boards"
+      - "Snorkeling equipment"
+      - "Complimentary drinks package"
+      - "Water inflatables"
+      - "1-hour fuel (Ibiza trips)"
+      - "Full fuel (Formentera trips)"
+    notIncludes:
+      - "IVA"
+      - "Extra fuel (€300 per hour)"
+      - "Premium drinks packages (available upon request)"
+    importantInformation:
+      - _type: "block"
+        style: "normal"
+        _key: "prices"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: ["strong"]
+            text: "TOUR OPTIONS & PRICING:"
+            _key: "prices-title"
+      - _type: "block"
+        style: "normal"
+        _key: "half-day-morning"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "HALF DAY MORNING: 3.5 Hours (10:00 – 13:30) - €1500"
+            _key: "half-day-morning-span"
+      - _type: "block"
+        style: "normal"
+        _key: "half-day-sunset"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "HALF DAY SUNSET: 3.5 Hours (18:00 – 21:30) - €1500"
+            _key: "half-day-sunset-span"
+      - _type: "block"
+        style: "normal"
+        _key: "full-day-west"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "FULL DAY WEST COAST: 7 Hours (10:00 – 17:00 | 14:30 – Sunset) - €2400"
+            _key: "full-day-west-span"
+      - _type: "block"
+        style: "normal"
+        _key: "full-day-formentera"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "FULL DAY FORMENTERA: 7 Hours - €3000"
+            _key: "full-day-formentera-span"
+      - _type: "block"
+        style: "normal"
+        _key: "season"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: ["strong"]
+            text: "SEASONAL PRICING:"
+            _key: "season-title"
+      - _type: "block"
+        style: "normal"
+        _key: "season-info"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "High Season: June, July, August, September (Prices shown above)"
+            _key: "season-info-span"
+      - _type: "block"
+        style: "normal"
+        _key: "low-season"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "Low Season: April, May, October (€1350 Half Day, €2200 Full Day West Coast, €2800 Full Day Formentera)"
+            _key: "low-season-span"
+    freeCancellation: false
+    reserveNowPayLater: false
+    instructorInfo: "Professional captain"
+    isPrivateGroup: true
+    bookingGuarantees:
+      - "Instant confirmation"
+      - "Flexible cancellation policy"
+      - "Quick and easy reservation"
+      - "Premium experience"
+    productType: "rental"
+    bookButtonText: "Book This Yacht"
+    tripSummary: "Luxury yacht tour with captain"
+    specificTime: "10:00 AM, 2:00 PM, 6:00 PM"
+    departurePoint: "Es Nautics, San Antonio, Ibiza"
+    capacity: "12 people + captain"
+    season: "April to October"
+    customDetails:
+      - label: "Boat Model"
+        value: "Saxdor 400"
+      - label: "Home Port"
+        value: "Es Nautics, San Antonio"
+      - label: "Sound System"
+        value: "Fusion with Bluetooth"
+      - label: "Equipment"
+        value: "Water toys & inflatables"
+    bookingWidget:
+      enableWidget: true
+      bookingProductId: 233
+      companyId: 1
+      channelId: 
+      showQuantity: false
+      bookNowLabel: "Book Now"
+    faqs:
+      - question: "What makes the Saxdor 400 yacht tour one of the best luxury experiences in Ibiza?"
+        answer: "The Saxdor 400 yacht tour offers a unique blend of speed, style, and comfort. With its 50-knot performance, premium sound system, and spacious layout including 2 cabins, WC, and showers, this is the ultimate luxury boat hire for exploring Ibiza and Formentera in style. Guests enjoy complimentary drinks, beach towels, paddle boards, and professional crew service."
+      - question: "Can I book a full-day private yacht charter to Formentera from Ibiza?"
+        answer: "Yes! Our Full Day Formentera Yacht Charter includes a 7-hour private cruise to the stunning beaches of Formentera. The tour comes with all fuel included, access to water toys, a drinks package, and the option to stop at a top-rated beach restaurant. Perfect for families, couples, or small groups seeking the best Formentera boat experience."
+      - question: "Is the Saxdor 400 yacht suitable for sunset boat tours in Ibiza?"
+        answer: "Absolutely. The Sunset Yacht Cruise in Ibiza aboard the Saxdor 400 is a top choice for those seeking breathtaking views of the west coast. With departure at 18:00, guests can sip wine while watching the sun melt into the sea — ideal for romantic evenings, proposals, or Instagram-worthy moments."
+      - question: "How many people can join the Saxdor 400 yacht excursion?"
+        answer: "The Saxdor 400 can accommodate up to 12 guests plus 1 professional captain. It's perfect for group charters, birthday celebrations, corporate retreats, or family getaways. Whether it's a half-day escape or a full-day island adventure, the experience is tailored for maximum comfort and exclusivity."
+      - question: "What's included in the Saxdor 400 yacht rental price in Ibiza?"
+        answer: "Every Saxdor 400 booking includes: Experienced professional captain, Premium drinks (wine, beer, soft drinks), Water activities: paddle boards, snorkeling gear, water inflatables, Beach towels, Fuel (1 hour for Ibiza trips, full for Formentera), and Onboard facilities: 2 cabins, 1 bathroom, and 2 showers. No hidden costs. High-season pricing applies from June to September."
+    category: "boat-rental" 

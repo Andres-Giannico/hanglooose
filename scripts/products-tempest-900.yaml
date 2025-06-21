@@ -1,0 +1,150 @@
+products:
+  - name: "Capelli Tempest 900 - Valhalla"
+    slug: "capelli-tempest-900-valhalla"
+    shortDescription: "Enjoy an exclusive charter with family or friends on this spacious yacht with capacity for 11 people. Perfect for discovering the most beautiful coasts of Ibiza."
+    highlights:
+      - "9-meter boat with two 300 HP engines"
+      - "Captain and fuel included"
+      - "Capacity for 11 people"
+      - "Retractable roof and spacious cabin"
+      - "Snorkeling equipment and paddle board included"
+    fullDescription:
+      - _type: "block"
+        style: "normal"
+        _key: "intro"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "Come aboard and enjoy an exclusive yacht charter with your family or friends. During your private yacht day, you will discover one of the most beautiful coasts of Ibiza. You can visit Cala Conta, Cala Bassa, Cala Tarida, Cala Saladeta, Punta Galera, Es Vedra or Formentera island (only on full day rental)."
+            _key: "intro-span"
+      - _type: "block"
+        style: "normal"
+        _key: "features"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "Valhalla is a Capelli Tempest 900 with a beautiful spacious deck and a retractable roof. It features a spacious cabin, perfect for relaxing during the day. It is a fast boat powered by two powerful engines, allowing for swift navigation. With a length of 9 meters and beam of 3.2 meters, there is ample seating space on the boat along with a sun deck for lounging. The option to assemble a table is available for added convenience. The onboard Fusion sound system ensures a lively atmosphere. Additionally, the boat features a toilet and shower for your comfort."
+            _key: "features-span"
+      - _type: "block"
+        style: "normal"
+        _key: "tours"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "In our offer, we have full-day charters, which last for 7 hours. You can choose the morning hours starting from 10 a.m. or the afternoon hours and enjoying the sunset."
+            _key: "tours-span"
+    price: 700
+    showFromPrice: true
+    priceSubtitle: "Half Day"
+    duration: "3.5 hours or 7 hours"
+    rating: 4.9
+    reviewCount: 42
+    isBestSeller: true
+    isLikelyToSellOut: true
+    features:
+      - key: "Length"
+        value: "9 meters"
+      - key: "Beam"
+        value: "3.2 meters"
+      - key: "Engine"
+        value: "2x300 HP"
+      - key: "Capacity"
+        value: "11 people"
+      - key: "Amenities"
+        value: "Retractable roof, cabin, toilet, shower"
+    includes:
+      - "Captain"
+      - "Fuel (San Antonio)"
+      - "Snorkeling equipment"
+      - "Paddle board"
+      - "Fusion sound system"
+    notIncludes:
+      - "Fuel for Formentera (€200 additional)"
+      - "Fuel for Es Vedra (€70 additional)"
+      - "Food and drinks"
+    importantInformation:
+      - _type: "block"
+        style: "normal"
+        _key: "times"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: ["strong"]
+            text: "TIMES:"
+            _key: "times-title"
+      - _type: "block"
+        style: "normal"
+        _key: "times-details"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "10:00 to 13:30 (Half Day) - 3.5 Hours"
+            _key: "times-morning"
+      - _type: "block"
+        style: "normal"
+        _key: "times-afternoon"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "14:00 to 21:00 (Full Day) - times may vary depending on sunset time - 7 Hours"
+            _key: "times-afternoon-span"
+      - _type: "block"
+        style: "normal"
+        _key: "formentera"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "Trip to Formentera has an additional €200 fuel surcharge (only available on Full Day Trip)"
+            _key: "formentera-span"
+    freeCancellation: true
+    reserveNowPayLater: true
+    instructorInfo: "Experienced captain"
+    isPrivateGroup: true
+    bookingGuarantees:
+      - "Instant confirmation"
+      - "Flexible cancellation policy"
+      - "Quick and easy reservation"
+      - "Partial online payment"
+    productType: "rental"
+    bookButtonText: "Book This Boat"
+    tripSummary: "Boat rental with captain"
+    specificTime: "10:00 AM, 2:00 PM"
+    departurePoint: "San Antonio Port, Ibiza"
+    capacity: "11 people (including captain)"
+    season: "May to October"
+    customDetails:
+      - label: "Boat Model"
+        value: "Capelli Tempest 900"
+      - label: "Name"
+        value: "Valhalla"
+      - label: "Engines"
+        value: "2x300 HP"
+      - label: "Length"
+        value: "9 meters"
+      - label: "Beam"
+        value: "3.2 meters"
+    bookingWidget:
+      enableWidget: true
+      bookingProductId: 551
+      companyId: 1
+      channelId: 19
+      showQuantity: false
+      bookNowLabel: "Book Now"
+    faqs:
+      - question: "Is the captain included in the price?"
+        answer: "Yes, the price includes an experienced captain."
+      - question: "Is fuel included in the price?"
+        answer: "Yes, fuel is included for routes around San Antonio. Going to Es Vedra has a €70 surcharge and Formentera has a €200 surcharge."
+      - question: "How many people can go on the boat?"
+        answer: "The boat has a capacity for 11 people, including the captain."
+      - question: "Can I visit Formentera with this boat?"
+        answer: "Yes, but only on a full day rental (7 hours) and with an additional €200 fuel surcharge."
+      - question: "What equipment does the boat include?"
+        answer: "The boat includes snorkeling equipment, paddle board, Fusion sound system, toilet and shower."
+    category: "boat-rental" 

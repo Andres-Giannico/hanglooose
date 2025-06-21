@@ -1,0 +1,228 @@
+products:
+  - name: "Black Ruby Boat Tour"
+    slug: "black-ruby-boat-tour"
+    shortDescription: "Experience the best of Ibiza aboard the striking Black Ruby, a stylish 8-meter vessel with black hull and red upholstery. Perfect for exploring hidden coves and enjoying the crystal-clear Mediterranean waters."
+    highlights:
+      - "8-meter boat with 300 HP engine"
+      - "Capacity for 11 passengers plus captain"
+      - "Fuel and captain included"
+      - "Onboard WC and external shower"
+      - "Snorkeling equipment and paddle surf board included"
+    fullDescription:
+      - _type: "block"
+        style: "normal"
+        _key: "intro"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "Discover the best coves of Ibiza aboard the striking Black Ruby, a stylish 8-meter vessel featuring distinctive black hull and elegant red upholstery. This premium boat offers the perfect combination of performance, comfort, and luxury for unforgettable excursions around Ibiza's spectacular coastline."
+            _key: "intro-span"
+      - _type: "block"
+        style: "normal"
+        _key: "experience"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "With its powerful 300 HP engine, the Black Ruby ensures a smooth and exhilarating ride as you explore the most beautiful bays and hidden spots around the island. Whether you choose a short 3-hour trip, a half-day adventure, or a full-day exploration, our experienced captain will guide you to the most breathtaking locations depending on your preferences and sea conditions."
+            _key: "experience-span"
+      - _type: "block"
+        style: "normal"
+        _key: "features"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "The spacious deck layout offers comfortable seating for up to 11 passengers, with ample sun lounging areas and shaded sections for those preferring to relax out of the direct sunlight. The Black Ruby is fully equipped with modern amenities including an onboard bathroom, external shower, refrigerator for keeping your drinks cool, and a quality Bluetooth sound system to set the perfect mood for your maritime adventure."
+            _key: "features-span"
+      - _type: "block"
+        style: "normal"
+        _key: "activities"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "For water enthusiasts, we provide complimentary snorkeling masks and paddle surf boards, allowing you to explore the crystal-clear Mediterranean waters at your leisure during swimming stops. Your experience begins with a welcome drink as you set sail from San Antonio, with the option to extend your journey to visit iconic locations such as Es Vedrà, Atlantis, Las Margaritas, or even Formentera for an additional fee."
+            _key: "activities-span"
+      - _type: "block"
+        style: "normal"
+        _key: "conclusion"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: ["strong"]
+            text: "All-inclusive experience with fuel, captain, welcome drink, snorkeling equipment, paddle surf boards, and more – everything you need for the perfect day at sea!"
+            _key: "conclusion-span"
+    price: 650
+    showFromPrice: true
+    priceSubtitle: "3 Hour Tour"
+    duration: "3, 5, or 8 hours"
+    rating: 4.8
+    reviewCount: 42
+    isBestSeller: true
+    isLikelyToSellOut: true
+    features:
+      - key: "Length"
+        value: "8 meters"
+      - key: "Capacity"
+        value: "11 passengers + captain"
+      - key: "Engine"
+        value: "300 HP"
+      - key: "Facilities"
+        value: "WC, external shower, refrigerator"
+      - key: "Sound System"
+        value: "Bluetooth"
+    includes:
+      - "Professional captain"
+      - "Fuel"
+      - "Welcome drink"
+      - "Snorkeling equipment"
+      - "Paddle surf board"
+      - "Bluetooth sound system"
+      - "Refrigerator"
+      - "Onboard WC"
+      - "External shower"
+    notIncludes:
+      - "Food and additional drinks"
+      - "Premium destination supplements"
+      - "Sunset supplement (€149)"
+      - "Es Vedrà visit (€149)"
+      - "Atlantis visit (€149)"
+      - "Las Margaritas visit (€149)"
+      - "Formentera trip (€199)"
+    importantInformation:
+      - _type: "block"
+        style: "normal"
+        _key: "prices"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: ["strong"]
+            text: "TOUR OPTIONS & PRICING:"
+            _key: "prices-title"
+      - _type: "block"
+        style: "normal"
+        _key: "three-hour"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "3 HOUR TOUR: Short Excursion - €650"
+            _key: "three-hour-span"
+      - _type: "block"
+        style: "normal"
+        _key: "five-hour"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "5 HOUR TOUR: Half Day Adventure - €800"
+            _key: "five-hour-span"
+      - _type: "block"
+        style: "normal"
+        _key: "eight-hour"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "8 HOUR TOUR: Full Day Experience - €1,150"
+            _key: "eight-hour-span"
+      - _type: "block"
+        style: "normal"
+        _key: "supplements"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: ["strong"]
+            text: "ADDITIONAL OPTIONS:"
+            _key: "supplements-title"
+      - _type: "block"
+        style: "normal"
+        _key: "sunset"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "Sunset Supplement: €149"
+            _key: "sunset-span"
+      - _type: "block"
+        style: "normal"
+        _key: "es-vedra"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "Es Vedrà Visit: €149"
+            _key: "es-vedra-span"
+      - _type: "block"
+        style: "normal"
+        _key: "atlantis"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "Atlantis Visit: €149"
+            _key: "atlantis-span"
+      - _type: "block"
+        style: "normal"
+        _key: "margaritas"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "Las Margaritas: €149"
+            _key: "margaritas-span"
+      - _type: "block"
+        style: "normal"
+        _key: "formentera"
+        markDefs: []
+        children:
+          - _type: "span"
+            marks: []
+            text: "Formentera Trip: €199"
+            _key: "formentera-span"
+    freeCancellation: false
+    reserveNowPayLater: false
+    instructorInfo: "Professional captain"
+    isPrivateGroup: true
+    bookingGuarantees:
+      - "All-inclusive experience"
+      - "Professional captain"
+      - "Quality equipment"
+      - "Premium boat"
+    productType: "rental"
+    bookButtonText: "Book This Boat"
+    tripSummary: "Luxury boat tour with captain"
+    specificTime: "Flexible departure times"
+    departurePoint: "San Antonio, Ibiza"
+    capacity: "11 passengers + captain"
+    season: "Summer season"
+    customDetails:
+      - label: "Boat Name"
+        value: "Black Ruby"
+      - label: "Hull Color"
+        value: "Black with red upholstery"
+      - label: "Engine"
+        value: "300 HP"
+      - label: "Equipment"
+        value: "WC, shower, sound system, fridge"
+    bookingWidget:
+      enableWidget: true
+      bookingProductId: 213
+      companyId: 1
+      channelId: 
+      showQuantity: false
+      bookNowLabel: "Book Now"
+    faqs:
+      - question: "What is included in the Black Ruby boat tour in Ibiza?"
+        answer: "The Black Ruby boat tour in San Antonio, Ibiza, offers an all-inclusive experience: a professional captain, fuel, welcome drinks, snorkeling gear, paddle surf boards, Bluetooth sound system, fridge, onboard bathroom, and external shower. It's the ultimate Ibiza summer yacht experience for groups of up to 11 people."
+      - question: "Can I watch the Ibiza sunset on a private boat tour aboard the Black Ruby?"
+        answer: "Absolutely! The Black Ruby offers a magical sunset supplement experience, allowing you to witness Ibiza's legendary sunset from the sea. This upgrade can be added to any tour, transforming your luxury charter into an unforgettable romantic or group evening cruise."
+      - question: "What are the best routes to explore during the Black Ruby excursion?"
+        answer: "Top-rated routes on the Black Ruby include iconic coves like Cala Bassa, Cala Conta, and Cala Salada. You can also add premium destinations such as Es Vedrà, Atlantis, Las Margaritas, or Formentera for an extended and customized Ibiza boat tour adventure."
+      - question: "How long are the boat trips and what are the prices?"
+        answer: "Choose from three tour lengths: 3-Hour Tour: €650, 5-Hour Tour: €800, 8-Hour Full-Day Tour: €1,150. All tours include a captain, fuel, drinks, and watersports gear. Optional extras like the sunset or Es Vedrà visit can be added for an additional fee, making your Black Ruby experience fully customizable."
+      - question: "How do I book a Black Ruby private boat trip in Ibiza for Summer 2025?"
+        answer: "Booking your Ibiza boat tour is easy! Reserve directly on our website or call us at +34 659 232 247 for personal assistance. Secure your spot early for Summer 2025 and enjoy a luxury yacht charter in Ibiza's top destinations, with full-service hospitality included."
+    category: "boat-rental" 

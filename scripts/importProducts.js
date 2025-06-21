@@ -1,74 +1,138 @@
-const { createClient } = require('@sanity/client');
-const yaml = require('js-yaml');
+// Generic script to import products from YAML files to Sanity
 const fs = require('fs');
-const path = require('path');
-const { v4: uuidv4 } = require('uuid');
+const yaml = require('js-yaml');
+const { createClient } = require('@sanity/client');
+require('dotenv').config();
 
-// Intentar cargar la configuración desde el archivo
-let config;
-try {
-  config = require('./importConfig.js');
-} catch (e) {
-  console.error('Error: No se pudo cargar la configuración.');
-  console.error('Asegúrate de ejecutar el script import-products.sh en lugar de este archivo directamente.');
-  process.exit(1);
-}
-
-// Configuración del cliente de Sanity
+// Sanity client configuration
 const client = createClient({
-  projectId: config.projectId,
-  dataset: config.dataset,
-  token: config.token,
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+  apiVersion: '2023-05-03',
+  token: process.env.SANITY_API_TOKEN,
   useCdn: false,
-  apiVersion: '2023-05-03'
 });
 
-// Modo de prueba (si se quiere ver el output sin crear documentos)
-const TEST_MODE = process.env.TEST_MODE === 'true';
-
-async function importProducts() {
+// Function to load and process YAML file
+async function importProducts(yamlFilePath) {
   try {
-    // Leer el archivo YAML
-    const yamlFile = path.join(process.cwd(), 'scripts', 'products.yaml');
-    const fileContents = fs.readFileSync(yamlFile, 'utf8');
+    // Read YAML file
+    const fileContents = fs.readFileSync(yamlFilePath, 'utf8');
     const data = yaml.load(fileContents);
 
-    console.log(`Found ${data.products.length} products to import`);
+    // Check if there are products in the file
+    if (!data.products || !data.products.length) {
+      console.error('No products found in the YAML file.');
+      return;
+    }
 
-    // Procesar cada producto
+    console.log(`Found ${data.products.length} products in the YAML file.`);
+
+    // Process each product
     for (const product of data.products) {
-      // Generar un _id único para el documento
-      const documentId = `product-${uuidv4()}`;
-
-      // Preparar el documento para Sanity
-      const sanityDocument = {
-        _id: documentId,
+      // Create a Sanity document for the product
+      const sanityProduct = {
         _type: 'product',
-        ...product,
-        // Asegurarse de que los campos de referencia estén correctamente formateados
-        category: product.category ? {
-          _type: 'reference',
-          _ref: product.category
-        } : undefined,
+        name: product.name,
+        slug: {
+          _type: 'slug',
+          current: product.slug,
+        },
+        shortDescription: product.shortDescription,
+        highlights: product.highlights,
+        fullDescription: product.fullDescription,
+        price: product.price,
+        showFromPrice: product.showFromPrice,
+        priceSubtitle: product.priceSubtitle,
+        duration: product.duration,
+        rating: product.rating,
+        reviewCount: product.reviewCount,
+        isBestSeller: product.isBestSeller,
+        isLikelyToSellOut: product.isLikelyToSellOut,
+        features: product.features,
+        includes: product.includes,
+        notIncludes: product.notIncludes,
+        importantInformation: product.importantInformation,
+        freeCancellation: product.freeCancellation,
+        reserveNowPayLater: product.reserveNowPayLater,
+        instructorInfo: product.instructorInfo,
+        isPrivateGroup: product.isPrivateGroup,
+        bookingGuarantees: product.bookingGuarantees,
+        productType: product.productType,
+        bookButtonText: product.bookButtonText,
+        tripSummary: product.tripSummary,
+        specificTime: product.specificTime,
+        departurePoint: product.departurePoint,
+        capacity: product.capacity,
+        season: product.season,
+        customDetails: product.customDetails,
+        bookingWidget: product.bookingWidget,
+        faqs: product.faqs,
       };
 
-      console.log(`Preparing to import: ${product.name}`);
-      
-      if (TEST_MODE) {
-        console.log(JSON.stringify(sanityDocument, null, 2));
+      // Add category reference if provided
+      if (product.category) {
+        // Find the category by slug
+        const category = await client.fetch(
+          `*[_type == "category" && slug.current == $slug][0]`,
+          { slug: product.category }
+        );
+
+        if (category) {
+          sanityProduct.category = {
+            _type: 'reference',
+            _ref: category._id,
+          };
+        } else {
+          console.warn(`Category ${product.category} not found.`);
+        }
+      }
+
+      // Check if product already exists
+      const existingProduct = await client.fetch(
+        `*[_type == "product" && slug.current == $slug][0]`,
+        { slug: product.slug }
+      );
+
+      if (existingProduct) {
+        console.log(`Updating existing product: ${product.name}`);
+        await client
+          .patch(existingProduct._id)
+          .set(sanityProduct)
+          .commit()
+          .then((updatedProduct) => {
+            console.log(`✅ Product updated: ${updatedProduct.name}`);
+          })
+          .catch((err) => {
+            console.error('Error updating product:', err.message);
+          });
       } else {
-        // Crear el documento en Sanity
-        await client.createOrReplace(sanityDocument);
-        console.log(`Imported product: ${product.name}`);
+        console.log(`Creating new product: ${product.name}`);
+        await client
+          .create(sanityProduct)
+          .then((createdProduct) => {
+            console.log(`✅ Product created: ${product.name}`);
+          })
+          .catch((err) => {
+            console.error('Error creating product:', err.message);
+          });
       }
     }
 
-    console.log('Import completed successfully!');
+    console.log('Import completed successfully.');
   } catch (error) {
     console.error('Error importing products:', error);
-    process.exit(1);
   }
 }
 
-// Ejecutar el script
-importProducts();
+// Get YAML file path from command line arguments
+const yamlFilePath = process.argv[2];
+
+if (!yamlFilePath) {
+  console.error('Please provide a YAML file path as an argument.');
+  console.log('Usage: node importProducts.js path/to/products.yaml');
+  process.exit(1);
+}
+
+// Run the import
+importProducts(yamlFilePath);
