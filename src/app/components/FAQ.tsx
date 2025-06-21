@@ -15,13 +15,13 @@ export default function FAQ({ question, answer }: FAQProps) {
     <div className="border-b border-gray-200 last:border-0">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between py-6 px-4 text-left hover:bg-gray-50 transition-colors"
+        className="flex w-full items-center justify-between py-4 sm:py-6 px-3 sm:px-4 text-left hover:bg-gray-50 transition-colors"
       >
-        <span className="flex items-center pr-8">
-          <span className="text-base text-gray-900">{question}</span>
+        <span className="flex items-center pr-4 sm:pr-8">
+          <span className="text-sm sm:text-base font-medium text-gray-900">{question}</span>
         </span>
         <span className={`flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
-          <svg className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+          <svg className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
         </span>
@@ -35,7 +35,7 @@ export default function FAQ({ question, answer }: FAQProps) {
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="px-4 pb-6 text-gray-600">
+            <div className="px-3 sm:px-4 pb-4 sm:pb-6 text-sm sm:text-base text-gray-600">
               {answer}
             </div>
           </motion.div>

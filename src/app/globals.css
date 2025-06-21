@@ -73,3 +73,13 @@ body {
 body.hide-global-whatsapp .global-whatsapp-button {
   display: none;
 }
+
+/* Ocultar barras de desplazamiento pero mantener la funcionalidad */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Para Chrome, Safari y Opera */
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* Para Internet Explorer y Edge */
+  scrollbar-width: none;  /* Para Firefox */
+}

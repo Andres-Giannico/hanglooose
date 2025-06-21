@@ -202,41 +202,66 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
   }, [])
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
       {/* Breadcrumbs */}
-      <nav className="flex mb-8" aria-label="Breadcrumb">
+      <nav className="flex mb-4 sm:mb-8 overflow-x-auto whitespace-nowrap pb-2" aria-label="Breadcrumb">
         <ol className="flex items-center space-x-2">
           <li>
-            <Link href="/" className="text-gray-500 hover:text-gray-700">
+            <Link href="/" className="text-sm text-gray-500 hover:text-gray-700">
               Inicio
             </Link>
           </li>
           <li>
             <span className="text-gray-400 mx-2">/</span>
-            <Link href={`/categories/${product.category.slug}`} className="text-gray-500 hover:text-gray-700">
+            <Link href={`/categories/${product.category.slug}`} className="text-sm text-gray-500 hover:text-gray-700">
               {product.category.title}
             </Link>
           </li>
           <li>
             <span className="text-gray-400 mx-2">/</span>
-            <span className="text-gray-900">{product.name}</span>
+            <span className="text-sm text-gray-900">{product.name}</span>
           </li>
         </ol>
       </nav>
 
-      <div className="mb-6">
-        <h1 className="text-3xl lg:text-4xl font-bold text-gray-800">{product.name}</h1>
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800">{product.name}</h1>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
+      {/* Product card for mobile */}
+      <div className="block sm:hidden mb-8">
+        <div className="bg-white rounded-xl border p-4 shadow-md">
+          <div className="flex items-baseline justify-between mb-4">
+            <h2 className="text-xl font-bold">
+              {product.showFromPrice && <span className="text-gray-500 font-normal mr-1">from</span>}
+              €{product.price}
+            </h2>
+            {product.priceSubtitle && (
+              <span className="text-sm text-gray-500">/ {product.priceSubtitle}</span>
+            )}
+          </div>
+          {product.duration && (
+            <p className="mb-4 text-sm text-gray-500">{product.duration}</p>
+          )}
+
+          <button
+            onClick={handleCheckAvailability}
+            className="mb-4 w-full rounded-lg bg-blue-600 px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700"
+          >
+            Check Availability
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12 items-start">
         {/* Left Column */}
         <div className="lg:col-span-2">
           <ProductGallery gallery={product.gallery} />
-          <div className="mt-8 space-y-8">
+          <div className="mt-6 sm:mt-8 space-y-6 sm:space-y-8">
             {product.highlights && (
               <div>
-                <h2 className="text-2xl font-bold mb-3">Highlights</h2>
-                <ul className="list-disc list-inside space-y-1">
+                <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Highlights</h2>
+                <ul className="list-disc list-inside space-y-1 text-sm sm:text-base text-gray-700">
                   {product.highlights.map((highlight, index) => (
                     <li key={index}>{highlight}</li>
                   ))}
@@ -244,22 +269,22 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
               </div>
             )}
             {product.fullDescription && (
-              <div className="prose max-w-none">
-                <h2 className="text-2xl font-bold mb-3">Full description</h2>
+              <div className="prose max-w-none text-sm sm:text-base">
+                <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Full description</h2>
                 <PortableText value={product.fullDescription} components={portableTextComponents} />
               </div>
             )}
             {(product.includes && product.includes.length > 0) || (product.notIncludes && product.notIncludes.length > 0) ? (
               <div>
-                <h2 className="text-2xl font-bold mb-4">Price Details</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Price Details</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   {product.includes && product.includes.length > 0 && (
-                    <div>
-                      <h3 className="text-lg font-semibold mb-3 text-green-700">Included</h3>
+                    <div className="bg-green-50/50 p-4 rounded-lg border border-green-100">
+                      <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-green-700">Included</h3>
                       <ul className="space-y-2">
                         {product.includes.map((item, index) => (
-                          <li key={index} className="flex items-center text-gray-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6 mr-3 text-green-500 flex-shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                          <li key={index} className="flex items-center text-sm sm:text-base text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-green-500 flex-shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
                             <span>{item}</span>
                           </li>
                         ))}
@@ -267,12 +292,12 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
                     </div>
                   )}
                   {product.notIncludes && product.notIncludes.length > 0 && (
-                    <div>
-                      <h3 className="text-lg font-semibold mb-3 text-red-700">Not Included</h3>
+                    <div className="bg-red-50/50 p-4 rounded-lg border border-red-100">
+                      <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-red-700">Not Included</h3>
                       <ul className="space-y-2">
                         {product.notIncludes.map((item, index) => (
-                          <li key={index} className="flex items-center text-gray-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6 mr-3 text-red-500 flex-shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                          <li key={index} className="flex items-center text-sm sm:text-base text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-red-500 flex-shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                             <span>{item}</span>
                           </li>
                         ))}
@@ -283,22 +308,24 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
               </div>
             ) : null}
             {product.importantInformation && (
-              <div className="prose max-w-none bg-gray-50 p-4 rounded-lg">
-                <h2 className="text-2xl font-bold mb-3">Important information</h2>
+              <div className="prose max-w-none bg-gray-50 p-4 rounded-lg text-sm sm:text-base">
+                <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Important information</h2>
                 <PortableText value={product.importantInformation} components={portableTextComponents} />
               </div>
             )}
           </div>
         </div>
 
-        {/* Right Column */}
-        <BookingCard product={product} onCheckAvailabilityClick={handleCheckAvailability} />
+        {/* Right Column - Hidden on mobile since we show at top */}
+        <div className="hidden sm:block">
+          <BookingCard product={product} onCheckAvailabilityClick={handleCheckAvailability} />
+        </div>
       </div>
 
       {/* Guarantees & Payment Methods */}
       {product.paymentMethods && (
-        <div className="my-12 py-8 border-t">
-          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="my-8 sm:my-12 py-6 sm:py-8 border-t">
+          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             <PaymentMethodsSection paymentMethods={product.paymentMethods} />
           </div>
         </div>
@@ -306,9 +333,9 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
 
       {/* Booking Widget Section */}
       {product.bookingWidget?.enableWidget && product.bookingWidget.bookingProductId && (
-        <div id="booking-widget-section" className="mt-12 pt-8 border-t">
-          <h2 className="text-3xl font-bold text-center mb-8">Make a Reservation</h2>
-          <div className="max-w-4xl mx-auto bg-white p-4 sm:p-6 lg:p-8 rounded-xl shadow-2xl">
+        <div id="booking-widget-section" className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8">Make a Reservation</h2>
+          <div className="max-w-4xl mx-auto bg-white p-4 sm:p-6 lg:p-8 rounded-xl shadow-xl sm:shadow-2xl">
             <BookingWidget settings={product.bookingWidget} />
           </div>
         </div>
@@ -316,9 +343,9 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
 
       {/* FAQs Section */}
       {product.faqs && product.faqs.length > 0 && (
-        <div className="mt-16">
+        <div className="mt-10 sm:mt-16">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8">Frequently Asked Questions</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-8">Frequently Asked Questions</h2>
             <div className="divide-y divide-gray-200 rounded-lg bg-white shadow">
               {product.faqs.map((faq, index) => (
                 <FAQ 
