@@ -31,7 +31,7 @@ const SocialIcon = ({ platform }: { platform: string }) => {
         case 'instagram':
             return (
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+np                    <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
                 </svg>
             )
         case 'facebook':
@@ -50,132 +50,51 @@ export default function Footer({ settings }: FooterProps) {
     const currentYear = new Date().getFullYear()
 
     return (
-        <footer className="relative bg-gradient-to-b from-[#0f172a] to-[#0c1222] text-gray-300">
-            {/* Decorative element */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500/80 via-indigo-500/80 to-purple-500/80"></div>
-            <div className="absolute top-1 inset-x-0 h-[1px] bg-white/10"></div>
+        <footer className="bg-white border-t relative">
+            {/* Efecto de ondas en la parte superior - solo en versiones no móviles */}
+            <div className="hidden sm:block absolute top-0 left-0 right-0 h-8 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-blue-600/5"></div>
+                <svg className="absolute bottom-0 w-full text-white" viewBox="0 0 1200 30" preserveAspectRatio="none">
+                    <path d="M0,30 L1200,30 L1200,20 C1080,25 1080,15 960,20 C840,25 840,15 720,20 C600,25 600,15 480,20 C360,25 360,15 240,20 C120,25 120,15 0,20 L0,30 Z" className="fill-current"></path>
+                </svg>
+            </div>
             
-            {/* Main Footer */}
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-                    {/* Brand Column */}
-                    <div className="space-y-5">
-                        {logo?.asset && (
-                            <div className="inline-block bg-gradient-to-br from-white/15 to-white/5 p-3 rounded-lg shadow-lg backdrop-blur-sm border border-white/10">
-                                <Image
-                                    src={urlForImage(logo)?.width(100).height(100).url() || ''}
-                                    alt={settings.title || 'Logo'}
-                                    width={80}
-                                    height={80}
-                                    className="h-14 w-auto"
-                                />
-                            </div>
-                        )}
-                        <p className="text-sm text-gray-300/90">
-                            {settings.footerTagline || 'Experience adventure and create lasting memories with our premium services.'}
-                        </p>
-                        <div className="space-y-3 pt-2">
-                            {settings.contactEmail && (
-                                <a href={`mailto:${settings.contactEmail}`} 
-                                   className="flex items-center text-sm group hover:text-white transition-all duration-200">
-                                    <span className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 mr-3 group-hover:bg-white/15 transition-colors">
-                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                        </svg>
-                                    </span>
-                                    <span className="group-hover:translate-x-1 transition-transform">
-                                        {settings.contactEmail}
-                                    </span>
-                                </a>
+            {/* Contenido principal del footer */}
+            <div className="container mx-auto pt-12 pb-8 px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+                    
+                    {/* Brand Column - 4 columnas en desktop */}
+                    <div className="md:col-span-4 space-y-6 text-center sm:text-left">
+                        <div className="flex flex-col items-center sm:items-start">
+                            {logo?.asset && (
+                                <Link href="/" className="inline-flex mb-4">
+                                    <div className="w-full h-auto">
+                                        <Image
+                                            src={urlForImage(logo)?.width(300).height(300).url() || ''}
+                                            alt={settings.title || 'Logo'}
+                                            width={300}
+                                            height={300}
+                                            className="w-[120px] sm:w-[140px] h-auto object-contain object-center"
+                                            priority
+                                            unoptimized
+                                        />
+                                    </div>
+                                </Link>
                             )}
-                            {settings.contactPhoneNumber && (
-                                <a href={`tel:${settings.contactPhoneNumber}`} 
-                                   className="flex items-center text-sm group hover:text-white transition-all duration-200">
-                                    <span className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 mr-3 group-hover:bg-white/15 transition-colors">
-                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                                        </svg>
-                                    </span>
-                                    <span className="group-hover:translate-x-1 transition-transform">
-                                        {settings.contactPhoneNumberDisplay || settings.contactPhoneNumber}
-                                    </span>
-                                </a>
-                            )}
-                            {settings.address && (
-                                <div className="flex items-start text-sm">
-                                    <span className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 mr-3 flex-shrink-0 mt-0.5">
-                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        </svg>
-                                    </span>
-                                    <span>{settings.address}</span>
-                                </div>
-                            )}
+                            <p className="mt-4 text-gray-600 text-sm max-w-xs">
+                                {settings.footerTagline || 'Experience adventure and create lasting memories with our premium services.'}
+                            </p>
                         </div>
-                    </div>
-
-                    {/* Quick Links */}
-                    <div>
-                        <h3 className="text-lg font-semibold text-white mb-5 border-b border-white/10 pb-2 inline-block">
-                            {settings.footerQuickLinks?.title || 'Quick Links'}
-                        </h3>
-                        <ul className="space-y-3">
-                            {settings.footerQuickLinks?.links?.map((link: FooterLink, index: number) => (
-                                <li key={index}>
-                                    <Link 
-                                        href={link.url} 
-                                        className="text-sm hover:text-white group flex items-center transition-all duration-200"
-                                    >
-                                        <svg className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                        </svg>
-                                        <span className="group-hover:translate-x-1 transition-transform">
-                                            {link.text}
-                                        </span>
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Legal Links */}
-                    <div>
-                        <h3 className="text-lg font-semibold text-white mb-5 border-b border-white/10 pb-2 inline-block">
-                            {settings.footerLegalLinks?.title || 'Legal'}
-                        </h3>
-                        <ul className="space-y-3">
-                            {settings.footerLegalLinks?.links?.map((link: FooterLink, index: number) => (
-                                <li key={index}>
-                                    <Link 
-                                        href={link.url} 
-                                        className="text-sm hover:text-white group flex items-center transition-all duration-200"
-                                    >
-                                        <svg className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                        </svg>
-                                        <span className="group-hover:translate-x-1 transition-transform">
-                                            {link.text}
-                                        </span>
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Social Links */}
-                    <div>
-                        <h3 className="text-lg font-semibold text-white mb-5 border-b border-white/10 pb-2 inline-block">
-                            {settings.footerSocialTitle || 'Connect With Us'}
-                        </h3>
-                        <div className="flex flex-wrap gap-3">
+                        
+                        {/* Social icons */}
+                        <div className="flex items-center justify-center sm:justify-start space-x-4 mt-6">
                             {settings.socialLinks?.map((social: { platform: string; url: string }, index: number) => (
                                 <a
                                     key={index}
                                     href={social.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="bg-gradient-to-br from-white/15 to-white/5 p-3 rounded-full hover:scale-110 transition-all duration-300 shadow-md hover:shadow-lg"
+                                    className="bg-gray-100 hover:bg-blue-50 p-2 rounded-full transition-all duration-200 text-gray-600 hover:text-blue-600"
                                     aria-label={`Follow us on ${social.platform}`}
                                 >
                                     <SocialIcon platform={social.platform} />
@@ -183,21 +102,126 @@ export default function Footer({ settings }: FooterProps) {
                             ))}
                         </div>
                     </div>
-                </div>
-            </div>
+                    
+                    {/* Quick Links - 3 columnas en desktop */}
+                    <div className="md:col-span-3 text-center sm:text-left">
+                        <h3 className="text-base font-semibold text-gray-900 mb-4">
+                            {settings.footerQuickLinks?.title || 'Quick Links'}
+                        </h3>
+                        <ul className="space-y-2">
+                            {settings.footerQuickLinks?.links?.map((link: FooterLink, index: number) => (
+                                <li key={index}>
+                                    <Link 
+                                        href={link.url} 
+                                        className="text-gray-600 hover:text-blue-600 text-sm hover:underline transition-colors"
+                                    >
+                                        {link.text}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-            {/* Bottom Bar */}
-            <div className="border-t border-white/10 bg-[#080e1a]/50">
-                <div className="container mx-auto px-4 py-6">
-                    <div className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
-                        <div className="text-sm">
+                    {/* Legal Links - 3 columnas en desktop */}
+                    <div className="md:col-span-2 text-center sm:text-left">
+                        <h3 className="text-base font-semibold text-gray-900 mb-4">
+                            {settings.footerLegalLinks?.title || 'Legal'}
+                        </h3>
+                        <ul className="space-y-2">
+                            {settings.footerLegalLinks?.links?.map((link: FooterLink, index: number) => (
+                                <li key={index}>
+                                    <Link 
+                                        href={link.url} 
+                                        className="text-gray-600 hover:text-blue-600 text-sm hover:underline transition-colors"
+                                    >
+                                        {link.text}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Contact Info - 3 columnas en desktop */}
+                    <div className="md:col-span-3 text-center sm:text-left">
+                        <h3 className="text-base font-semibold text-gray-900 mb-4">
+                            {'Contact Us'}
+                        </h3>
+                        <ul className="space-y-3">
+                            {settings.contactEmail && (
+                                <li>
+                                    <a href={`mailto:${settings.contactEmail}`} 
+                                       className="text-sm text-gray-600 hover:text-blue-600 flex items-center group justify-center sm:justify-start">
+                                        <svg className="w-4 h-4 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                        <span className="group-hover:underline">{settings.contactEmail}</span>
+                                    </a>
+                                </li>
+                            )}
+                            {settings.contactPhoneNumber && (
+                                <li>
+                                    <a href={`tel:${settings.contactPhoneNumber}`} 
+                                       className="text-sm text-gray-600 hover:text-blue-600 flex items-center group justify-center sm:justify-start">
+                                        <svg className="w-4 h-4 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                        </svg>
+                                        <span className="group-hover:underline">{settings.contactPhoneNumberDisplay || settings.contactPhoneNumber}</span>
+                                    </a>
+                                </li>
+                            )}
+                            {settings.address && (
+                                <li className="flex items-start justify-center sm:justify-start">
+                                    <svg className="w-4 h-4 mr-2 text-blue-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                    <span className="text-sm text-gray-600">{settings.address}</span>
+                                </li>
+                            )}
+                        </ul>
+                    </div>
+                </div>
+                
+                {/* Sección de pago y certificaciones - móvil y desktop */}
+                <div className="mt-10 py-6 border-t border-gray-200">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div className="flex flex-col sm:flex-row items-center">
+                            <p className="text-sm text-gray-600 mb-3 sm:mb-0 sm:mr-4">Payment Methods:</p>
+                            <div className="flex space-x-4">
+                                <Image src="/visa.svg" alt="Visa" width={40} height={25} className="h-7 w-auto" />
+                                <Image src="/mastercard.svg" alt="Mastercard" width={40} height={25} className="h-7 w-auto" />
+                                <Image src="/amex.svg" alt="American Express" width={40} height={25} className="h-7 w-auto" />
+                                <Image src="/stripe.svg" alt="Stripe" width={40} height={25} className="h-7 w-auto opacity-80" />
+                            </div>
+                        </div>
+                        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                            <div className="flex items-center bg-green-50/50 border border-green-100 rounded-lg p-2 px-3 text-sm text-gray-700">
+                                <svg className="w-5 h-5 mr-2 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                <span>Secure Booking</span>
+                            </div>
+                            <div className="flex items-center bg-blue-50/50 border border-blue-100 rounded-lg p-2 px-3 text-sm text-gray-700">
+                                <svg className="w-5 h-5 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>Best Price Guarantee</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Copyright Bar */}
+                <div className="mt-8 pt-6 border-t border-gray-200">
+                    <div className="flex flex-col md:flex-row justify-between items-center">
+                        <div className="text-sm text-gray-500 mb-4 md:mb-0 text-center">
                             © {currentYear} {settings.footerCopyright || settings.title || 'Company Name'}. All rights reserved.
                         </div>
                         {settings.footerCredits && (
-                            <div className="text-sm flex items-center">
-                                <span>Made with</span>
-                                <span className="text-red-500 animate-pulse mx-1">❤️</span>
-                                <span>by {settings.footerCredits}</span>
+                            <div className="flex items-center text-sm">
+                                <span className="text-gray-400">Designed with</span>
+                                <span className="text-red-500 mx-1">❤️</span>
+                                <span className="text-gray-500 font-medium">by {settings.footerCredits}</span>
                             </div>
                         )}
                     </div>
