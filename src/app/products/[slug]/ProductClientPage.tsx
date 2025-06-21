@@ -821,7 +821,7 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
       {product.bookingWidget?.enableWidget && product.bookingWidget.bookingProductId && (
         <div id="booking-widget-section" className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t">
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8">Make a Reservation</h2>
-          <div className="max-w-4xl mx-auto bg-white p-4 sm:p-6">
+          <div className="max-w-4xl mx-auto bg-white p-4 sm:p-6 border border-gray-200 rounded-xl">
             <BookingWidget settings={product.bookingWidget} />
           </div>
           
