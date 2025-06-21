@@ -83,8 +83,9 @@ async function getCategory(slug: string) {
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
-  const { slug } = params;
-  const category = await getCategory(slug) as Category
+  // En Next.js 15, debemos evitar usar params.slug directamente
+  const slugValue = typeof params === 'object' && params ? params.slug || '' : '';
+  const category = await getCategory(slugValue) as Category
   
   if (!category) {
     return {
@@ -99,8 +100,9 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const { slug } = params;
-  const category = await getCategory(slug) as Category
+  // En Next.js 15, debemos evitar usar params.slug directamente
+  const slugValue = typeof params === 'object' && params ? params.slug || '' : '';
+  const category = await getCategory(slugValue) as Category
 
   if (!category) {
     return (

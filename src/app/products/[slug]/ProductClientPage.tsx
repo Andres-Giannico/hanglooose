@@ -563,6 +563,9 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
 
       <div className="mb-4 sm:mb-6">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800">{product.name}</h1>
+        {product.shortDescription && (
+          <p className="mt-2 text-gray-600 text-lg">{product.shortDescription}</p>
+        )}
       </div>
 
       {/* Product card for mobile */}

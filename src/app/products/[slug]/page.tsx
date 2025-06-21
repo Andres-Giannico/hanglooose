@@ -33,6 +33,7 @@ async function getProduct(slug: string) {
       mainImage,
       gallery,
       shortDescription,
+      highlights,
       fullDescription[]{
         ...,
         _type == "image" => {
@@ -102,9 +103,11 @@ async function getSettings() {
 
 // This is the new Server Component
 export default async function ProductPage({ params }: ProductPageProps) {
-  // Corregido: Desestructurar params en una constante antes de usar
-  const { slug } = params;
-  const product = await getProduct(slug);
+  // En Next.js 15, debemos evitar usar params.slug directamente
+  // Usamos un enfoque más seguro
+  const slugValue = typeof params === 'object' && params ? params.slug || '' : '';
+  
+  const product = await getProduct(slugValue);
   const settings = await getSettings();
 
   if (!product) {

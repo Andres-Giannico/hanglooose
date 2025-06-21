@@ -29,8 +29,13 @@ export default function ProductCard({ product }: ProductCardProps) {
   // Determine if we should show gallery grid - now using at least 2 images
   const hasEnoughImages = product.gallery && product.gallery.length >= 2;
   
+  // Asegurarse de que el slug sea una cadena
+  const productSlug = typeof product.slug === 'string' ? product.slug : 
+                     (product.slug && typeof product.slug === 'object' && product.slug.current) ? 
+                     product.slug.current : '';
+  
   return (
-    <Link href={`/products/${product.slug}`} className="group block h-full">
+    <Link href={`/products/${productSlug}`} className="group block h-full">
       <div className="overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col border border-gray-100">
         <div className="relative aspect-[4/3] overflow-hidden">
           {/* Gallery grid (showing on all screen sizes when there are 2+ images) */}

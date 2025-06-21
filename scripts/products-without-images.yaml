@@ -114,22 +114,3 @@ products:
         answer: "The boat can accommodate up to 6 people including the skipper."
       - question: "What months is this boat available?"
         answer: "The boat is available from May through October."
-    
-    # Images (placeholders - would be replaced with actual image references)
-    mainImage:
-      _type: "image"
-      asset:
-        _ref: "image-reference-galeon-630-main"
-    gallery:
-      - _type: "image"
-        asset:
-          _ref: "image-reference-galeon-630-1"
-        alt: "Galea Galeon 630 boat"
-      - _type: "image"
-        asset:
-          _ref: "image-reference-galeon-630-2"
-        alt: "Interior view of Galeon 630"
-      - _type: "image"
-        asset:
-          _ref: "image-reference-galeon-630-3"
-        alt: "Rear view of Galeon 630"
