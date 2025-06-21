@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { PortableText } from '@portabletext/react'
 import ProductGallery from '@/app/components/ProductGallery'
 import BookingWidget from '@/app/components/BookingWidget'
@@ -431,6 +431,37 @@ function EnhancedBookingCard({
   );
 }
 
+// Nuevo componente Collapsible para secciones desplegables en móvil
+function Collapsible({ title, children, initiallyOpen = false, className = "" }) {
+  const [isOpen, setIsOpen] = useState(initiallyOpen);
+
+  return (
+    <div className={`border-b border-gray-200 ${className}`}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex w-full items-center justify-between py-4 text-left font-medium text-gray-900"
+      >
+        <h2 className="text-xl font-bold">{title}</h2>
+        <svg
+          className={`h-6 w-6 transform text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div
+        className={`overflow-hidden transition-all duration-300 ${
+          isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className="pb-6">{children}</div>
+      </div>
+    </div>
+  );
+}
+
 export default function ProductClientPage({ product, whatsappSettings }: ProductClientPageProps) {
   // Force scroll to top on mount
   useEffect(() => {
@@ -752,61 +783,126 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
         <div className="lg:col-span-2">
           <ProductGallery gallery={combinedGallery} />
           <div className="mt-6 sm:mt-8 space-y-6 sm:space-y-8">
-            {product.highlights && (
-              <div>
-                <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Highlights</h2>
-                <ul className="list-disc list-inside space-y-1 text-sm sm:text-base text-gray-700">
-                  {product.highlights.map((highlight, index) => (
-                    <li key={index}>{highlight}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {product.fullDescription && (
-              <div className="prose max-w-none text-sm sm:text-base">
-                <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Full description</h2>
-                <PortableText value={product.fullDescription} components={portableTextComponents} />
-              </div>
-            )}
-            {(product.includes && product.includes.length > 0) || (product.notIncludes && product.notIncludes.length > 0) ? (
-              <div>
-                <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Price Details</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                  {product.includes && product.includes.length > 0 && (
-                    <div className="bg-green-50/50 p-4 rounded-lg border border-green-100">
-                      <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-green-700">Included</h3>
-                      <ul className="space-y-2">
-                        {product.includes.map((item, index) => (
-                          <li key={index} className="flex items-center text-sm sm:text-base text-gray-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-green-500 flex-shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  {product.notIncludes && product.notIncludes.length > 0 && (
-                    <div className="bg-red-50/50 p-4 rounded-lg border border-red-100">
-                      <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-red-700">Not Included</h3>
-                      <ul className="space-y-2">
-                        {product.notIncludes.map((item, index) => (
-                          <li key={index} className="flex items-center text-sm sm:text-base text-gray-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-red-500 flex-shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+            {/* Versión móvil: Secciones colapsables */}
+            <div className="block sm:hidden">
+              {product.highlights && (
+                <Collapsible title="Highlights" initiallyOpen={true}>
+                  <ul className="list-disc list-inside space-y-1 text-sm sm:text-base text-gray-700">
+                    {product.highlights.map((highlight, index) => (
+                      <li key={index}>{highlight}</li>
+                    ))}
+                  </ul>
+                </Collapsible>
+              )}
+              
+              {product.fullDescription && (
+                <Collapsible title="Full description">
+                  <div className="prose max-w-none text-sm sm:text-base">
+                    <PortableText value={product.fullDescription} components={portableTextComponents} />
+                  </div>
+                </Collapsible>
+              )}
+              
+              {(product.includes && product.includes.length > 0) || (product.notIncludes && product.notIncludes.length > 0) ? (
+                <Collapsible title="Price Details">
+                  <div className="grid grid-cols-1 gap-4">
+                    {product.includes && product.includes.length > 0 && (
+                      <div className="bg-green-50/50 p-4 rounded-lg border border-green-100">
+                        <h3 className="text-base font-semibold mb-2 text-green-700">Included</h3>
+                        <ul className="space-y-2">
+                          {product.includes.map((item, index) => (
+                            <li key={index} className="flex items-center text-sm text-gray-600">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 mr-2 text-green-500 flex-shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {product.notIncludes && product.notIncludes.length > 0 && (
+                      <div className="bg-red-50/50 p-4 rounded-lg border border-red-100">
+                        <h3 className="text-base font-semibold mb-2 text-red-700">Not Included</h3>
+                        <ul className="space-y-2">
+                          {product.notIncludes.map((item, index) => (
+                            <li key={index} className="flex items-center text-sm text-gray-600">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 mr-2 text-red-500 flex-shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </Collapsible>
+              ) : null}
+              
+              {product.importantInformation && (
+                <Collapsible title="Important information">
+                  <div className="prose max-w-none text-sm">
+                    <PortableText value={product.importantInformation} components={portableTextComponents} />
+                  </div>
+                </Collapsible>
+              )}
+            </div>
+
+            {/* Versión desktop: Secciones expandidas */}
+            <div className="hidden sm:block">
+              {product.highlights && (
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Highlights</h2>
+                  <ul className="list-disc list-inside space-y-1 text-sm sm:text-base text-gray-700">
+                    {product.highlights.map((highlight, index) => (
+                      <li key={index}>{highlight}</li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
-            ) : null}
-            {product.importantInformation && (
-              <div className="prose max-w-none bg-gray-50 p-4 rounded-lg text-sm sm:text-base">
-                <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Important information</h2>
-                <PortableText value={product.importantInformation} components={portableTextComponents} />
-              </div>
-            )}
+              )}
+              {product.fullDescription && (
+                <div className="prose max-w-none text-sm sm:text-base">
+                  <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Full description</h2>
+                  <PortableText value={product.fullDescription} components={portableTextComponents} />
+                </div>
+              )}
+              {(product.includes && product.includes.length > 0) || (product.notIncludes && product.notIncludes.length > 0) ? (
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Price Details</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    {product.includes && product.includes.length > 0 && (
+                      <div className="bg-green-50/50 p-4 rounded-lg border border-green-100">
+                        <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-green-700">Included</h3>
+                        <ul className="space-y-2">
+                          {product.includes.map((item, index) => (
+                            <li key={index} className="flex items-center text-sm sm:text-base text-gray-600">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-green-500 flex-shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {product.notIncludes && product.notIncludes.length > 0 && (
+                      <div className="bg-red-50/50 p-4 rounded-lg border border-red-100">
+                        <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-red-700">Not Included</h3>
+                        <ul className="space-y-2">
+                          {product.notIncludes.map((item, index) => (
+                            <li key={index} className="flex items-center text-sm sm:text-base text-gray-600">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-red-500 flex-shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : null}
+              {product.importantInformation && (
+                <div className="prose max-w-none bg-gray-50 p-4 rounded-lg text-sm sm:text-base">
+                  <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Important information</h2>
+                  <PortableText value={product.importantInformation} components={portableTextComponents} />
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -898,6 +994,19 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
           buttonText={whatsappSettings.whatsappButtonText}
         />
       )}
+
+      {/* Botón flotante para móvil */}
+      <div className="fixed bottom-4 left-0 right-0 z-50 px-4 sm:hidden">
+        <button
+          onClick={handleCheckAvailability}
+          className="w-full rounded-lg bg-blue-600 px-4 py-3 text-center font-semibold text-white shadow-lg transition-colors hover:bg-blue-700 flex items-center justify-center"
+        >
+          <span>{getButtonText()}</span>
+          <svg className="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
     </div>
   )
 } 
