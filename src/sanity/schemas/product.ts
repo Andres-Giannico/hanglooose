@@ -626,6 +626,80 @@ export default defineType({
       description: 'Show "Likely to Sell Out" badge on the product card',
     }),
     defineField({
+      name: 'productLabels',
+      title: 'Custom Product Labels',
+      description: 'Add custom labels to display on the product card (maximum 1 will be displayed)',
+      type: 'array',
+      fieldset: 'marketing',
+      of: [
+        {
+          type: 'object',
+          name: 'productLabel',
+          fields: [
+            {
+              name: 'text',
+              title: 'Label Text',
+              type: 'string',
+              validation: Rule => Rule.required().max(20).error('Max 20 characters')
+            },
+            {
+              name: 'color',
+              title: 'Label Color',
+              type: 'string',
+              options: {
+                list: [
+                  {title: 'Blue', value: 'blue'},
+                  {title: 'Green', value: 'green'},
+                  {title: 'Yellow', value: 'yellow'},
+                  {title: 'Red', value: 'red'},
+                  {title: 'Purple', value: 'purple'},
+                  {title: 'Orange', value: 'orange'},
+                ]
+              },
+              initialValue: 'blue',
+              validation: Rule => Rule.required()
+            },
+            {
+              name: 'icon',
+              title: 'Icon Type',
+              type: 'string',
+              options: {
+                list: [
+                  {title: 'Star', value: 'star'},
+                  {title: 'Fire', value: 'fire'},
+                  {title: 'Lightning', value: 'lightning'},
+                  {title: 'Alert', value: 'alert'},
+                  {title: 'Heart', value: 'heart'},
+                  {title: 'Check', value: 'check'},
+                  {title: 'Clock', value: 'clock'},
+                  {title: 'Trend', value: 'trend'},
+                  {title: 'None', value: 'none'},
+                ]
+              },
+              initialValue: 'star',
+              validation: Rule => Rule.required()
+            }
+          ],
+          preview: {
+            select: {
+              title: 'text',
+              color: 'color',
+              icon: 'icon'
+            },
+            prepare({title, color, icon}) {
+              return {
+                title: title || 'Label',
+                subtitle: `${icon && icon !== 'none' ? icon + ' • ' : ''}${color || 'blue'}`,
+              }
+            }
+          }
+        }
+      ],
+      options: {
+        layout: 'grid',
+      }
+    }),
+    defineField({
       name: 'rating',
       title: 'Rating',
       type: 'number',

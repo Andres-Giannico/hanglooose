@@ -32,6 +32,11 @@ interface Product {
   specificTime?: string;
   childrenPrice?: number;
   childrenAgeRange?: string;
+  productLabels?: {
+    text: string;
+    color: string;
+    icon: string;
+  }[];
 }
 
 async function getHomeData() {
@@ -65,6 +70,11 @@ async function getHomeData() {
       reviewCount,
       isBestSeller,
       isLikelyToSellOut,
+      productLabels[]{
+        text,
+        color,
+        icon
+      },
       productType,
       bookButtonText,
       tripSummary,

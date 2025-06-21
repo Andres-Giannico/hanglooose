@@ -20,6 +20,11 @@ interface Product {
   reviewCount?: number
   isBestSeller?: boolean
   isLikelyToSellOut?: boolean
+  productLabels?: Array<{
+    text: string
+    color: string
+    icon: string
+  }>
 }
 
 interface ProductCardProps {
@@ -37,6 +42,76 @@ const getOptimizedImageUrl = (image: SanityImage, width: number, height: number)
     ?.format('webp') // Usar formato webp para mejor compresión
     ?.quality(80) // Reducir calidad para mejorar rendimiento
     ?.url() || '';
+}
+
+// Componente para mostrar los iconos de las etiquetas
+function LabelIcon({ icon }: { icon: string }) {
+  switch (icon) {
+    case 'star':
+      return (
+        <svg className="h-3.5 w-3.5 mr-1" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/>
+        </svg>
+      );
+    case 'fire':
+      return (
+        <svg className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+        </svg>
+      );
+    case 'lightning':
+      return (
+        <svg className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      );
+    case 'alert':
+      return (
+        <svg className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      );
+    case 'heart':
+      return (
+        <svg className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+      );
+    case 'check':
+      return (
+        <svg className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      );
+    case 'clock':
+      return (
+        <svg className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      );
+    case 'trend':
+      return (
+        <svg className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
+
+// Función para determinar el color de fondo de la etiqueta
+function getBadgeColorClass(color: string) {
+  switch (color) {
+    case 'blue': return 'bg-blue-500';
+    case 'green': return 'bg-green-500';
+    case 'yellow': return 'bg-yellow-500';
+    case 'red': return 'bg-red-500';
+    case 'purple': return 'bg-purple-500';
+    case 'orange': return 'bg-orange-500';
+    default: return 'bg-blue-500';
+  }
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
@@ -141,8 +216,20 @@ export default function ProductCard({ product }: ProductCardProps) {
             )
           )}
           
-          {/* Badge: Best Seller */}
-          {product.isBestSeller && (
+          {/* Badge: Custom Labels (with priority) */}
+          {product.productLabels && product.productLabels.length > 0 && (
+            <div className="absolute top-3 left-3">
+              <span className={`inline-flex items-center ${getBadgeColorClass(product.productLabels[0].color)} px-2.5 py-1 rounded-md text-xs font-medium text-white shadow-sm`}>
+                {product.productLabels[0].icon !== 'none' && (
+                  <LabelIcon icon={product.productLabels[0].icon} />
+                )}
+                {product.productLabels[0].text}
+              </span>
+            </div>
+          )}
+          
+          {/* Badge: Best Seller (if no custom labels) */}
+          {!product.productLabels?.length && product.isBestSeller && (
             <div className="absolute top-3 left-3">
               <span className="inline-flex items-center bg-yellow-500 px-2.5 py-1 rounded-md text-xs font-medium text-white shadow-sm">
                 <svg className="h-3.5 w-3.5 mr-1" fill="currentColor" viewBox="0 0 24 24">
@@ -153,8 +240,8 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
 
-          {/* Badge: Likely to Sell Out */}
-          {product.isLikelyToSellOut && (
+          {/* Badge: Likely to Sell Out (if no custom labels and not best seller) */}
+          {!product.productLabels?.length && !product.isBestSeller && product.isLikelyToSellOut && (
             <div className="absolute top-3 left-3">
               <span className="inline-flex items-center bg-red-500 px-2.5 py-1 rounded-md text-xs font-medium text-white shadow-sm">
                 <svg className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -70,13 +70,14 @@ export default function Footer({ settings }: FooterProps) {
                                 <Link href="/" className="inline-flex mb-4">
                                     <div className="w-full h-auto">
                                         <Image
-                                            src={urlForImage(logo)?.width(300).height(300).url() || ''}
+                                            src={urlForImage(logo)?.url() || ''}
                                             alt={settings.title || 'Logo'}
                                             width={300}
                                             height={300}
-                                            className="w-[120px] sm:w-[140px] h-auto object-contain object-center"
+                                            className="h-auto object-contain object-center"
                                             priority
                                             unoptimized
+                                            style={{ maxWidth: 'unset' }}
                                         />
                                     </div>
                                 </Link>

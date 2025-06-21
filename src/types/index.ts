@@ -7,11 +7,7 @@ export interface Feature {
 
 export interface PaymentMethods {
   text?: string
-  logos?: {
-    asset: {
-      url: string
-    }
-  }
+  logos?: SanityImage
 }
 
 export interface BookingWidget {
@@ -30,7 +26,7 @@ export interface BookingWidget {
 
 export interface CustomDetail {
   icon?: string
-  label: string
+  label?: string
   value: string
 }
 
@@ -81,6 +77,9 @@ export interface Product {
   reserveNowPayLater?: boolean
   instructorInfo?: string
   isPrivateGroup?: boolean
+  isBestSeller?: boolean
+  isLikelyToSellOut?: boolean
+  productLabels?: ProductLabel[]
 }
 
 export interface FooterLink {
@@ -172,4 +171,10 @@ export interface BookingWidgetSettings {
   childrenAge?: string
   infantAge?: string
   depositObservation?: string
+}
+
+export interface ProductLabel {
+  text: string
+  color: 'blue' | 'green' | 'yellow' | 'red' | 'purple' | 'orange'
+  icon: 'star' | 'fire' | 'lightning' | 'alert' | 'heart' | 'check' | 'clock' | 'trend' | 'none'
 } 

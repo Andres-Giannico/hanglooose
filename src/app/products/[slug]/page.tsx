@@ -53,6 +53,11 @@ async function getProduct(slug: string) {
       reviewCount,
       isBestSeller,
       isLikelyToSellOut,
+      productLabels[]{
+        text,
+        color,
+        icon
+      },
       features,
       includes,
       notIncludes,

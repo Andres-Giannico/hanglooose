@@ -347,12 +347,13 @@ const MobileMenu = ({ open, setOpen, menu, settings }: { open: boolean, setOpen:
                   {settings?.logo?.asset ? (
                     <div className="h-10 w-auto">
                       <Image
-                        src={urlForImage(settings.logo)?.width(200).url() || ''}
+                        src={urlForImage(settings.logo)?.url() || ''}
                         alt={settings.title || 'Logo'}
-                        width={100}
+                        width={200}
                         height={40}
-                        className="h-full w-full object-contain"
+                        className="h-full w-auto object-contain"
                         priority
+                        style={{ maxWidth: 'unset' }}
                       />
                     </div>
                   ) : (
@@ -488,12 +489,13 @@ export default function Header() {
                 {settings?.logo?.asset ? (
                   <div className="h-12 w-auto">
                     <Image
-                      src={urlForImage(settings.logo)?.width(120).height(120).url() || ''}
+                      src={urlForImage(settings.logo)?.url() || ''}
                       alt={settings.title || 'Logo'}
-                      width={120}
+                      width={200}
                       height={120}
                       className="h-full w-auto object-contain"
                       priority
+                      style={{ maxWidth: 'unset' }}
                     />
                   </div>
                 ) : (
