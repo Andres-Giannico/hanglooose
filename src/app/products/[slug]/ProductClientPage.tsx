@@ -437,6 +437,11 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
     window.scrollTo(0, 0)
   }, [])
 
+  // Combinar la imagen principal con la galería si existe
+  const combinedGallery = product.mainImage 
+    ? [product.mainImage, ...(product.gallery || [])]
+    : product.gallery || [];
+
   const handleCheckAvailability = () => {
     const bookingSection = document.getElementById('booking-widget-section')
     if (bookingSection) {
@@ -745,7 +750,7 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12 items-start">
         {/* Left Column */}
         <div className="lg:col-span-2">
-          <ProductGallery gallery={product.gallery} />
+          <ProductGallery gallery={combinedGallery} />
           <div className="mt-6 sm:mt-8 space-y-6 sm:space-y-8">
             {product.highlights && (
               <div>
