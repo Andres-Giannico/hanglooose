@@ -102,16 +102,13 @@ async function getSettings() {
 
 // This is the new Server Component
 export default async function ProductPage({ params }: ProductPageProps) {
-  // Usar params directamente sin intentar desestructurar o acceder a slug de forma asíncrona
-  const product = await getProduct(params.slug as string);
+  // Corregido: Desestructurar params en una constante antes de usar
+  const { slug } = params;
+  const product = await getProduct(slug);
   const settings = await getSettings();
 
   if (!product) {
-    return (
-      <div className="container mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold text-gray-900">Producto no encontrado</h1>
-      </div>
-    );
+    notFound();
   }
 
   return (

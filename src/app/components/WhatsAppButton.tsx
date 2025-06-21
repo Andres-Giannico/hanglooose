@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 interface WhatsAppButtonProps {
   phoneNumber: string
@@ -18,6 +19,12 @@ export default function WhatsAppButton({
   className = ''
 }: WhatsAppButtonProps) {
   const [visible, setVisible] = useState(false)
+  const pathname = usePathname()
+  
+  // No mostrar el botón en páginas del Studio
+  if (pathname && (pathname.startsWith('/studio') || pathname.includes('studio/'))) {
+    return null
+  }
   
   useEffect(() => {
     // Mostrar el botón después de un pequeño retraso

@@ -126,9 +126,25 @@ export default defineType({
       type: 'array',
       of: [{ 
         type: 'image',
-        options: { hotspot: true },
+        options: { 
+          hotspot: true,
+          storeOriginalFilename: true,
+          accept: 'image/*',
+          sources: [{name: 'filesystem', title: 'Filesystem'}]
+        },
+        fields: [
+          {
+            name: 'alt',
+            title: 'Alt Text',
+            type: 'string',
+            description: 'Alternative text for screen readers and SEO'
+          }
+        ]
       }],
       validation: (Rule) => Rule.required().min(1),
+      options: {
+        layout: 'grid'
+      }
     }),
     
     // --- Descriptions ---

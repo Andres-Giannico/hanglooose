@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 interface BookingWidgetProps {
   settings: {
@@ -28,6 +28,8 @@ interface BookingWidgetProps {
 export default function BookingWidget({ settings }: BookingWidgetProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
+  const [iframeHeight, setIframeHeight] = useState(600)
+  const iframeRef = useRef<HTMLIFrameElement>(null)
   
   // Extraer todas las propiedades con valores por defecto
   const productId = settings.bookingProductId || 22
@@ -71,6 +73,30 @@ export default function BookingWidget({ settings }: BookingWidgetProps) {
   
   const widgetUrl = buildWidgetUrl()
 
+  // Configurar la escucha de mensajes para ajustar la altura automáticamente
+  useEffect(() => {
+    // Manejar mensajes del iframe para ajustar la altura
+    const handleMessage = (event: MessageEvent) => {
+      // Verificar que el origen sea de confianza (puede ser el dominio local o widgets.turbnb.com)
+      if (event.origin !== window.location.origin && !event.origin.includes('turbnb.com')) {
+        return;
+      }
+      
+      // Ajustar la altura según el mensaje recibido
+      if (event.data && typeof event.data === 'object' && event.data.type === 'resize') {
+        if (typeof event.data.height === 'number' && event.data.height > 300) {
+          setIframeHeight(event.data.height);
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, []);
+
   // Mostrar un mensaje de carga mientras el iframe se carga
   return (
     <div className="relative">
@@ -109,8 +135,10 @@ export default function BookingWidget({ settings }: BookingWidgetProps) {
       )}
       
       <iframe
+        ref={iframeRef}
         src={widgetUrl}
-        className="w-full min-h-[600px] border-0"
+        className="w-full border-0"
+        style={{ height: `${iframeHeight}px` }}
         title="Booking Widget"
         onLoad={() => setIsLoading(false)}
         onError={() => {

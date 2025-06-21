@@ -10,15 +10,16 @@
       margin: 0; 
       padding: 0; 
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+      overflow-x: hidden;
     }
     #widget-container {
       width: 100%;
-      min-height: 600px;
+      height: auto;
     }
   </style>
 </head>
 <body>
-  <div id="turbnb-booking-22" style="width: 100%; min-height: 600px;"></div>
+  <div id="turbnb-booking-22" style="width: 100%;"></div>
   
   <script src="https://widgets.turbnb.com/turbnb.booking.1.0.31.min.js"></script>
   <script>
@@ -58,9 +59,33 @@
     var depositObservation = getUrlParameter('depositObservation') || 'Deposit and payment instructions';
     
     // Actualizar el ID del elemento
-    var container = document.getElementById('turbnb-booking-22');
+    var container = document.getElementById('turbnb-booking-' + productId);
+    if (!container) {
+      container = document.getElementById('turbnb-booking-22');
+    }
     container.id = 'turbnb-booking-' + productId;
     
+    // Función para notificar la altura del contenido al padre
+    function notifyHeightChange() {
+      // Obtener la altura actual del documento
+      const height = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.offsetHeight,
+        document.body.clientHeight,
+        document.documentElement.clientHeight
+      );
+
+      // Enviar mensaje al padre con la nueva altura
+      if (height > 0) {
+        window.parent.postMessage({
+          type: 'resize',
+          height: height
+        }, '*');
+      }
+    }
+
     // Inicializar el widget cuando el DOM esté listo
     document.addEventListener("DOMContentLoaded", function() {
       initializeWidget();
@@ -104,6 +129,26 @@
           // Inicializar el widget con la configuración
           turbo.run(el, config);
           console.log('Widget initialized with productId:', productId);
+
+          // Notificar altura inicial después de un tiempo para dar tiempo a que se renderice
+          setTimeout(notifyHeightChange, 500);
+
+          // Configurar un observador de mutaciones para detectar cambios en el contenido
+          const observer = new MutationObserver(function() {
+            notifyHeightChange();
+          });
+
+          // Observar cambios en el DOM del widget
+          observer.observe(el, { 
+            childList: true, 
+            subtree: true, 
+            attributes: true, 
+            characterData: true 
+          });
+
+          // También enviar altura cada cierto tiempo para asegurar que se actualiza
+          setInterval(notifyHeightChange, 2000);
+
         } else {
           console.log('Waiting for TurboBooking to be available...');
           setTimeout(initializeWidget, 500);
@@ -113,6 +158,11 @@
       }
     }
     
+    // Detectar cambios de tamaño de ventana
+    window.addEventListener('resize', function() {
+      notifyHeightChange();
+    });
+
     // Intentar inicializar inmediatamente
     initializeWidget();
   </script>
