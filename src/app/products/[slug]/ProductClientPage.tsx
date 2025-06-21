@@ -432,7 +432,17 @@ function EnhancedBookingCard({
 }
 
 // Nuevo componente Collapsible para secciones desplegables en móvil
-function Collapsible({ title, children, initiallyOpen = false, className = "" }) {
+function Collapsible({ 
+  title, 
+  children, 
+  initiallyOpen = false, 
+  className = "" 
+}: { 
+  title: string; 
+  children: React.ReactNode; 
+  initiallyOpen?: boolean; 
+  className?: string;
+}) {
   const [isOpen, setIsOpen] = useState(initiallyOpen);
 
   return (
@@ -467,6 +477,24 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  // Estado para controlar la visibilidad del botón flotante
+  const [showFloatingButton, setShowFloatingButton] = useState(false);
+  
+  // Función para controlar la visibilidad del botón flotante basada en el scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      // Mostrar el botón flotante solo cuando hemos scrolleado lo suficiente
+      // para que no se vea el botón principal (aproximadamente 300px)
+      const scrollPosition = window.scrollY;
+      setShowFloatingButton(scrollPosition > 300);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   // Combinar la imagen principal con la galería si existe
   const combinedGallery = product.mainImage 
@@ -521,7 +549,12 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
   };
 
   // Función centralizada para obtener el texto del botón
-  const getButtonText = () => {
+  const getButtonText = (isFloatingButton = false) => {
+    // Para el botón flotante, siempre mostramos "Book Now"
+    if (isFloatingButton) {
+      return "Book Now";
+    }
+    
     // Determinar el texto adecuado para el botón según el tipo de producto
     let buttonText = "Check Availability"; // Texto predeterminado
 
@@ -627,11 +660,11 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
 
             {/* Booking Guarantees Mini */}
             {!hasDetailedInfo && product.bookingGuarantees && product.bookingGuarantees.length > 0 && (
-              <div className="p-4 pt-0">
-                <div className="flex flex-wrap gap-2 text-xs">
+                              <div className="p-4 pt-0">
+                <div className="flex flex-wrap gap-2">
                   {product.bookingGuarantees.slice(0, 3).map((guarantee, index) => (
-                    <span key={index} className="inline-flex items-center bg-green-50 text-green-700 px-2 py-1 rounded-full">
-                      <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <span key={index} className="inline-flex items-center bg-green-50 text-green-700 px-1.5 py-0.5 rounded-full text-[10px] font-medium">
+                      <svg className="h-2.5 w-2.5 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       {guarantee}
@@ -804,7 +837,7 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
               )}
               
               {(product.includes && product.includes.length > 0) || (product.notIncludes && product.notIncludes.length > 0) ? (
-                <Collapsible title="Price Details">
+                <Collapsible title="What's included">
                   <div className="grid grid-cols-1 gap-4">
                     {product.includes && product.includes.length > 0 && (
                       <div className="bg-green-50/50 p-4 rounded-lg border border-green-100">
@@ -865,7 +898,7 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
               )}
               {(product.includes && product.includes.length > 0) || (product.notIncludes && product.notIncludes.length > 0) ? (
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Price Details</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">What's included</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     {product.includes && product.includes.length > 0 && (
                       <div className="bg-green-50/50 p-4 rounded-lg border border-green-100">
@@ -953,10 +986,10 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
         <div className="block sm:hidden mt-8 pt-6 border-t">
           <div className="bg-white rounded-xl border p-4 shadow-sm">
             <h4 className="font-semibold mb-3 text-center">Booking Guarantees</h4>
-            <div className="flex flex-wrap gap-2 justify-center">
+                            <div className="flex flex-wrap gap-2 justify-center">
               {product.bookingGuarantees.map((guarantee, index) => (
-                <div key={index} className="inline-flex items-center bg-green-50 text-green-700 px-2 py-1 rounded-full text-xs">
-                  <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div key={index} className="inline-flex items-center bg-green-50 text-green-700 px-1.5 py-0.5 rounded-full text-[10px] font-medium">
+                  <svg className="h-2.5 w-2.5 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   {guarantee}
@@ -995,13 +1028,13 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
         />
       )}
 
-      {/* Botón flotante para móvil */}
-      <div className="fixed bottom-4 left-0 right-0 z-50 px-4 sm:hidden">
+      {/* Botón flotante para móvil - solo visible al scrollear */}
+      <div className={`fixed bottom-4 left-0 right-0 z-50 px-4 sm:hidden transition-opacity duration-300 ${showFloatingButton ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <button
           onClick={handleCheckAvailability}
           className="w-full rounded-lg bg-blue-600 px-4 py-3 text-center font-semibold text-white shadow-lg transition-colors hover:bg-blue-700 flex items-center justify-center"
         >
-          <span>{getButtonText()}</span>
+          <span>{getButtonText(true)}</span>
           <svg className="ml-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
