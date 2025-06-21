@@ -47,7 +47,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {product.isBestSeller && (
-              <span className="inline-flex items-center rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-2.5 py-1 sm:px-3.5 sm:py-1.5 text-xs font-bold text-white shadow-lg backdrop-blur-sm border border-amber-400/20">
+              <span className="inline-flex items-center rounded-md bg-amber-400 px-2.5 py-1 sm:px-3 sm:py-1 text-xs font-medium text-white shadow-sm">
                 <svg className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/>
                 </svg>
@@ -55,7 +55,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               </span>
             )}
             {product.isLikelyToSellOut && (
-              <span className="inline-flex items-center rounded-full bg-gradient-to-r from-rose-500 to-pink-500 px-2.5 py-1 sm:px-3.5 sm:py-1.5 text-xs font-bold text-white shadow-lg backdrop-blur-sm border border-rose-400/20">
+              <span className="inline-flex items-center rounded-md bg-rose-500 px-2.5 py-1 sm:px-3 sm:py-1 text-xs font-medium text-white shadow-sm">
                 <svg className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -66,7 +66,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           
           {/* View details button - visible always on mobile, on hover for desktop */}
           <div className="absolute bottom-4 right-4 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-0 sm:translate-y-2 sm:group-hover:translate-y-0">
-            <span className="inline-flex items-center rounded-full bg-white/90 px-3 py-1 sm:px-3.5 sm:py-1.5 text-xs font-bold text-blue-600 shadow-lg backdrop-blur-sm border border-white/20">
+            <span className="inline-flex items-center rounded-md bg-white px-3 py-1 sm:px-3 sm:py-1 text-xs font-medium text-blue-600 shadow-sm">
               View Details
               <svg className="ml-1 w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -76,7 +76,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <div className="p-3 sm:p-5 space-y-2 sm:space-y-3 flex-1 flex flex-col">
-          <h3 className="text-base sm:text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+          <h3 className="text-base sm:text-lg font-bold text-gray-900 group-hover:text-gray-700 transition-colors line-clamp-2">
             {product.name}
           </h3>
           
@@ -90,7 +90,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             <div className="flex items-baseline">
               {product.price && (
                 <>
-                  <span className="text-lg sm:text-xl font-bold text-blue-600">€{product.price}</span>
+                  <span className="text-lg sm:text-xl font-bold text-gray-900">€{product.price}</span>
                   {product.priceSubtitle && (
                     <span className="ml-1 text-xs sm:text-sm font-medium text-gray-500">/ {product.priceSubtitle}</span>
                   )}
@@ -132,7 +132,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <p className="ml-1 text-[10px] sm:text-sm font-medium text-gray-600">({product.reviewCount})</p>
               </div>
               
-              <span className="text-[10px] sm:text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">
+              <span className="text-[10px] sm:text-xs font-medium text-white bg-blue-600 px-2 py-0.5 rounded-md">
                 Book now
               </span>
             </div>
