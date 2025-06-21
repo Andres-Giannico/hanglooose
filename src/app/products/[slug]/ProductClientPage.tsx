@@ -46,6 +46,45 @@ interface ProductClientPageProps {
   }
 }
 
+// Sistema de estrellas para mostrar las reseñas
+function ReviewStars({ rating, reviewCount }: { rating: number, reviewCount?: number }) {
+  // Crear un array con 5 elementos para representar las estrellas
+  const stars = Array.from({ length: 5 }, (_, i) => {
+    if (i < Math.floor(rating)) return 'full';
+    return i < rating ? 'half' : 'empty';
+  });
+
+  return (
+    <div className="flex items-center">
+      <div className="flex items-center">
+        {stars.map((type, index) => (
+          <span key={index} className="text-yellow-400">
+            {type === 'full' && (
+              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>
+              </svg>
+            )}
+            {type === 'half' && (
+              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"></path>
+                <path fill="#e5e7eb" d="M12 17.27V2l2.81 6.63 7.19.61-5.46 4.73 1.64 7.03L12 17.27z"></path>
+              </svg>
+            )}
+            {type === 'empty' && (
+              <svg className="w-5 h-5 text-gray-300 fill-current" viewBox="0 0 24 24">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>
+              </svg>
+            )}
+          </span>
+        ))}
+      </div>
+      {reviewCount !== undefined && (
+        <span className="ml-1 text-sm text-gray-600">{rating.toFixed(1)} ({reviewCount})</span>
+      )}
+    </div>
+  );
+}
+
 const portableTextComponents = {
   types: {
     image: ({ value }: any) => {
@@ -654,6 +693,25 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
 
       {/* Versión móvil rediseñada estilo GetYourGuide */}
       <div className="block sm:hidden">
+        {/* TÍTULO Y CALIFICACIÓN ARRIBA DE LA GALERÍA */}
+        <div className="mb-4">
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">{product.name}</h1>
+          
+          {/* Sistema de calificación con estrellas */}
+          <div className="flex items-center justify-between">
+            {product.rating ? (
+              <ReviewStars rating={product.rating} reviewCount={product.reviewCount} />
+            ) : (
+              <div className="flex-1"></div>
+            )}
+            
+                         <div className="text-lg font-bold text-blue-700">
+              {product.showFromPrice && <span className="text-gray-600 font-normal text-base mr-1">from</span>}
+              €{product.price}
+            </div>
+          </div>
+        </div>
+
         {/* Galería con botón de compartir */}
         <div className="relative mb-4">
           <ProductGallery gallery={combinedGallery} />
@@ -668,51 +726,51 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
           </button>
         </div>
 
-        {/* Título e información */}
+        {/* Información básica */}
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">{product.name}</h1>
-          
           {product.shortDescription && (
             <p className="text-gray-600 text-base mb-3">{product.shortDescription}</p>
           )}
           
-          {/* Información básica */}
-          <div className="flex flex-wrap gap-y-2 gap-x-4 text-sm text-gray-500 mb-3">
-            {product.duration && (
-              <div className="flex items-center">
-                <svg className="h-4 w-4 mr-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                {product.duration}
-              </div>
-            )}
-            
-            {product.departurePoint && (
-              <div className="flex items-center">
-                <svg className="h-4 w-4 mr-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                {product.departurePoint}
-              </div>
-            )}
-            
-            {product.capacity && (
-              <div className="flex items-center">
-                <svg className="h-4 w-4 mr-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                {product.capacity}
-              </div>
-            )}
+          {/* Tarjeta de información básica en móvil - NUEVO DISEÑO */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
+            <div className="flex flex-wrap gap-y-3 gap-x-4 text-sm">
+              {product.duration && (
+                <div className="flex items-center">
+                  <svg className="h-5 w-5 mr-1.5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="font-medium">{product.duration}</span>
+                </div>
+              )}
+              
+              {product.departurePoint && (
+                <div className="flex items-center">
+                  <svg className="h-5 w-5 mr-1.5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <span className="font-medium">{product.departurePoint}</span>
+                </div>
+              )}
+              
+              {product.capacity && (
+                <div className="flex items-center">
+                  <svg className="h-5 w-5 mr-1.5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  <span className="font-medium">{product.capacity}</span>
+                </div>
+              )}
+            </div>
           </div>
           
           {/* Garantías y beneficios */}
           {product.bookingGuarantees && product.bookingGuarantees.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-3">
-              {product.bookingGuarantees.slice(0, 3).map((guarantee, index) => (
-                <span key={index} className="inline-flex items-center bg-green-50 text-green-700 px-1.5 py-0.5 rounded-full text-[10px] font-medium">
-                  <svg className="h-2.5 w-2.5 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {product.bookingGuarantees.map((guarantee, index) => (
+                <span key={index} className="inline-flex items-center bg-green-50 text-green-700 px-2 py-1 rounded-md text-xs font-medium">
+                  <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   {guarantee}
@@ -721,6 +779,14 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
             </div>
           )}
         </div>
+        
+        {/* BOTÓN DE RESERVA MÓVIL */}
+        <button
+          onClick={handleCheckAvailability}
+          className="w-full rounded-lg bg-blue-600 px-4 py-3 mb-6 text-center font-semibold text-white transition-colors hover:bg-blue-700"
+        >
+          {getButtonText()}
+        </button>
         
         {/* Secciones colapsables */}
         <div className="space-y-1">
