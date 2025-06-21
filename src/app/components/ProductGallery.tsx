@@ -5,25 +5,30 @@ import Image from 'next/image'
 import { urlForImage } from '@/sanity/image'
 import type { SanityImage } from '@/sanity/types'
 
+// Helper function to check if an image is valid
+const isValidSanityImage = (image: SanityImage | null | undefined): image is SanityImage => {
+  return Boolean(image && image.asset && image.asset._ref)
+}
+
 interface ProductGalleryProps {
   gallery: SanityImage[]
 }
 
-const isValidSanityImage = (image: unknown): image is SanityImage => {
-  return image !== null && 
-         typeof image === 'object' && 
-         image !== null &&
-         'asset' in image &&
-         image.asset !== null &&
-         typeof image.asset === 'object'
-}
-
+// Función optimizada para obtener URLs de imágenes con formatos modernos y calidad optimizada
 const getImageUrl = (image: SanityImage | null | undefined, width: number, height: number): string | undefined => {
   if (!isValidSanityImage(image)) {
     return undefined
   }
   
-  const url = urlForImage(image)?.width(width).height(height).fit('crop').url()
+  // Usar formatos modernos (webp) y ajustar la calidad para optimizar
+  const url = urlForImage(image)
+    ?.width(width)
+    ?.height(height)
+    ?.format('webp') // Usar formato webp para mejor compresión
+    ?.quality(80) // Reducir ligeramente la calidad para mejorar el rendimiento
+    ?.fit('crop')
+    ?.url()
+    
   if (!url) {
     return undefined
   }
@@ -31,11 +36,22 @@ const getImageUrl = (image: SanityImage | null | undefined, width: number, heigh
   return url
 }
 
+// Blur hash placeholder (base64) para mostrar mientras se cargan las imágenes
+const blurHashPlaceholder = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAFeAJ5cZRj3wAAAABJRU5ErkJggg=='
+
 export default function ProductGallery({ gallery }: ProductGalleryProps) {
   const [selectedImage, setSelectedImage] = useState(0)
+  const [isLoaded, setIsLoaded] = useState<boolean[]>([])
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   const imagesCount = gallery?.length || 0
+
+  // Inicializar el estado de carga para cada imagen
+  useEffect(() => {
+    if (imagesCount > 0) {
+      setIsLoaded(new Array(imagesCount).fill(false))
+    }
+  }, [imagesCount])
 
   // Función para navegar a la siguiente imagen
   const goToNextImage = useCallback(() => {
@@ -77,6 +93,15 @@ export default function ProductGallery({ gallery }: ProductGalleryProps) {
     }
   }
 
+  // Manejar la carga completa de una imagen
+  const handleImageLoaded = (index: number) => {
+    setIsLoaded(prev => {
+      const newState = [...prev]
+      newState[index] = true
+      return newState
+    })
+  }
+
   if (!gallery || gallery.length === 0) {
     return (
       <div className="aspect-[4/3] w-full bg-gray-100 rounded-lg flex items-center justify-center">
@@ -90,14 +115,29 @@ export default function ProductGallery({ gallery }: ProductGalleryProps) {
       {/* Main Image */}
       <div className="aspect-[4/3] w-full relative overflow-hidden rounded-lg bg-gray-100">
         {getImageUrl(gallery[selectedImage], 1200, 900) ? (
-          <Image
-            src={getImageUrl(gallery[selectedImage], 1200, 900)!}
-            alt={`Product image ${selectedImage + 1}`}
-            fill
-            className="object-cover"
-            priority={selectedImage === 0}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 66vw, 50vw"
-          />
+          <>
+            {/* Imagen de baja resolución para mostrar inmediatamente */}
+            <Image
+              src={getImageUrl(gallery[selectedImage], 120, 90) || blurHashPlaceholder}
+              alt={`Product thumbnail ${selectedImage + 1}`}
+              fill
+              className={`object-cover transition-opacity duration-300 ${isLoaded[selectedImage] ? 'opacity-0' : 'opacity-100 blur-sm scale-105'}`}
+              priority={false}
+              unoptimized
+              sizes="20vw"
+            />
+            
+            {/* Imagen principal de alta calidad */}
+            <Image
+              src={getImageUrl(gallery[selectedImage], 1200, 900) || ''}
+              alt={`Product image ${selectedImage + 1}`}
+              fill
+              className={`object-cover transition-opacity duration-300 ${isLoaded[selectedImage] ? 'opacity-100' : 'opacity-0'}`}
+              priority={selectedImage === 0}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 66vw, 50vw"
+              onLoadingComplete={() => handleImageLoaded(selectedImage)}
+            />
+          </>
         ) : (
           <div className="flex h-full items-center justify-center">
             <span className="text-gray-400 text-sm sm:text-base">Image not available</span>
@@ -105,7 +145,7 @@ export default function ProductGallery({ gallery }: ProductGalleryProps) {
         )}
 
         {/* Navigation Arrows */}
-        {gallery.length > 1 && (
+        {
           <>
             <button 
               onClick={(e) => {
@@ -133,7 +173,7 @@ export default function ProductGallery({ gallery }: ProductGalleryProps) {
               </svg>
             </button>
           </>
-        )}
+        }
 
         {/* Dots Indicators */}
         {gallery.length > 1 && (
@@ -176,12 +216,14 @@ export default function ProductGallery({ gallery }: ProductGalleryProps) {
                     : 'hover:opacity-75 transition-opacity'
                 }`}
               >
+                {/* Usar el componente Image de Next.js con optimización */}
                 <Image
                   src={thumbUrl}
                   alt={`Thumbnail ${index + 1}`}
                   fill
                   className="object-cover"
                   sizes="64px"
+                  loading="lazy" // Cargar de forma diferida las miniaturas que no están en el viewport
                 />
               </button>
             )

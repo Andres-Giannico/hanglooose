@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { urlForImage } from '@/sanity/image'
 import type { SanityImage } from '@/sanity/types'
+import { useState } from 'react'
 
 interface Product {
   _id: string
@@ -25,14 +26,41 @@ interface ProductCardProps {
   product: Product
 }
 
+// Blur hash placeholder (base64) para mostrar mientras se cargan las imágenes
+const blurHashPlaceholder = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAFeAJ5cZRj3wAAAABJRU5ErkJggg=='
+
+// Función optimizada para obtener URLs de imágenes con formatos modernos y calidad optimizada
+const getOptimizedImageUrl = (image: SanityImage, width: number, height: number) => {
+  return urlForImage(image)
+    ?.width(width)
+    ?.height(height)
+    ?.format('webp') // Usar formato webp para mejor compresión
+    ?.quality(80) // Reducir calidad para mejorar rendimiento
+    ?.url() || '';
+}
+
 export default function ProductCard({ product }: ProductCardProps) {
+  // Estados para controlar la carga de imágenes
+  const [imagesLoaded, setImagesLoaded] = useState<Record<number, boolean>>({});
+  const [mainImageLoaded, setMainImageLoaded] = useState(false);
+  
   // Determine if we should show gallery grid - now using at least 2 images
   const hasEnoughImages = product.gallery && product.gallery.length >= 2;
   
   // Asegurarse de que el slug sea una cadena
-  const productSlug = typeof product.slug === 'string' ? product.slug : 
-                     (product.slug && typeof product.slug === 'object' && product.slug.current) ? 
-                     product.slug.current : '';
+  const productSlug = typeof product.slug === 'string' 
+    ? product.slug 
+    : (product.slug && typeof product.slug === 'object')
+      ? (product.slug as {current?: string}).current || ''
+      : '';
+  
+  // Manejar la carga completa de una imagen
+  const handleImageLoaded = (index: number) => {
+    setImagesLoaded(prev => ({
+      ...prev,
+      [index]: true
+    }));
+  };
   
   return (
     <Link href={`/products/${productSlug}`} className="group block h-full">
@@ -44,13 +72,28 @@ export default function ProductCard({ product }: ProductCardProps) {
               {/* Use the available images, up to 4 */}
               {product.gallery!.slice(0, 4).map((image, index) => (
                 <div key={index} className="relative w-full h-full overflow-hidden">
+                  {/* Miniatura de baja resolución */}
                   <Image
-                    src={urlForImage(image)?.width(400).height(300).url() || ''}
+                    src={getOptimizedImageUrl(image, 100, 75)}
+                    alt={`${product.name} thumbnail ${index + 1}`}
+                    fill
+                    className={`object-cover object-center transition-opacity duration-300 
+                      ${imagesLoaded[index] ? 'opacity-0' : 'opacity-100 blur-sm scale-105'}`}
+                    sizes="(max-width: 640px) 25vw, 16vw"
+                    unoptimized
+                  />
+                  
+                  {/* Imagen principal */}
+                  <Image
+                    src={getOptimizedImageUrl(image, 400, 300)}
                     alt={`${product.name} - image ${index + 1}`}
                     fill
-                    className="object-cover object-center"
+                    className={`object-cover object-center transition-opacity duration-300
+                      ${imagesLoaded[index] ? 'opacity-100' : 'opacity-0'}`}
                     sizes="(max-width: 640px) 50vw, 33vw"
                     priority={index === 0 && product.isBestSeller}
+                    onLoadingComplete={() => handleImageLoaded(index)}
+                    loading={index < 2 ? 'eager' : 'lazy'} // Cargar con prioridad sólo las primeras 2 imágenes
                   />
                 </div>
               ))}
@@ -70,39 +113,57 @@ export default function ProductCard({ product }: ProductCardProps) {
           ) : (
             // Default single image view when not enough images
             product.mainImage && (
-              <Image
-                src={urlForImage(product.mainImage)?.width(800).height(600).url() || ''}
-                alt={product.name}
-                fill
-                className="object-cover object-center transition-transform duration-500 group-hover:scale-110"
-                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                priority={product.isBestSeller}
-              />
+              <>
+                {/* Miniatura de baja resolución */}
+                <Image
+                  src={getOptimizedImageUrl(product.mainImage, 200, 150)}
+                  alt={`${product.name} thumbnail`}
+                  fill
+                  className={`object-cover object-center transition-opacity duration-300
+                    ${mainImageLoaded ? 'opacity-0' : 'opacity-100 blur-sm scale-105'}`}
+                  sizes="(max-width: 640px) 50vw, 33vw"
+                  unoptimized
+                />
+                
+                {/* Imagen principal */}
+                <Image
+                  src={getOptimizedImageUrl(product.mainImage, 800, 600)}
+                  alt={product.name}
+                  fill
+                  className={`object-cover object-center transition-transform duration-500 
+                    group-hover:scale-110 transition-opacity duration-300
+                    ${mainImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  priority={product.isBestSeller}
+                  onLoadingComplete={() => setMainImageLoaded(true)}
+                />
+              </>
             )
           )}
           
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          
-          {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-2">
-            {product.isBestSeller && (
-              <span className="inline-flex items-center rounded-md bg-amber-400 px-2.5 py-1 sm:px-3 sm:py-1 text-xs font-medium text-white shadow-sm">
-                <svg className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" fill="currentColor" viewBox="0 0 24 24">
+          {/* Badge: Best Seller */}
+          {product.isBestSeller && (
+            <div className="absolute top-3 left-3">
+              <span className="inline-flex items-center bg-yellow-500 px-2.5 py-1 rounded-md text-xs font-medium text-white shadow-sm">
+                <svg className="h-3.5 w-3.5 mr-1" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/>
                 </svg>
                 Best Seller
               </span>
-            )}
-            {product.isLikelyToSellOut && (
-              <span className="inline-flex items-center rounded-md bg-rose-500 px-2.5 py-1 sm:px-3 sm:py-1 text-xs font-medium text-white shadow-sm">
-                <svg className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </div>
+          )}
+
+          {/* Badge: Likely to Sell Out */}
+          {product.isLikelyToSellOut && (
+            <div className="absolute top-3 left-3">
+              <span className="inline-flex items-center bg-red-500 px-2.5 py-1 rounded-md text-xs font-medium text-white shadow-sm">
+                <svg className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
                 Likely to Sell Out
               </span>
-            )}
-          </div>
+            </div>
+          )}
           
           {/* View details button - visible always on mobile, on hover for desktop */}
           <div className="absolute bottom-4 right-4 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-0 sm:translate-y-2 sm:group-hover:translate-y-0">
