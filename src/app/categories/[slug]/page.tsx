@@ -26,6 +26,12 @@ interface Product {
   reviewCount?: number
   isBestSeller?: boolean
   isLikelyToSellOut?: boolean
+  productType?: string
+  bookButtonText?: string
+  tripSummary?: string
+  specificTime?: string
+  childrenPrice?: number
+  childrenAgeRange?: string
 }
 
 interface Category {
@@ -63,7 +69,13 @@ async function getCategory(slug: string) {
         rating,
         reviewCount,
         isBestSeller,
-        isLikelyToSellOut
+        isLikelyToSellOut,
+        productType,
+        bookButtonText,
+        tripSummary,
+        specificTime,
+        childrenPrice,
+        childrenAgeRange
       }
     }`,
     { slug }

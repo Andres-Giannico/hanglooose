@@ -17,6 +17,8 @@ export interface PaymentMethods {
 export interface BookingWidget {
   enableWidget: boolean
   bookingProductId: number
+  companyId?: number
+  channelId?: number
   billingTermIds?: number[]
   groupByBillingTerm?: boolean
   displayBillingTerm?: boolean
@@ -24,6 +26,12 @@ export interface BookingWidget {
   showQuantity?: boolean
   quantityLabel?: string
   bookNowLabel?: string
+}
+
+export interface CustomDetail {
+  icon?: string
+  label: string
+  value: string
 }
 
 export interface Product {
@@ -57,6 +65,22 @@ export interface Product {
     question: string
     answer: string
   }>
+  // Campos adicionales
+  productType?: string
+  bookButtonText?: string
+  tripSummary?: string
+  specificTime?: string
+  departurePoint?: string
+  capacity?: string
+  season?: string
+  limitedAvailability?: string
+  customDetails?: CustomDetail[]
+  childrenPrice?: number
+  childrenAgeRange?: string
+  freeCancellation?: boolean
+  reserveNowPayLater?: boolean
+  instructorInfo?: string
+  isPrivateGroup?: boolean
 }
 
 export interface FooterLink {
@@ -126,4 +150,26 @@ export interface HomeSettings {
   ctaDescription: string
   ctaButtonText: string
   ctaButtonLink: string
+}
+
+export interface BookingWidgetSettings {
+  enableWidget: boolean
+  bookingProductId: number
+  companyId?: number
+  channelId?: number
+  billingTermIds?: number[]
+  groupByBillingTerm?: boolean
+  displayBillingTerm?: boolean
+  useLargeSlots?: boolean
+  showQuantity?: boolean
+  quantityLabel?: string
+  bookNowLabel?: string
+  confirmReservationAndPayLabel?: string
+  payNowLabel?: string
+  selectTimeLabel?: string
+  selectExperienceLabel?: string
+  addonsLabel?: string
+  childrenAge?: string
+  infantAge?: string
+  depositObservation?: string
 } 

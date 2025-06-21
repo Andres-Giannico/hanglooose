@@ -30,6 +30,11 @@ export default defineType({
       title: 'Frequently Asked Questions',
       options: { collapsible: true, collapsed: false },
     },
+    {
+      name: 'productDetails',
+      title: 'Product Details',
+      options: { collapsible: true, collapsed: false },
+    },
   ],
   fields: [
     // --- Basic Info ---
@@ -87,6 +92,20 @@ export default defineType({
       name: 'priceSubtitle',
       title: 'Price Subtitle',
       description: 'e.g., "per group up to 4", "Half day"',
+      type: 'string',
+      fieldset: 'pricing',
+    }),
+    defineField({
+      name: 'childrenPrice',
+      title: 'Children Price',
+      description: 'Price for children (optional)',
+      type: 'number',
+      fieldset: 'pricing',
+    }),
+    defineField({
+      name: 'childrenAgeRange',
+      title: 'Children Age Range',
+      description: 'e.g., "4-12", "Under 10"',
       type: 'string',
       fieldset: 'pricing',
     }),
@@ -214,6 +233,106 @@ export default defineType({
           }
         }
       ],
+    }),
+
+    // --- Product Details ---
+    defineField({
+      name: 'productType',
+      title: 'Product Type',
+      description: 'Used to display specific information in the booking card',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Boat Trip', value: 'boatTrip'},
+          {title: 'Activity', value: 'activity'},
+          {title: 'Tour', value: 'tour'},
+          {title: 'Rental', value: 'rental'},
+          {title: 'Experience', value: 'experience'},
+          {title: 'Transfer', value: 'transfer'},
+        ]
+      },
+      fieldset: 'productDetails',
+    }),
+    defineField({
+      name: 'bookButtonText',
+      title: 'Book Button Text',
+      description: 'Customize the text for the booking button (e.g., "Book Now", "Reserve This Boat", "Book Experience")',
+      type: 'string',
+      fieldset: 'productDetails',
+    }),
+    defineField({
+      name: 'tripSummary',
+      title: 'Trip/Experience Summary',
+      description: 'Short description shown at the top of the booking card (e.g., "All-inclusive daytime adventure")',
+      type: 'string',
+      fieldset: 'productDetails',
+    }),
+    defineField({
+      name: 'duration',
+      title: 'Duration',
+      type: 'string',
+      description: 'e.g., "2 hours", "Half Day", "Full Day"',
+      validation: Rule => Rule.required(),
+      fieldset: 'productDetails',
+    }),
+    defineField({
+      name: 'specificTime',
+      title: 'Specific Time',
+      description: 'e.g., "14:00 - 17:00"',
+      type: 'string',
+      fieldset: 'productDetails',
+    }),
+    defineField({
+      name: 'departurePoint',
+      title: 'Departure Point',
+      description: 'e.g., "San Antonio Port, Ibiza"',
+      type: 'string',
+      fieldset: 'productDetails',
+    }),
+    defineField({
+      name: 'capacity',
+      title: 'Capacity',
+      description: 'e.g., "Up to 35 passengers"',
+      type: 'string',
+      fieldset: 'productDetails',
+    }),
+    defineField({
+      name: 'season',
+      title: 'Season',
+      description: 'e.g., "May to October"',
+      type: 'string',
+      fieldset: 'productDetails',
+    }),
+    defineField({
+      name: 'limitedAvailability',
+      title: 'Limited Availability Message',
+      description: 'e.g., "Limited spaces available daily"',
+      type: 'string',
+      fieldset: 'productDetails',
+    }),
+    defineField({
+      name: 'customDetails',
+      title: 'Additional Details',
+      description: 'Additional information to show in the product card',
+      type: 'array',
+      of: [
+        defineField({
+          name: 'detail',
+          title: 'Detail',
+          type: 'object',
+          fields: [
+            { 
+              name: 'icon', 
+              title: 'Icon (SVG)', 
+              type: 'string',
+              description: 'Small SVG icon code for this detail'
+            },
+            { name: 'label', title: 'Label', type: 'string' },
+            { name: 'value', title: 'Value', type: 'string' }
+          ]
+        })
+      ],
+      fieldset: 'productDetails',
     }),
 
     // --- Included / Not Included ---
@@ -346,6 +465,22 @@ export default defineType({
           hidden: ({ parent }) => !parent?.enableWidget,
         }),
         defineField({
+          name: 'companyId',
+          title: 'Company ID',
+          type: 'number',
+          description: 'The company ID in the Turbobooking system.',
+          initialValue: 1,
+          hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+        defineField({
+          name: 'channelId',
+          title: 'Channel ID',
+          type: 'number',
+          description: 'The channel ID in the Turbobooking system.',
+          initialValue: 2,
+          hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+        defineField({
           name: 'billingTermIds',
           title: 'Billing Term IDs',
           type: 'array',
@@ -398,6 +533,62 @@ export default defineType({
           placeholder: 'Book Now',
           hidden: ({ parent }) => !parent?.enableWidget,
         }),
+        defineField({
+          name: 'confirmReservationAndPayLabel',
+          title: '"Confirm & Pay" Button Label',
+          type: 'string',
+          placeholder: 'Confirm & pay',
+          hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+        defineField({
+          name: 'payNowLabel',
+          title: '"Pay Now" Button Label',
+          type: 'string',
+          placeholder: 'Pay Now',
+          hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+        defineField({
+          name: 'selectTimeLabel',
+          title: '"Time Selection" Label',
+          type: 'string',
+          placeholder: 'Time Selection',
+          hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+        defineField({
+          name: 'selectExperienceLabel',
+          title: '"Select Experience" Label',
+          type: 'string',
+          placeholder: 'Select Experience',
+          hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+        defineField({
+          name: 'addonsLabel',
+          title: '"Additionals" Label',
+          type: 'string',
+          placeholder: 'Additionals',
+          hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+        defineField({
+          name: 'childrenAge',
+          title: 'Children Age Description',
+          type: 'string',
+          placeholder: 'Ages 4-12',
+          hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+        defineField({
+          name: 'infantAge',
+          title: 'Infant Age Description',
+          type: 'string',
+          placeholder: 'Under 4 years',
+          hidden: ({ parent }) => !parent?.enableWidget,
+        }),
+        defineField({
+          name: 'depositObservation',
+          title: 'Deposit Observation Text',
+          type: 'string',
+          placeholder: 'Deposit and payment instructions',
+          hidden: ({ parent }) => !parent?.enableWidget,
+        }),
       ]
     }),
 
@@ -433,13 +624,6 @@ export default defineType({
       fieldset: 'marketing',
       validation: Rule => Rule.min(0).integer(),
       description: 'Total number of reviews',
-    }),
-    defineField({
-      name: 'duration',
-      title: 'Duration',
-      type: 'string',
-      description: 'e.g., "2 hours", "Half Day", "Full Day"',
-      validation: Rule => Rule.required(),
     }),
 
     // --- FAQs ---

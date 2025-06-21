@@ -67,6 +67,21 @@ async function getProduct(slug: string) {
         question,
         answer
       },
+      productType,
+      bookButtonText,
+      tripSummary,
+      specificTime,
+      departurePoint,
+      capacity,
+      season,
+      limitedAvailability,
+      childrenPrice,
+      childrenAgeRange,
+      "customDetails": customDetails[]{
+        icon,
+        label,
+        value
+      },
       category->{
         _id,
         title,
@@ -87,8 +102,8 @@ async function getSettings() {
 
 // This is the new Server Component
 export default async function ProductPage({ params }: ProductPageProps) {
-  // Desestructurar params directamente
-  const { slug } = params;
+  // Asegurarnos de que params está disponible antes de usarlo
+  const slug = await Promise.resolve(params.slug);
   const product = await getProduct(slug);
   const settings = await getSettings();
 

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Booking Widget</title>
+  <link href="https://widgets.turbnb.com/turbnb.booking.1.0.31.min.css" rel="stylesheet" />
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+    }
+    #widget-container {
+      width: 100%;
+      min-height: 600px;
+    }
+  </style>
+</head>
+<body>
+  <div id="turbnb-booking-22" style="width: 100%; min-height: 600px;"></div>
+  
+  <script src="https://widgets.turbnb.com/turbnb.booking.1.0.31.min.js"></script>
+  <script>
+    // Función para obtener parámetros de la URL
+    function getUrlParameter(name) {
+      name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+      var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+      var results = regex.exec(location.search);
+      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+    
+    // Obtener parámetros de la URL
+    var productId = parseInt(getUrlParameter('productId')) || 22;
+    var companyId = parseInt(getUrlParameter('companyId')) || 1;
+    var channelId = parseInt(getUrlParameter('channelId')) || 19;
+    
+    // Intentar obtener billingTermIds
+    var billingTermIdsParam = getUrlParameter('billingTermIds');
+    var billingTermIds = billingTermIdsParam ? JSON.parse(billingTermIdsParam) : null;
+    
+    // Obtener propiedades personalizadas
+    var groupByBillingTerm = getUrlParameter('groupByBillingTerm') === 'true';
+    var displayBillingTerm = getUrlParameter('displayBillingTerm') === 'true';
+    var useLargeSlots = getUrlParameter('useLargeSlots') === 'true';
+    var showQuantity = getUrlParameter('showQuantity') !== 'false'; // Por defecto true
+    
+    // Textos personalizados
+    var quantityLabel = getUrlParameter('quantityLabel') || 'Quantity';
+    var bookNowLabel = getUrlParameter('bookNowLabel') || 'Reserve Now';
+    var confirmReservationAndPayLabel = getUrlParameter('confirmReservationAndPayLabel') || 'Confirm & pay';
+    var payNowLabel = getUrlParameter('payNowLabel') || 'Pay Now';
+    var selectTimeLabel = getUrlParameter('selectTimeLabel') || 'Time Selection';
+    var selectExperienceLabel = getUrlParameter('selectExperienceLabel') || 'Select Experience';
+    var addonsLabel = getUrlParameter('addonsLabel') || 'Additionals';
+    var childrenAge = getUrlParameter('childrenAge') || '';
+    var infantAge = getUrlParameter('infantAge') || '';
+    var depositObservation = getUrlParameter('depositObservation') || 'Deposit and payment instructions';
+    
+    // Actualizar el ID del elemento
+    var container = document.getElementById('turbnb-booking-22');
+    container.id = 'turbnb-booking-' + productId;
+    
+    // Inicializar el widget cuando el DOM esté listo
+    document.addEventListener("DOMContentLoaded", function() {
+      initializeWidget();
+    });
+    
+    // También intentamos inicializar inmediatamente
+    function initializeWidget() {
+      try {
+        const el = document.getElementById('turbnb-booking-' + productId);
+        if (el && typeof TurboBooking !== 'undefined') {
+          const turbo = new TurboBooking();
+          
+          // Crear el objeto de configuración base
+          const config = {
+            companyId: companyId,
+            productId: productId,
+            channelId: channelId,
+            customProperties: {
+              "groupByBillingTerm": groupByBillingTerm,
+              "displayBillingTerm": displayBillingTerm,
+              "useLargeSlots": useLargeSlots,
+              "showQuantity": showQuantity,
+              "quantity": quantityLabel,
+              "bookNow": bookNowLabel,
+              "confirmReservationAndPay": confirmReservationAndPayLabel,
+              "payNow": payNowLabel,
+              "selectTimeLabel": selectTimeLabel,
+              "selectExperienceLabel": selectExperienceLabel,
+              "addonsLabel": addonsLabel,
+              "childrenAge": childrenAge,
+              "infantAge": infantAge,
+              "depositObservation": depositObservation
+            }
+          };
+          
+          // Añadir billingTermIds solo si existe
+          if (billingTermIds) {
+            config.billingTermIds = billingTermIds;
+          }
+          
+          // Inicializar el widget con la configuración
+          turbo.run(el, config);
+          console.log('Widget initialized with productId:', productId);
+        } else {
+          console.log('Waiting for TurboBooking to be available...');
+          setTimeout(initializeWidget, 500);
+        }
+      } catch (e) {
+        console.error('Error initializing widget:', e);
+      }
+    }
+    
+    // Intentar inicializar inmediatamente
+    initializeWidget();
+  </script>
+</body>
+</html> 

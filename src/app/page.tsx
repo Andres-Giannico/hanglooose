@@ -26,6 +26,12 @@ interface Product {
   reviewCount?: number;
   isBestSeller?: boolean;
   isLikelyToSellOut?: boolean;
+  productType?: string;
+  bookButtonText?: string;
+  tripSummary?: string;
+  specificTime?: string;
+  childrenPrice?: number;
+  childrenAgeRange?: string;
 }
 
 async function getHomeData() {
@@ -58,7 +64,13 @@ async function getHomeData() {
       rating,
       reviewCount,
       isBestSeller,
-      isLikelyToSellOut
+      isLikelyToSellOut,
+      productType,
+      bookButtonText,
+      tripSummary,
+      specificTime,
+      childrenPrice,
+      childrenAgeRange
     }
   }`)
 }
