@@ -102,9 +102,8 @@ async function getSettings() {
 
 // This is the new Server Component
 export default async function ProductPage({ params }: ProductPageProps) {
-  // Asegurarnos de que params está disponible antes de usarlo
-  const slug = await Promise.resolve(params.slug);
-  const product = await getProduct(slug);
+  // Usar params directamente sin intentar desestructurar o acceder a slug de forma asíncrona
+  const product = await getProduct(params.slug as string);
   const settings = await getSettings();
 
   if (!product) {
