@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import { urlForImage } from '@/sanity/image'
 import type { SanityImage } from '@/sanity/types'
@@ -33,6 +33,49 @@ const getImageUrl = (image: SanityImage | null | undefined, width: number, heigh
 
 export default function ProductGallery({ gallery }: ProductGalleryProps) {
   const [selectedImage, setSelectedImage] = useState(0)
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
+
+  const imagesCount = gallery?.length || 0
+
+  // Función para navegar a la siguiente imagen
+  const goToNextImage = useCallback(() => {
+    setSelectedImage((prev) => (prev + 1) % imagesCount)
+  }, [imagesCount])
+
+  // Función para navegar a la imagen anterior
+  const goToPrevImage = useCallback(() => {
+    setSelectedImage((prev) => (prev - 1 + imagesCount) % imagesCount)
+  }, [imagesCount])
+
+  // Configurar el autoplay
+  useEffect(() => {
+    if (imagesCount <= 1) return
+
+    // Iniciar el temporizador para cambiar la imagen cada 4 segundos
+    timerRef.current = setInterval(() => {
+      goToNextImage()
+    }, 4000)
+
+    // Limpiar el temporizador cuando el componente se desmonte
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+      }
+    }
+  }, [goToNextImage, imagesCount])
+
+  // Reiniciar el temporizador cuando se cambie manualmente la imagen
+  const handleImageChange = (index: number) => {
+    setSelectedImage(index)
+    
+    // Reiniciar el temporizador
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
+      timerRef.current = setInterval(() => {
+        goToNextImage()
+      }, 4000)
+    }
+  }
 
   if (!gallery || gallery.length === 0) {
     return (
@@ -61,6 +104,53 @@ export default function ProductGallery({ gallery }: ProductGalleryProps) {
           </div>
         )}
 
+        {/* Navigation Arrows */}
+        {gallery.length > 1 && (
+          <>
+            <button 
+              onClick={(e) => {
+                e.preventDefault();
+                handleImageChange((selectedImage - 1 + gallery.length) % gallery.length);
+              }}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white/90 p-2 rounded-full shadow-md transition-colors"
+              aria-label="Previous image"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+              </svg>
+            </button>
+            
+            <button 
+              onClick={(e) => {
+                e.preventDefault();
+                handleImageChange((selectedImage + 1) % gallery.length);
+              }}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white/90 p-2 rounded-full shadow-md transition-colors"
+              aria-label="Next image"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              </svg>
+            </button>
+          </>
+        )}
+
+        {/* Dots Indicators */}
+        {gallery.length > 1 && (
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-2">
+            {gallery.map((_, index) => (
+              <button
+                key={`dot-${index}`}
+                onClick={() => handleImageChange(index)}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  selectedImage === index ? 'bg-white' : 'bg-white/40 hover:bg-white/60'
+                }`}
+                aria-label={`Go to image ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
+
         {/* Current image indicator for mobile */}
         {gallery.length > 1 && (
           <div className="absolute bottom-3 right-3 bg-black/60 px-2 py-1 rounded-md text-xs text-white font-medium sm:hidden">
@@ -79,7 +169,7 @@ export default function ProductGallery({ gallery }: ProductGalleryProps) {
             return (
               <button
                 key={index}
-                onClick={() => setSelectedImage(index)}
+                onClick={() => handleImageChange(index)}
                 className={`relative flex-none w-16 h-16 sm:w-auto sm:h-auto aspect-square overflow-hidden rounded-lg ${
                   selectedImage === index
                     ? 'ring-2 ring-blue-500'

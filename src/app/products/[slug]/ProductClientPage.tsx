@@ -105,13 +105,13 @@ function PaymentMethodsSection({ paymentMethods }: { paymentMethods: Product['pa
 
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-4">Payment Methods</h3>
-      <p className="text-gray-600 mb-4">{paymentMethods.text}</p>
+      <h3 className="text-xl font-semibold mb-4">Payment Methods</h3>
+      <p className="text-gray-600 mb-5 text-base">{paymentMethods.text}</p>
       {paymentMethods.logos?.asset && (
         <img
           src={paymentMethods.logos.asset.url}
           alt="Payment methods accepted"
-          className="max-h-8"
+          className="max-h-16 sm:max-h-20"
         />
       )}
     </div>
@@ -214,13 +214,13 @@ function EnhancedBookingCard({
             {/* Payment Methods */}
             <div className="pt-4 mt-4 border-t border-gray-100">
               <div className="flex flex-col items-center space-y-4">
-                <span className="text-sm text-gray-600">Secure payment with</span>
+                <span className="text-base text-gray-600">Secure payment with</span>
                 <Image 
                   src="/payment-methods.png" 
                   alt="Payment methods: Visa, Mastercard, American Express, Apple Pay, Google Pay, and Stripe" 
-                  width={300}
-                  height={50}
-                  className="h-16 w-auto"
+                  width={400}
+                  height={80}
+                  className="h-20 w-auto sm:h-24"
                 />
               </div>
             </div>
@@ -397,7 +397,7 @@ function EnhancedBookingCard({
       </div>
 
       {/* Booking guarantees */}
-      {product.bookingGuarantees && product.bookingGuarantees.length > 0 && (
+      {!hasDetailedInfo && product.bookingGuarantees && product.bookingGuarantees.length > 0 && (
         <div className="p-6 border-t border-gray-200 bg-gray-50">
           <h4 className="font-semibold mb-3">Booking Guarantees</h4>
           <ul className="space-y-2">
@@ -415,14 +415,15 @@ function EnhancedBookingCard({
 
       {/* Payment section */}
       <div className="p-6 border-t border-gray-200 bg-gray-50">
-        <p className="text-center text-sm text-gray-600 mb-3">Secure payment with</p>
+        <p className="text-center text-base text-gray-600 mb-5">Secure payment with</p>
         <div className="flex justify-center">
           <Image 
             src="/payment-methods.png" 
             alt="Payment methods: Visa, Mastercard, American Express, Apple Pay, Google Pay, and Stripe" 
-            width={250}
-            height={40}
-            className="h-10 w-auto"
+            width={400}
+            height={80}
+            className="h-20 w-auto sm:h-24"
+            priority
           />
         </div>
       </div>
@@ -586,7 +587,7 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
             </div>
 
             {/* Booking Guarantees Mini */}
-            {product.bookingGuarantees && product.bookingGuarantees.length > 0 && (
+            {!hasDetailedInfo && product.bookingGuarantees && product.bookingGuarantees.length > 0 && (
               <div className="p-4 pt-0">
                 <div className="flex flex-wrap gap-2 text-xs">
                   {product.bookingGuarantees.slice(0, 3).map((guarantee, index) => (
@@ -820,8 +821,44 @@ export default function ProductClientPage({ product, whatsappSettings }: Product
       {product.bookingWidget?.enableWidget && product.bookingWidget.bookingProductId && (
         <div id="booking-widget-section" className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t">
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8">Make a Reservation</h2>
-          <div className="max-w-4xl mx-auto bg-white p-4 sm:p-6 lg:p-8 rounded-xl shadow-xl sm:shadow-2xl overflow-hidden">
+          <div className="max-w-4xl mx-auto bg-white p-4 sm:p-6">
             <BookingWidget settings={product.bookingWidget} />
+          </div>
+          
+          {/* Booking guarantees - mostrados abajo cuando hay card info detallada */}
+          {hasDetailedInfo && product.bookingGuarantees && product.bookingGuarantees.length > 0 && (
+            <div className="max-w-4xl mx-auto mt-6 bg-white p-4 sm:p-6 rounded-xl border border-gray-200">
+              <h4 className="font-semibold mb-3 text-center">Booking Guarantees</h4>
+              <div className="flex flex-wrap justify-center gap-3">
+                {product.bookingGuarantees.map((guarantee, index) => (
+                  <div key={index} className="flex items-center bg-green-50 text-green-700 px-3 py-2 rounded-md text-sm">
+                    <svg className="h-4 w-4 mr-2 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>{guarantee}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Mobile Booking Guarantees - mostrados después del widget de reserva en móvil cuando hay card info detallada */}
+      {hasDetailedInfo && !product.bookingWidget?.enableWidget && product.bookingGuarantees && product.bookingGuarantees.length > 0 && (
+        <div className="block sm:hidden mt-8 pt-6 border-t">
+          <div className="bg-white rounded-xl border p-4 shadow-sm">
+            <h4 className="font-semibold mb-3 text-center">Booking Guarantees</h4>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {product.bookingGuarantees.map((guarantee, index) => (
+                <div key={index} className="inline-flex items-center bg-green-50 text-green-700 px-2 py-1 rounded-full text-xs">
+                  <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  {guarantee}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
